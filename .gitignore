@@ -1,0 +1,34 @@
+# Backend
+backend/vendor/
+backend/node_modules/
+backend/.env
+backend/.env.*
+backend/storage/*.key
+backend/storage/logs/*
+backend/storage/framework/*
+backend/bootstrap/cache/*
+backend/public/storage
+
+# Frontend modules
+frontend/node_modules
+frontend/public
+
+# Frontend Logs
+frontend/logs
+frontend/*.log
+frontend/npm-debug.log*
+frontend/yarn-debug.log*
+frontend/yarn-error.log*
+frontend/pnpm-debug.log*
+frontend/lerna-debug.log*
+
+# Editor dirs
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
