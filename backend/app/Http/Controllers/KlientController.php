@@ -29,8 +29,6 @@ class KlientController extends Controller
             'bilanci'   => 'nullable|numeric',
         ]);
 
-        $data['data_regjistrimit'] = now()->toDateString();
-
         // Krijo klient
         $client = Klienti::create($data);
 

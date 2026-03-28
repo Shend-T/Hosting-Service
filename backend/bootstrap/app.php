@@ -14,6 +14,10 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->validateCsrfTokens(except: [
             'klienti',
             'klienti/*',
+            'paketa',
+            'paketa/*',
+            'abonimi',
+            'abonimi/*',
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
