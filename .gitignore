@@ -32,3 +32,8 @@ frontend/lerna-debug.log*
 *.njsproj
 *.sln
 *.sw?
+
+# Others
+backend/Shend-TODO.md
+README.txt
+ProjectDesc.md

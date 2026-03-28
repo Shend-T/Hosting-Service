@@ -6,6 +6,6 @@
     <title>{{ $title }}</title>
 </head>
 <body>
-    <h1>Hello Wrld</h1>
+    <h1>Test route</h1>
 </body>
 </html>
