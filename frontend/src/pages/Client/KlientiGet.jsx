@@ -14,12 +14,14 @@ function KlientiGet() {
   };
 
   return (
-    <div>
-      <h1>Get All Klienti</h1>
+    <div className="container mt-5">
+      <h1 className="text-primary">Get All Klienti</h1>
 
-      <button onClick={getClients}>Merr Te Gjihe Klientet</button>
+      <button onClick={getClients} className="btn btn-success">
+        Merr Te Gjihe Klientet
+      </button>
 
-      <ul>
+      <div>
         {clients.map((client) => (
           <div key={client.id}>
             <p>Emri: {client.emri}</p>
@@ -29,7 +31,7 @@ function KlientiGet() {
             <br />
           </div>
         ))}
-      </ul>
+      </div>
     </div>
   );
 }

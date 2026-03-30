@@ -18,9 +18,12 @@ Route::get('/test', function () use ($web_title) {
 
 Route::get('/klienti', [KlientController::class, 'index']);  // Lexo krejt klientet
 Route::post('/klienti', [KlientController::class, 'store']); // Krijo klient
+Route::get('/klienti/{id}', [KlientController::class, 'show']); // Lexo nje klient
+Route::put('/klienti/{id}', [KlientController::class, 'update']); // Perditso nje klient
+Route::delete('/klienti/{id}', [KlientController::class, 'destroy']); 
 
-Route::get('/abonimi', [AbonimiController::class, 'index']);  // Lexo krejt klientet
-Route::post('/abonimi', [AbonimiController::class, 'store']); // Krijo klient
+Route::get('/abonimi', [AbonimiController::class, 'index']);  // Lexo krejt abonimet
+Route::post('/abonimi', [AbonimiController::class, 'store']); // Krijo abonim
 
-Route::get('/paketa', [PaketaController::class, 'index']);  // Lexo krejt klientet
-Route::post('/paketa', [PaketaController::class, 'store']); // Krijo klient
+Route::get('/paketa', [PaketaController::class, 'index']);  // Lexo krejt paketat
+Route::post('/paketa', [PaketaController::class, 'store']); // Krijo pakete
