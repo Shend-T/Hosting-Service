@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 
-function Client() {
+function Klienti() {
   const baseURL = "http://localhost:8000/";
   const [clients, setClients] = useState([]);
 
@@ -142,7 +142,7 @@ function Client() {
           <tbody>
             {clients.map((client) => (
               <tr key={client.id}>
-                <th scope="row">{client.id}</th>
+                <td>{client.id}</td>
                 <td>{client.emri}</td>
                 <td>{client.mbiemri}</td>
                 <td>{client.kompania}</td>
@@ -477,4 +477,4 @@ function Client() {
   );
 }
 
-export default Client;
+export default Klienti;

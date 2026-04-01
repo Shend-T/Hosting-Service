@@ -7,8 +7,10 @@ function Home() {
   return (
     <div>
       <h1>Home Page</h1>
-      <h3>Shko Te Lista E </h3>
-      <button onClick={() => navigate("/klienti")}>Klienteve</button>
+
+      <button onClick={() => navigate("/klienti")}>CRUD Klienti</button>
+      <button onClick={() => navigate("/paketa")}>CRUD Paketa</button>
+      <button onClick={() => navigate("/abonimi")}>CRUD Abonimi</button>
     </div>
   );
 }
