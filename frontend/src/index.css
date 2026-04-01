@@ -1,0 +1,69 @@
+:root {
+  --fs-h1: 3rem;
+  --fs-h3: 2.2rem;
+  --fs-p: 1.4rem;
+
+  --ff-primary: "Ubuntu", sans-serif;
+  --ff-secondary: "Courier New", Courier, monospace;
+
+  /* https://colorhunt.co/palette/db1a1afff6f68cc7c42c687b */
+  --color-background: #fff6f6;
+  --color-primary: #2c687b;
+  --color-primary-lighter: #8cc7c4;
+  --color-secondary: #db1a1a;
+
+  --text-color-primary: #121212;
+  --text-color-secondary: #eaeaea;
+}
+
+/* === Rregulla Te Pergjithshme === */
+* {
+  margin: 0;
+  padding: 0;
+
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+
+  font-size: 62.5%;
+
+  color: var(--text-color-primary);
+  background-color: var(--color-background);
+}
+body {
+  font-family: var(--ff-primary);
+}
+
+/* === Text === */
+h1 {
+  font-family: var(--ff-secondary);
+}
+
+a {
+  text-decoration: none;
+  color: var(--text-color-primary);
+
+  transition: color 0.2s ease-in;
+}
+
+a:hover {
+  color: var(--color-secondary);
+}
+
+/* === Butonet === */
+button {
+  border: none;
+  padding: 10px 20px;
+
+  border-radius: 10px;
+
+  color: var(--text-color-secondary);
+  background-color: var(--color-primary-lighter);
+
+  transition: background-color 0.2s ease-in;
+}
+button:hover {
+  background-color: var(--color-primary);
+}
