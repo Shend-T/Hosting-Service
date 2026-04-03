@@ -1,7 +1,11 @@
 import React, { useState } from "react";
 import axios from "axios";
 
+import { useNavigate } from "react-router-dom";
+
 function Klienti() {
+  const navigate = useNavigate();
+
   const baseURL = "http://localhost:8000/";
   const [clients, setClients] = useState([]);
 
@@ -112,6 +116,9 @@ function Klienti() {
 
   return (
     <div className="container mt-5">
+      <button onClick={() => navigate("/")} className="btn btn-primary">
+        Kthehu
+      </button>
       <h1>Klienti CRUD</h1>
 
       <div className="error">

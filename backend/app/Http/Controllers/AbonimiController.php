@@ -15,10 +15,18 @@ class AbonimiController extends Controller
         return response()->json($abonimet);
     }
 
-    // Merr vetem nje abonim ne baze te ID( Read)
-    public function show(int $id) {
-        $client = Abonimi::findOrFail($id);
-        return response()->json($client);
+    // Merr vetem nje abonim ne baze te ID (Read)
+    public function show(int $id)
+    {
+        $abonimi = Abonimi::find($id);
+
+        if ($abonimi === null) {
+            return response()->json([
+                'message' => 'Abonimi me kete ID nuk u gjet.',
+            ], 404);
+        }
+
+        return response()->json($abonimi);
     }
 
     // Krijo abonim te ri (Create)
