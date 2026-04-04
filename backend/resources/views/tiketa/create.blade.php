@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shto Tiket te Ri</title>
+    <title>Shto Tiket te Re</title>
 </head>
 <body>
 
-    <h1>Shto Tiket te Ri</h1>
+    <h1>Shto Tiket te Re</h1>
 
     <a href="/tiketa">← Kthehu</a>
 
