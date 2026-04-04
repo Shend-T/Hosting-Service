@@ -6,6 +6,7 @@ use App\Http\Controllers\KlientController;
 use App\Http\Controllers\AbonimiController;
 use App\Http\Controllers\PaketaController;
 use App\Http\Controllers\TiketiController;
+use App\Http\Controllers\PergjigjaTiketiController;
 
 $web_title = "Hosting Site";
 
@@ -41,3 +42,9 @@ Route::get('/tiketa/{tiketi}', [TiketiController::class, 'show']); // Shfaq nje 
 Route::get('/tiketa/{tiketi}/edit', [TiketiController::class, 'edit']); // Shfaq formen e editimit
 Route::put('/tiketa/{tiketi}', [TiketiController::class, 'update']); // Update tiketen
 Route::delete('/tiketa/{tiketi}', [TiketiController::class, 'destroy']); // Fshi tiketen
+
+Route::post('/pergjigja_tiketi', [PergjigjaTiketiController::class, 'store']);  // Ruaj pergjigjen e tiketis
+Route::get('/pergjigja_tiketi/{pergjigjaTiketi}' , [PergjigjaTiketiController::class, 'show']);      // Shfaq nje pergjigje te tiketis
+Route::get('/pergjigja_tiketi/{pergjigjaTiketi}/edit', [PergjigjaTiketiController::class, 'edit']); // Shfaq formen e editimit te pergjigjes se tiketis
+Route::put('/pergjigja_tiketi/{pergjigjaTiketi}', [PergjigjaTiketiController::class, 'update']); // Update pergjigjen e tiketis
+Route::delete('/pergjigja_tiketi/{pergjigjaTiketi}', [PergjigjaTiketiController::class, 'destroy']); // Fshi pergjigjen e tiket

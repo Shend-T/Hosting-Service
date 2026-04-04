@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\PergjigjaTiketi;
 
 class Tiketi extends Model
 {
@@ -32,6 +33,6 @@ class Tiketi extends Model
 
     public function pergjigjet()
     {
-        return $this->hasMany(PergjigjjaTiketit::class, 'tiketi_id');
+        return $this->hasMany(PergjigjaTiketi::class, 'tiketi_id');
     }
 }
