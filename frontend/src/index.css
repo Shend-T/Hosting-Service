@@ -40,6 +40,15 @@ body {
 h1 {
   font-family: var(--ff-secondary);
 }
+.text-primary {
+  color: var(--text-color-primary);
+}
+.text-secondary {
+  color: var(--text-color-secondary);
+}
+.text-important {
+  color: var(--color-secondary);
+}
 
 a {
   text-decoration: none;

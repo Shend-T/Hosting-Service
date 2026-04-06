@@ -1,0 +1,20 @@
+.container-main {
+  margin: 1px;
+  /* background: #2c687b; */
+  /* background: linear-gradient(
+    90deg,
+    rgba(44, 104, 123, 1) 0%,
+    rgba(140, 199, 196, 1) 33%,
+    rgba(44, 104, 123, 1) 66%,
+    rgba(44, 104, 123, 1) 100%
+  ); */
+}
+.plus-icon {
+  width: 24px;
+  height: 24px;
+  fill: currentColor; /* Allows the icon to inherit text color */
+  z-index: 1000;
+}
+.custom-pos {
+  top: 10 !important;
+}
