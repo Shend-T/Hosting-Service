@@ -12,9 +12,97 @@
 .plus-icon {
   width: 24px;
   height: 24px;
-  fill: currentColor; /* Allows the icon to inherit text color */
+  fill: currentColor;
   z-index: 1000;
 }
 .custom-pos {
   top: 10 !important;
+}
+
+.fade-in-on-load {
+  animation: fadeIn 1s;
+}
+.fade-in-on-load-long {
+  animation: fadeIn 1.5s;
+}
+.fade-in-on-load-card.animate {
+  animation: fadeIn 1s;
+}
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.pop-up-on-load {
+  position: relative;
+  animation: popUp 1s;
+}
+@keyframes popUp {
+  from {
+    top: 100px;
+  }
+  to {
+    top: 0px;
+  }
+}
+
+.pop-up-on-load-card {
+  opacity: 0.2;
+  transform: translateY(30px);
+  transition: all 0.4s ease-in;
+}
+
+.pop-up-on-load-card.animate {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.pop-right-on-load {
+  position: relative;
+  animation: popRight 1s;
+}
+@keyframes popRight {
+  from {
+    right: 100px;
+  }
+  to {
+    right: 0px;
+  }
+}
+.pop-left-on-load.animate {
+  position: relative;
+  animation: popLeft 1s;
+}
+@keyframes popLeft {
+  from {
+    right: 100px;
+  }
+  to {
+    right: 0px;
+  }
+}
+
+.typewriter {
+  overflow: hidden;
+  white-space: nowrap;
+  margin: 0 auto;
+  animation: typing 1.5s steps(40, end);
+}
+@keyframes typing {
+  from {
+    width: 0;
+  }
+  to {
+    width: 100%;
+  }
+}
+@media only screen and (max-width: 991px) {
+  .typewriter {
+    animation: none;
+    white-space: wrap;
+  }
 }
