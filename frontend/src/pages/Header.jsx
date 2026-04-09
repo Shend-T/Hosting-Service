@@ -2,7 +2,10 @@ import React from "react";
 
 function Header() {
   return (
-    <nav className="navbar navbar-expand-lg navbar-dark bg-primary">
+    <nav
+      className="navbar navbar-expand-lg navbar-dark py-3"
+      style={{ backgroundColor: "var(--color-primary)" }}
+    >
       <div className="container">
         <a className="navbar-brand" href="#">
           Home

@@ -1,5 +1,7 @@
 import React from "react";
 
+import logo from "../../public/logo.png";
+
 function Footer() {
   return (
     <div className="container">
@@ -9,7 +11,7 @@ function Footer() {
           className="col-md-4 d-flex align-items-center justify-content-center mb-3 mb-md-0 me-md-auto link-body-emphasis"
           href="#"
         >
-          Logo here
+          <img src={logo} alt="UBT Hosting Services" height="28" />
           {/* Ma von */}
         </a>
 

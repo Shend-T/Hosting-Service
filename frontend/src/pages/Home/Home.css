@@ -106,3 +106,10 @@
     white-space: wrap;
   }
 }
+
+.scale-card {
+  transition: all 0.1s ease-in-out;
+}
+.scale-card:hover {
+  transform: scale(1.02);
+}

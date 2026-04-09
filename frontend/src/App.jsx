@@ -2,8 +2,9 @@ import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import Header from "./pages/Header";
-import Home from "./pages/Home";
 import Footer from "./pages/Footer";
+
+import Home from "./pages/Home/Home";
 
 import Klienti from "./pages/Klienti/Klienti";
 import Paketa from "./pages/Paketa/Paketa";

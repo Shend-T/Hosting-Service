@@ -2,10 +2,11 @@ import React, { useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 
 import "./Home.css";
-import banner from "../assets/home/earth.png";
-
-import placeholderImage from "../assets/placeholders/image-placeholder.png";
-import placeholderImage2 from "../assets/placeholders/workflow.png";
+import banner from "../../assets/home/world.png";
+import card1 from "../../assets/home/card1.png";
+import card2 from "../../assets/home/card2.png";
+import card3 from "../../assets/home/card3.png";
+import workflow from "../../assets/home/workflow.png";
 
 function Home() {
   const navigate = useNavigate();
@@ -110,9 +111,9 @@ function Home() {
           <div className="col-md-4 col-sm-8 mb-3">
             <div
               ref={(el) => (cardsRef.current[0] = el)}
-              className="card shadow py-3 pop-up-on-load-card"
+              className="card shadow py-3 pop-up-on-load-card scale-card"
             >
-              <img src={placeholderImage} className="card-img-top" alt="..." />
+              <img src={card1} className="card-img-top" alt="..." />
               {/* <a href="https://www.flaticon.com/free-icons/image-placeholder" title="image placeholder icons">Image placeholder icons created by Saepul Nahwan - Flaticon</a> */}
               <div className="card-body">
                 <h3 className="card-title">Create Your Website</h3>
@@ -127,9 +128,9 @@ function Home() {
           <div className="col-md-4 col-sm-8 mb-3">
             <div
               ref={(el) => (cardsRef.current[1] = el)}
-              className="card shadow py-3 pop-up-on-load-card"
+              className="card shadow py-3 pop-up-on-load-card scale-card"
             >
-              <img src={placeholderImage} className="card-img-top" alt="..." />
+              <img src={card2} className="card-img-top" alt="..." />
               {/* <a href="https://www.flaticon.com/free-icons/image-placeholder" title="image placeholder icons">Image placeholder icons created by Saepul Nahwan - Flaticon</a> */}
               <div className="card-body">
                 <h3 className="card-title">Deploy Instantly</h3>
@@ -144,9 +145,9 @@ function Home() {
           <div className="col-md-4 col-sm-8 mb-3">
             <div
               ref={(el) => (cardsRef.current[2] = el)}
-              className="card shadow py-3 pop-up-on-load-card"
+              className="card shadow py-3 pop-up-on-load-card scale-card"
             >
-              <img src={placeholderImage} className="card-img-top" alt="..." />
+              <img src={card3} className="card-img-top" alt="..." />
               {/* <a href="https://www.flaticon.com/free-icons/image-placeholder" title="image placeholder icons">Image placeholder icons created by Saepul Nahwan - Flaticon</a> */}
               <div className="card-body">
                 <h3 className="card-title">Scale With Ease</h3>
@@ -170,7 +171,7 @@ function Home() {
               <img
                 className="d-block mx-lg-auto img-fluid"
                 loading="lazy"
-                src={placeholderImage2}
+                src={workflow}
                 height="500"
                 alt=""
               />
