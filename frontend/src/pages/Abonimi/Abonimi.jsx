@@ -1,10 +1,7 @@
-<<<<<<< HEAD
 import React, { useState } from "react";
 import axios from "axios";
-
 import { useNavigate } from "react-router-dom";
 
-// === Konstantet ===
 const BASE_URL = "http://localhost:8000/";
 
 const defaultAbonim = {
@@ -26,7 +23,6 @@ function formatDateForInput(value) {
 function Abonimi() {
   const navigate = useNavigate();
   const [error, setError] = useState("");
-
   const [abonim, setAbonim] = useState(defaultAbonim);
   const [abonimId, setAbonimId] = useState(0);
   const [abonimet, setAbonimet] = useState([]);
@@ -55,8 +51,7 @@ function Abonimi() {
 
   const getAbonimet = async () => {
     if (abonimet.length == 0) {
-      await axios
-        .get(BASE_URL + "abonimi")
+      await axios.get(BASE_URL + "abonimi")
         .then(function (response) {
           setAbonimet(response.data);
         })
@@ -72,8 +67,7 @@ function Abonimi() {
   const getAbonim = async (e) => {
     e.preventDefault();
     const id = Number(abonimId);
-    await axios
-      .get(BASE_URL + "abonimi/" + id)
+    await axios.get(BASE_URL + "abonimi/" + id)
       .then(function (response) {
         const d = response.data;
         setAbonim({
@@ -101,18 +95,14 @@ function Abonimi() {
       periudha: form.periudha,
       auto_rinovim: form.auto_rinovim,
     };
-    await axios
-      .post(BASE_URL + "abonimi", payload)
+    await axios.post(BASE_URL + "abonimi", payload)
       .then(function (response) {
         const d = response.data;
-        setAbonimet([
-          ...abonimet,
-          {
-            ...d,
-            data_fillimit: formatDateForInput(d.data_fillimit),
-            data_skadimit: formatDateForInput(d.data_skadimit),
-          },
-        ]);
+        setAbonimet([...abonimet, {
+          ...d,
+          data_fillimit: formatDateForInput(d.data_fillimit),
+          data_skadimit: formatDateForInput(d.data_skadimit),
+        }]);
         setForm(emptyForm);
       })
       .catch(function (err) {
@@ -135,8 +125,7 @@ function Abonimi() {
         periudha: abonim.periudha,
         auto_rinovim: abonim.auto_rinovim,
       };
-      await axios
-        .put(BASE_URL + "abonimi/" + abonimId, payload)
+      await axios.put(BASE_URL + "abonimi/" + abonimId, payload)
         .then(function (response) {
           const d = response.data;
           const row = {
@@ -172,9 +161,7 @@ function Abonimi() {
 
   return (
     <div className="container mt-5">
-      <button onClick={() => navigate("/")} className="btn btn-primary">
-        Kthehu
-      </button>
+      <button onClick={() => navigate("/")} className="btn btn-primary">Kthehu</button>
       <h1>Abonimi CRUD</h1>
 
       <div className="row error">
@@ -184,9 +171,7 @@ function Abonimi() {
       <div className="row">
         <div>
           <h3>Merr Te Gjith Abonimet</h3>
-          <button onClick={getAbonimet} className="btn btn-primary">
-            Merr Te Gjith Abonimet
-          </button>
+          <button onClick={getAbonimet} className="btn btn-primary">Merr Te Gjith Abonimet</button>
         </div>
 
         <table className="table">
@@ -211,12 +196,7 @@ function Abonimi() {
                 <td>{formatDateForInput(row.data_skadimit)}</td>
                 <td>{row.statusi}</td>
                 <td>
-                  <button
-                    onClick={(e) => deleteAbonim(e, row.id)}
-                    className="btn btn-danger"
-                  >
-                    Fshij
-                  </button>
+                  <button onClick={(e) => deleteAbonim(e, row.id)} className="btn btn-danger">Fshij</button>
                 </td>
               </tr>
             ))}
@@ -225,23 +205,12 @@ function Abonimi() {
 
         <form onSubmit={getAbonim}>
           <div className="mb-3">
-            <label htmlFor="abonim-lookup-id" className="form-label">
-              ID:
-            </label>
-            <input
-              type="number"
-              className="form-control"
-              id="abonim-lookup-id"
-              name="id"
-              value={abonimId}
-              onChange={(e) => setAbonimId(e.target.value)}
-            />
+            <label htmlFor="abonim-lookup-id" className="form-label">ID:</label>
+            <input type="number" className="form-control" id="abonim-lookup-id" name="id" value={abonimId} onChange={(e) => setAbonimId(e.target.value)} />
           </div>
-
-          <button type="submit" className="btn btn-primary">
-            Merr Abonimin Specifik
-          </button>
+          <button type="submit" className="btn btn-primary">Merr Abonimin Specifik</button>
         </form>
+
         <table className="table">
           <thead>
             <tr>
@@ -275,85 +244,26 @@ function Abonimi() {
       <div className="row justify-content-center">
         <div className="col-12 col-md-6 col-lg-5">
           <h3>Krijo Abonim</h3>
-
           <form onSubmit={postAbonim}>
             <div className="mb-3">
-              <label htmlFor="create-klienti_id" className="form-label">
-                Klienti ID
-              </label>
-              <input
-                type="number"
-                name="klienti_id"
-                className="form-control"
-                id="create-klienti_id"
-                value={form.klienti_id || ""}
-                onChange={(e) =>
-                  setForm({ ...form, klienti_id: Number(e.target.value) })
-                }
-                required
-                min={1}
-              />
+              <label htmlFor="create-klienti_id" className="form-label">Klienti ID</label>
+              <input type="number" name="klienti_id" className="form-control" id="create-klienti_id" value={form.klienti_id || ""} onChange={(e) => setForm({ ...form, klienti_id: Number(e.target.value) })} required min={1} />
             </div>
             <div className="mb-3">
-              <label htmlFor="create-paketa_id" className="form-label">
-                Paketa ID
-              </label>
-              <input
-                type="number"
-                name="paketa_id"
-                className="form-control"
-                id="create-paketa_id"
-                value={form.paketa_id || ""}
-                onChange={(e) =>
-                  setForm({ ...form, paketa_id: Number(e.target.value) })
-                }
-                required
-                min={1}
-              />
+              <label htmlFor="create-paketa_id" className="form-label">Paketa ID</label>
+              <input type="number" name="paketa_id" className="form-control" id="create-paketa_id" value={form.paketa_id || ""} onChange={(e) => setForm({ ...form, paketa_id: Number(e.target.value) })} required min={1} />
             </div>
             <div className="mb-3">
-              <label htmlFor="create-data_fillimit" className="form-label">
-                Data fillimit
-              </label>
-              <input
-                type="date"
-                name="data_fillimit"
-                className="form-control"
-                id="create-data_fillimit"
-                value={form.data_fillimit}
-                onChange={(e) =>
-                  setForm({ ...form, data_fillimit: e.target.value })
-                }
-                required
-              />
+              <label htmlFor="create-data_fillimit" className="form-label">Data fillimit</label>
+              <input type="date" name="data_fillimit" className="form-control" id="create-data_fillimit" value={form.data_fillimit} onChange={(e) => setForm({ ...form, data_fillimit: e.target.value })} required />
             </div>
             <div className="mb-3">
-              <label htmlFor="create-data_skadimit" className="form-label">
-                Data skadimit
-              </label>
-              <input
-                type="date"
-                name="data_skadimit"
-                className="form-control"
-                id="create-data_skadimit"
-                value={form.data_skadimit}
-                onChange={(e) =>
-                  setForm({ ...form, data_skadimit: e.target.value })
-                }
-                required
-              />
+              <label htmlFor="create-data_skadimit" className="form-label">Data skadimit</label>
+              <input type="date" name="data_skadimit" className="form-control" id="create-data_skadimit" value={form.data_skadimit} onChange={(e) => setForm({ ...form, data_skadimit: e.target.value })} required />
             </div>
             <div className="mb-3">
-              <label htmlFor="create-statusi" className="form-label">
-                Statusi
-              </label>
-              <select
-                name="statusi"
-                className="form-select"
-                id="create-statusi"
-                value={form.statusi}
-                onChange={(e) => setForm({ ...form, statusi: e.target.value })}
-              >
+              <label htmlFor="create-statusi" className="form-label">Statusi</label>
+              <select name="statusi" className="form-select" id="create-statusi" value={form.statusi} onChange={(e) => setForm({ ...form, statusi: e.target.value })}>
                 <option value="pritje">pritje</option>
                 <option value="aktiv">aktiv</option>
                 <option value="suspenduar">suspenduar</option>
@@ -362,63 +272,24 @@ function Abonimi() {
               </select>
             </div>
             <div className="mb-3">
-              <label htmlFor="create-cmimi" className="form-label">
-                Cmimi
-              </label>
-              <input
-                type="number"
-                name="cmimi"
-                className="form-control"
-                id="create-cmimi"
-                value={form.cmimi}
-                onChange={(e) =>
-                  setForm({ ...form, cmimi: Number(e.target.value) })
-                }
-                min={0}
-                step="0.01"
-                required
-              />
+              <label htmlFor="create-cmimi" className="form-label">Cmimi</label>
+              <input type="number" name="cmimi" className="form-control" id="create-cmimi" value={form.cmimi} onChange={(e) => setForm({ ...form, cmimi: Number(e.target.value) })} min={0} step="0.01" required />
             </div>
             <div className="mb-3">
-              <label htmlFor="create-periudha" className="form-label">
-                Periudha
-              </label>
-              <select
-                name="periudha"
-                className="form-select"
-                id="create-periudha"
-                value={form.periudha}
-                onChange={(e) => setForm({ ...form, periudha: e.target.value })}
-                required
-              >
+              <label htmlFor="create-periudha" className="form-label">Periudha</label>
+              <select name="periudha" className="form-select" id="create-periudha" value={form.periudha} onChange={(e) => setForm({ ...form, periudha: e.target.value })} required>
                 <option value="mujore">mujore</option>
                 <option value="vjetore">vjetore</option>
               </select>
             </div>
             <div className="mb-3">
-              <label htmlFor="create-auto_rinovim" className="form-label">
-                Auto rinovim
-              </label>
-              <select
-                name="auto_rinovim"
-                className="form-select"
-                id="create-auto_rinovim"
-                value={form.auto_rinovim ? "1" : "0"}
-                onChange={(e) =>
-                  setForm({
-                    ...form,
-                    auto_rinovim: e.target.value === "1",
-                  })
-                }
-              >
+              <label htmlFor="create-auto_rinovim" className="form-label">Auto rinovim</label>
+              <select name="auto_rinovim" className="form-select" id="create-auto_rinovim" value={form.auto_rinovim ? "1" : "0"} onChange={(e) => setForm({ ...form, auto_rinovim: e.target.value === "1" })}>
                 <option value="1">Po</option>
                 <option value="0">Jo</option>
               </select>
             </div>
-
-            <button type="submit" className="btn btn-primary">
-              Krijo
-            </button>
+            <button type="submit" className="btn btn-primary">Krijo</button>
           </form>
         </div>
 
@@ -427,90 +298,24 @@ function Abonimi() {
           <p>Fillimisht kerko abonim specifik me ID me lart</p>
           <form onSubmit={updateAbonim}>
             <div className="mb-3">
-              <label htmlFor="update-klienti_id" className="form-label">
-                Klienti ID
-              </label>
-              <input
-                type="number"
-                name="klienti_id"
-                className="form-control"
-                id="update-klienti_id"
-                value={abonim.klienti_id || ""}
-                onChange={(e) =>
-                  setAbonim({
-                    ...abonim,
-                    klienti_id: Number(e.target.value),
-                  })
-                }
-                required
-                min={1}
-              />
+              <label htmlFor="update-klienti_id" className="form-label">Klienti ID</label>
+              <input type="number" name="klienti_id" className="form-control" id="update-klienti_id" value={abonim.klienti_id || ""} onChange={(e) => setAbonim({ ...abonim, klienti_id: Number(e.target.value) })} required min={1} />
             </div>
             <div className="mb-3">
-              <label htmlFor="update-paketa_id" className="form-label">
-                Paketa ID
-              </label>
-              <input
-                type="number"
-                name="paketa_id"
-                className="form-control"
-                id="update-paketa_id"
-                value={abonim.paketa_id || ""}
-                onChange={(e) =>
-                  setAbonim({
-                    ...abonim,
-                    paketa_id: Number(e.target.value),
-                  })
-                }
-                required
-                min={1}
-              />
+              <label htmlFor="update-paketa_id" className="form-label">Paketa ID</label>
+              <input type="number" name="paketa_id" className="form-control" id="update-paketa_id" value={abonim.paketa_id || ""} onChange={(e) => setAbonim({ ...abonim, paketa_id: Number(e.target.value) })} required min={1} />
             </div>
             <div className="mb-3">
-              <label htmlFor="update-data_fillimit" className="form-label">
-                Data fillimit
-              </label>
-              <input
-                type="date"
-                name="data_fillimit"
-                className="form-control"
-                id="update-data_fillimit"
-                value={abonim.data_fillimit}
-                onChange={(e) =>
-                  setAbonim({ ...abonim, data_fillimit: e.target.value })
-                }
-                required
-              />
+              <label htmlFor="update-data_fillimit" className="form-label">Data fillimit</label>
+              <input type="date" name="data_fillimit" className="form-control" id="update-data_fillimit" value={abonim.data_fillimit} onChange={(e) => setAbonim({ ...abonim, data_fillimit: e.target.value })} required />
             </div>
             <div className="mb-3">
-              <label htmlFor="update-data_skadimit" className="form-label">
-                Data skadimit
-              </label>
-              <input
-                type="date"
-                name="data_skadimit"
-                className="form-control"
-                id="update-data_skadimit"
-                value={abonim.data_skadimit}
-                onChange={(e) =>
-                  setAbonim({ ...abonim, data_skadimit: e.target.value })
-                }
-                required
-              />
+              <label htmlFor="update-data_skadimit" className="form-label">Data skadimit</label>
+              <input type="date" name="data_skadimit" className="form-control" id="update-data_skadimit" value={abonim.data_skadimit} onChange={(e) => setAbonim({ ...abonim, data_skadimit: e.target.value })} required />
             </div>
             <div className="mb-3">
-              <label htmlFor="update-statusi" className="form-label">
-                Statusi
-              </label>
-              <select
-                name="statusi"
-                className="form-select"
-                id="update-statusi"
-                value={abonim.statusi || "pritje"}
-                onChange={(e) =>
-                  setAbonim({ ...abonim, statusi: e.target.value })
-                }
-              >
+              <label htmlFor="update-statusi" className="form-label">Statusi</label>
+              <select name="statusi" className="form-select" id="update-statusi" value={abonim.statusi || "pritje"} onChange={(e) => setAbonim({ ...abonim, statusi: e.target.value })}>
                 <option value="pritje">pritje</option>
                 <option value="aktiv">aktiv</option>
                 <option value="suspenduar">suspenduar</option>
@@ -519,76 +324,29 @@ function Abonimi() {
               </select>
             </div>
             <div className="mb-3">
-              <label htmlFor="update-cmimi" className="form-label">
-                Cmimi
-              </label>
-              <input
-                type="number"
-                name="cmimi"
-                className="form-control"
-                id="update-cmimi"
-                value={abonim.cmimi}
-                onChange={(e) =>
-                  setAbonim({ ...abonim, cmimi: Number(e.target.value) })
-                }
-                min={0}
-                step="0.01"
-                required
-              />
+              <label htmlFor="update-cmimi" className="form-label">Cmimi</label>
+              <input type="number" name="cmimi" className="form-control" id="update-cmimi" value={abonim.cmimi} onChange={(e) => setAbonim({ ...abonim, cmimi: Number(e.target.value) })} min={0} step="0.01" required />
             </div>
             <div className="mb-3">
-              <label htmlFor="update-periudha" className="form-label">
-                Periudha
-              </label>
-              <select
-                name="periudha"
-                className="form-select"
-                id="update-periudha"
-                value={abonim.periudha || "mujore"}
-                onChange={(e) =>
-                  setAbonim({ ...abonim, periudha: e.target.value })
-                }
-                required
-              >
+              <label htmlFor="update-periudha" className="form-label">Periudha</label>
+              <select name="periudha" className="form-select" id="update-periudha" value={abonim.periudha || "mujore"} onChange={(e) => setAbonim({ ...abonim, periudha: e.target.value })} required>
                 <option value="mujore">mujore</option>
                 <option value="vjetore">vjetore</option>
               </select>
             </div>
             <div className="mb-3">
-              <label htmlFor="update-auto_rinovim" className="form-label">
-                Auto rinovim
-              </label>
-              <select
-                name="auto_rinovim"
-                className="form-select"
-                id="update-auto_rinovim"
-                value={abonim.auto_rinovim ? "1" : "0"}
-                onChange={(e) =>
-                  setAbonim({
-                    ...abonim,
-                    auto_rinovim: e.target.value === "1",
-                  })
-                }
-              >
+              <label htmlFor="update-auto_rinovim" className="form-label">Auto rinovim</label>
+              <select name="auto_rinovim" className="form-select" id="update-auto_rinovim" value={abonim.auto_rinovim ? "1" : "0"} onChange={(e) => setAbonim({ ...abonim, auto_rinovim: e.target.value === "1" })}>
                 <option value="1">Po</option>
                 <option value="0">Jo</option>
               </select>
             </div>
-
-            <button type="submit" className="btn btn-primary">
-              Perditso
-            </button>
+            <button type="submit" className="btn btn-primary">Perditso</button>
           </form>
         </div>
       </div>
     </div>
   );
-=======
-import React from "react";
-
-function Abonimi() {
-  return <div>Abonimi</div>;
->>>>>>> eklo
 }
 
 export default Abonimi;
