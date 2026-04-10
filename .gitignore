@@ -11,7 +11,11 @@ backend/public/storage
 
 # Frontend modules
 frontend/node_modules
+<<<<<<< HEAD
 # frontend/public
+=======
+frontend/public
+>>>>>>> eklo
 
 # Frontend Logs
 frontend/logs

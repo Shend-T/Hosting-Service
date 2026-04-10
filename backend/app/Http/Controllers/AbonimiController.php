@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-
 use Illuminate\Http\Request;
 use App\Models\Abonimi;
 
@@ -16,17 +15,9 @@ class AbonimiController extends Controller
     }
 
     // Merr vetem nje abonim ne baze te ID (Read)
-    public function show(int $id)
-    {
-        $abonimi = Abonimi::find($id);
-
-        if ($abonimi === null) {
-            return response()->json([
-                'message' => 'Abonimi me kete ID nuk u gjet.',
-            ], 404);
-        }
-
-        return response()->json($abonimi);
+    public function show(int $id) {
+        $client = Abonimi::findOrFail($id);
+        return response()->json($client);
     }
 
     // Krijo abonim te ri (Create)
@@ -47,7 +38,7 @@ class AbonimiController extends Controller
         return response()->json($abonimi, 201);
     }
 
-    // Perditso nje abonim( Update)
+    // Perditso nje abonim (Update)
     public function update(Request $request, int $id) {
         $abonimi = Abonimi::findOrFail($id);
 
@@ -63,15 +54,13 @@ class AbonimiController extends Controller
         ]);
 
         $abonimi->update($data);
-
         return response()->json($abonimi, 200);
     }
 
-    // Fshij nje abonim( Delete)
+    // Fshij nje abonim (Delete)
     public function destroy(int $id) {
         $abonimi = Abonimi::findOrFail($id);
         $abonimi->delete();
-
         return response()->json("", 204);
     }
 }
