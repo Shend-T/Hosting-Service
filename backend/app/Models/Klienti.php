@@ -7,9 +7,13 @@ use App\Models\Abonimi;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Klienti extends Model
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
+use Laravel\Sanctum\HasApiTokens;
+
+class Klienti extends Authenticatable
 {
-    use HasFactory;
+    use HasFactory, HasApiTokens, Notifiable;
 
     protected $table = 'klienti';
 
@@ -18,11 +22,20 @@ class Klienti extends Model
         'mbiemri',
         'kompania',
         'email',
+        'password',
         'telefoni',
         'adresa',
         // 'data_regjistrimit',
         'statusi',
         'bilanci'
+    ];
+
+    protected $hidden = [
+        'password',
+    ];
+
+    protected $casts = [
+        'password' => 'hashed',
     ];
 
     public function abonimet()

@@ -4,7 +4,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 // === Konstantet ===
-const BASE_URL = "http://localhost:8000/";
+const BASE_URL = "http://localhost:8000/api/";
 
 const defaultAbonim = {
   klienti_id: 0,

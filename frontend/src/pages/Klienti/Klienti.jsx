@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 function Klienti() {
   const navigate = useNavigate();
 
-  const baseURL = "http://localhost:8000/";
+  const baseURL = "http://localhost:8000/api/";
   const [clients, setClients] = useState([]);
 
   const [error, setError] = useState();

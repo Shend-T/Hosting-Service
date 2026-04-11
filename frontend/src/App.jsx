@@ -1,10 +1,15 @@
 import React from "react";
+import "./App.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import Header from "./pages/Header";
 import Footer from "./pages/Footer";
 
 import Home from "./pages/Home/Home";
+import About from "./pages/About/About";
+
+// ===== Authentikimi =====
+import Register from "./pages/Register/Register";
 
 import Klienti from "./pages/Klienti/Klienti";
 import Paketa from "./pages/Paketa/Paketa";
@@ -15,7 +20,11 @@ function App() {
     <BrowserRouter>
       <Header />
       <Routes>
+        {/* Faqet e zakonshme */}
         <Route path="/" element={<Home />} />
+        <Route path="/about" element={<About />} />
+        {/* Authentikimi */}
+        <Route path="/register" element={<Register />} />
         {/* CRUD-et */}
         <Route path="/klienti" element={<Klienti />} /> {/* Klienti CRUD */}
         <Route path="/paketa" element={<Paketa />} /> {/* Paketa CRUD */}

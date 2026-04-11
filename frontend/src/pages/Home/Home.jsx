@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import "./Home.css";
 import banner from "../../assets/home/world.png";
@@ -34,7 +34,7 @@ function Home() {
   return (
     <div className="container-main py-5">
       {/* ========= Hero ========= */}
-      <div className="container-sm px-4 pt-4 text-center border-bottom shadow-lg rounded fade-in-on-load">
+      <div className="container-sm px-4 pt-4 mt-5 text-center border-bottom shadow-lg rounded fade-in-on-load">
         <h1 className="display-4 fw-bold typewriter">
           Your Company Online With <span className="text-primary">ONE</span>{" "}
           Click
@@ -47,9 +47,17 @@ function Home() {
             live product in seconds.
           </p>
           <div className="d-flex justify-content-center gap-3 mb-4">
-            <button className="btn btn-primary btn-lg">Get Started</button>
+            <button
+              className="btn btn-primary btn-lg"
+              onClick={() => navigate("/register")}
+            >
+              Get Started
+            </button>
             {/* Kjo e qon ne /register ose /account */}
-            <button className="btn btn-outline-secondary btn-lg">
+            <button
+              className="btn btn-outline-secondary btn-lg"
+              onClick={() => navigate("/services")}
+            >
               View Plans
             </button>
           </div>

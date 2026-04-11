@@ -1,15 +1,51 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { NavLink, Link } from "react-router-dom";
+
+import logo from "../assets/logo.png";
 
 function Header() {
+  const [visible, setVisible] = useState(true);
+  const [lastScrollY, setLastScrollY] = useState(0);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+
+      if (currentScrollY > lastScrollY) {
+        // Scrolling down → hide
+        setVisible(false);
+      } else {
+        // Scrolling up → show
+        setVisible(true);
+      }
+
+      setLastScrollY(currentScrollY);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+
+    // Cleanup on unmount
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [lastScrollY]);
+
   return (
     <nav
       className="navbar navbar-expand-lg navbar-dark py-3"
-      style={{ backgroundColor: "var(--color-primary)" }}
+      // style={{ backgroundColor: "var(--color-primary)" }}
+      style={{
+        backgroundColor: "var(--color-primary)",
+        position: "fixed",
+        top: 0,
+        width: "100%",
+        transition: "top 0.3s ease",
+        top: visible ? "0" : "-80px",
+        zIndex: 1000,
+      }}
     >
       <div className="container">
-        <a className="navbar-brand" href="#">
-          Home
-        </a>
+        <Link className="navbar-brand navbar-logo" to="/">
+          <img src={logo} alt="UBT Hosting Services" height="28" />
+        </Link>
 
         <button
           className="navbar-toggler"
@@ -26,24 +62,47 @@ function Header() {
         <div className="collapse navbar-collapse" id="navbarNav">
           <ul className="navbar-nav me-auto mb-2 mb-lg-0">
             <li className="nav-item">
-              <a className="nav-link active" aria-current="page" href="#">
+              <NavLink
+                className={({ isActive }) =>
+                  isActive ? "nav-link active" : "" + "nav-link"
+                }
+                aria-current="page"
+                to="/"
+              >
                 Home
-              </a>
+              </NavLink>
+              {/* Dokumentimi per NavLink: https://reactrouter.com/api/components/NavLink */}
             </li>
             <li className="nav-item">
-              <a className="nav-link" href="#">
+              <NavLink
+                className={({ isActive }) =>
+                  isActive ? "nav-link active" : "" + "nav-link"
+                }
+                to="/about"
+                aria-current="page"
+              >
                 About
-              </a>
+              </NavLink>
             </li>
             <li className="nav-item">
-              <a className="nav-link" href="#">
+              <NavLink
+                className={({ isActive }) =>
+                  isActive ? "nav-link active" : "" + "nav-link"
+                }
+                to="/services"
+              >
                 Services
-              </a>
+              </NavLink>
             </li>
             <li className="nav-item">
-              <a className="nav-link" href="#">
+              <NavLink
+                className={({ isActive }) =>
+                  isActive ? "nav-link active" : "" + "nav-link"
+                }
+                to="/contact"
+              >
                 Contact
-              </a>
+              </NavLink>
             </li>
           </ul>
         </div>

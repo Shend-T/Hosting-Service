@@ -29,6 +29,7 @@ class KlientController extends Controller
             'mbiemri'   => 'required|string|max:255',
             'kompania'  => 'required|string|max:255',
             'email'     => 'required|email|unique:klienti,email',
+            'password'  => 'required|string|min:8',
             'telefoni'  => 'required|string|max:20',
             'adresa'    => 'required|string|max:255',
             'statusi'   => 'nullable|in:aktiv,jo-aktiv,suspenduar',
@@ -50,6 +51,7 @@ class KlientController extends Controller
             'mbiemri'   => 'required|string|max:255',
             'kompania'  => 'required|string|max:255',
             'email'     => 'required|email|unique:klienti,email,' . $client->id, // sigurohu qe nese email-i nuk ndryshon nuk kthen error
+            'password'  => 'required|string|min:8',
             'telefoni'  => 'required|string|max:20',
             'adresa'    => 'required|string|max:255',
             'statusi'   => 'nullable|in:aktiv,jo-aktiv,suspenduar',
