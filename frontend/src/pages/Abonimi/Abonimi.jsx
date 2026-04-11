@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import axios from "axios";
-
 import { useNavigate } from "react-router-dom";
 
 // === Konstantet ===
@@ -25,7 +24,6 @@ function formatDateForInput(value) {
 function Abonimi() {
   const navigate = useNavigate();
   const [error, setError] = useState("");
-
   const [abonim, setAbonim] = useState(defaultAbonim);
   const [abonimId, setAbonimId] = useState(0);
   const [abonimet, setAbonimet] = useState([]);
@@ -236,11 +234,11 @@ function Abonimi() {
               onChange={(e) => setAbonimId(e.target.value)}
             />
           </div>
-
           <button type="submit" className="btn btn-primary">
             Merr Abonimin Specifik
           </button>
         </form>
+
         <table className="table">
           <thead>
             <tr>
@@ -274,7 +272,6 @@ function Abonimi() {
       <div className="row justify-content-center">
         <div className="col-12 col-md-6 col-lg-5">
           <h3>Krijo Abonim</h3>
-
           <form onSubmit={postAbonim}>
             <div className="mb-3">
               <label htmlFor="create-klienti_id" className="form-label">
@@ -404,17 +401,13 @@ function Abonimi() {
                 id="create-auto_rinovim"
                 value={form.auto_rinovim ? "1" : "0"}
                 onChange={(e) =>
-                  setForm({
-                    ...form,
-                    auto_rinovim: e.target.value === "1",
-                  })
+                  setForm({ ...form, auto_rinovim: e.target.value === "1" })
                 }
               >
                 <option value="1">Po</option>
                 <option value="0">Jo</option>
               </select>
             </div>
-
             <button type="submit" className="btn btn-primary">
               Krijo
             </button>
@@ -436,10 +429,7 @@ function Abonimi() {
                 id="update-klienti_id"
                 value={abonim.klienti_id || ""}
                 onChange={(e) =>
-                  setAbonim({
-                    ...abonim,
-                    klienti_id: Number(e.target.value),
-                  })
+                  setAbonim({ ...abonim, klienti_id: Number(e.target.value) })
                 }
                 required
                 min={1}
@@ -456,10 +446,7 @@ function Abonimi() {
                 id="update-paketa_id"
                 value={abonim.paketa_id || ""}
                 onChange={(e) =>
-                  setAbonim({
-                    ...abonim,
-                    paketa_id: Number(e.target.value),
-                  })
+                  setAbonim({ ...abonim, paketa_id: Number(e.target.value) })
                 }
                 required
                 min={1}
@@ -563,17 +550,13 @@ function Abonimi() {
                 id="update-auto_rinovim"
                 value={abonim.auto_rinovim ? "1" : "0"}
                 onChange={(e) =>
-                  setAbonim({
-                    ...abonim,
-                    auto_rinovim: e.target.value === "1",
-                  })
+                  setAbonim({ ...abonim, auto_rinovim: e.target.value === "1" })
                 }
               >
                 <option value="1">Po</option>
                 <option value="0">Jo</option>
               </select>
             </div>
-
             <button type="submit" className="btn btn-primary">
               Perditso
             </button>
