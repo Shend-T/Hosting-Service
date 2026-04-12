@@ -228,6 +228,7 @@ function Home() {
                   <li>1 Project</li>
                   <li>Basic Performance</li>
                   <li>1 GB Storage</li>
+                  <li>Basic Domains</li>
                   <li>Community Support</li>
                 </ul>
 

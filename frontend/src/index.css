@@ -9,11 +9,7 @@
   /* https://colorhunt.co/palette/db1a1afff6f68cc7c42c687b */
   --color-background: #fff6f6;
   --color-primary: #2c687b;
-<<<<<<< HEAD
   --color-primary-lighter: #5ea19e;
-=======
-  --color-primary-lighter: #8cc7c4;
->>>>>>> eklo
   --color-secondary: #db1a1a;
 
   --text-color-primary: #121212;
@@ -44,12 +40,9 @@ body {
 h1 {
   font-family: var(--ff-secondary);
 }
-<<<<<<< HEAD
 .text-important {
   color: var(--color-secondary);
 }
-=======
->>>>>>> eklo
 
 a {
   text-decoration: none;
@@ -77,7 +70,6 @@ button {
 button:hover {
   background-color: var(--color-primary);
 }
-<<<<<<< HEAD
 .btn-primary {
   background-color: var(--color-primary-lighter) !important;
   border-color: var(--color-primary-lighter) !important;
@@ -86,5 +78,3 @@ button:hover {
   background-color: var(--color-primary) !important;
   border-color: var(--color-primary) !important;
 }
-=======
->>>>>>> eklo
