@@ -18,5 +18,7 @@ class VerifyCsrfToken extends Middleware
         '/paketa/*',
         '/abonimi',
         '/abonimi/*',
+        '/servers',
+        '/servers/*',
     ];
 }

@@ -18,6 +18,8 @@ return Application::configure(basePath: dirname(__DIR__))
             'paketa/*',
             'abonimi',
             'abonimi/*',
+            'servers',
+            'servers/*',
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
