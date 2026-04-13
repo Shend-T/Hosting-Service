@@ -96,7 +96,7 @@ function Register() {
 
   useEffect(() => {
     if (isAuthenticated) {
-      navigate("/");
+      navigate("/user");
     }
   }, [isAuthenticated]);
 
@@ -150,6 +150,22 @@ function Register() {
 
                   <div className="form-floating floating-border mb-3">
                     <input
+                      type="email"
+                      name="email"
+                      className="form-control"
+                      id="email"
+                      placeholder="name@example.com"
+                      value={form.email}
+                      onChange={(e) =>
+                        setForm({ ...form, email: e.target.value })
+                      }
+                      required
+                    />
+                    <label htmlFor="email">E-Mail Address</label>
+                  </div>
+
+                  <div className="form-floating floating-border mb-3">
+                    <input
                       type="password"
                       name="password"
                       className="form-control"
@@ -184,21 +200,6 @@ function Register() {
                     </label>
                   </div>
 
-                  <div className="form-floating floating-border mb-3">
-                    <input
-                      type="email"
-                      name="email"
-                      className="form-control"
-                      id="email"
-                      placeholder="name@example.com"
-                      value={form.email}
-                      onChange={(e) =>
-                        setForm({ ...form, email: e.target.value })
-                      }
-                      required
-                    />
-                    <label htmlFor="email">E-Mail Address</label>
-                  </div>
                   <div className="form-floating floating-border mb-3">
                     <input
                       type="text"

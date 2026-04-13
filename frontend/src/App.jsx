@@ -11,6 +11,7 @@ import About from "./pages/About/About";
 
 // ===== Authentikimi =====
 import Register from "./pages/Register/Register";
+import Login from "./pages/Login/Login";
 
 // ===== Dashboard-i =====
 import User from "./pages/User/User";
@@ -30,6 +31,7 @@ function App() {
         <Route path="/about" element={<About />} />
         {/* Authentikimi */}
         <Route path="/register" element={<Register />} />
+        <Route path="/login" element={<Login />} />
         {/* Dashboard */}
         <Route path="/user" element={<User />} />
         {/* CRUD-et */}
