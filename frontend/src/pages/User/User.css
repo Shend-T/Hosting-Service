@@ -2,10 +2,12 @@
   margin-top: 6rem;
 }
 .sidebar-link {
+  font-size: 12px;
   color: #333;
   padding: 10px 15px;
   border-radius: 5px;
   transition: background-color 0.2s ease;
+  cursor: pointer;
 }
 
 .sidebar-link:hover {
@@ -14,6 +16,6 @@
 }
 
 .sidebar-link.active {
-  background-color: var(--navbar-bg); /* uses your CSS variable */
-  color: #fff !important;
+  color: #000000 !important;
+  font-size: 13px;
 }

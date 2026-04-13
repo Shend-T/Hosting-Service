@@ -40,11 +40,8 @@ function Login() {
     e.preventDefault();
     if (validateFormData(form)) {
       try {
-        console.log(1);
         // Qetash e msova qe ma mir o axios request me e mbshtjell me try/catch se sa me perdor .then
         const res = await axios.post(URL, form);
-
-        console.log(2);
 
         dispatch(setToken(res.data.token));
       } catch (error) {

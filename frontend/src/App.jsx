@@ -2,8 +2,8 @@ import React from "react";
 import "./App.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
-import Header from "./pages/Header";
-import Footer from "./pages/Footer";
+import Header from "./components/Header";
+import Footer from "./components/Footer";
 
 // ===== Faqet e Zakonshme( Spo di term ma tmir) =====
 import Home from "./pages/Home/Home";

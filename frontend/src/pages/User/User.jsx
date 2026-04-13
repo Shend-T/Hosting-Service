@@ -1,14 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
-import { Bar } from "react-chartjs-2";
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  Title,
-  Tooltip,
-  Legend,
-} from "chart.js";
+import React, { useState, useEffect } from "react";
 import "./User.css";
 
 import { useNavigate } from "react-router-dom";
@@ -16,26 +6,24 @@ import { useSelector, useDispatch } from "react-redux";
 import { removeToken } from "../../features/auth/authSlice";
 import axios from "axios";
 
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  Title,
-  Tooltip,
-  Legend,
-);
+import Dashboard from "./sections/Dashboard";
+import Servers from "./sections/Servers";
+import Plans from "./sections/Plans";
+import Tickets from "./sections/Tickets";
 
 function User() {
-  const URL = "http://localhost:8000/api/abonimi/chart";
+  const URL = "http://localhost:8000/api/";
   const navigate = useNavigate();
 
   const dispatch = useDispatch();
   const token = useSelector((state) => state.auth.token);
   const { isAuthenticated } = useSelector((state) => state.auth);
 
-  const [chartData, setChartData] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [user, setUser] = useState(null);
+
   const [sidebarOpen, setSidebarOpen] = useState(false);
+
+  const [activePage, setActivePage] = useState("dashboard");
 
   useEffect(() => {
     if (!isAuthenticated) {
@@ -44,42 +32,42 @@ function User() {
   }, [isAuthenticated]);
 
   useEffect(() => {
-    const fetchChartData = async () => {
+    const getUser = async () => {
       try {
-        const response = await axios.get(URL, {
+        const response = await axios.get(URL + "user", {
           headers: { Authorization: `Bearer ${token}` },
         });
 
         const data = response.data;
 
-        setChartData({
-          labels: data.map((item) => item.label),
-          datasets: [
-            {
-              label: "Abonimet",
-              data: data.map((item) => item.total),
-              backgroundColor: "rgba(54, 162, 235, 0.6)",
-              borderColor: "rgba(54, 162, 235, 1)",
-              borderWidth: 1,
-            },
-          ],
-        });
-        console.log(data);
+        setUser(data);
       } catch (error) {
-        console.error(error);
-      } finally {
-        setLoading(false);
+        console.log(error);
       }
     };
 
-    fetchChartData();
+    getUser();
   }, []);
+
+  const [confirmLogOut, setConfirmLogOut] = useState(false);
+
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === "Escape") {
+        setConfirmLogOut(false);
+      }
+    };
+
+    if (confirmLogOut) {
+      window.addEventListener("keydown", handleKeyDown);
+    }
+
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [confirmLogOut]);
 
   const logOut = () => {
     dispatch(removeToken());
   };
-
-  console.log(token);
 
   return (
     <div className="container-fluid custom-margin">
@@ -97,99 +85,120 @@ function User() {
           <div className="position-sticky pt-3">
             <ul className="nav flex-column">
               <li className="nav-item">
-                <a className="nav-link sidebar-link" href="#">
-                  Dashboard
+                <a
+                  className={`nav-link sidebar-link ${activePage === "dashboard" ? "active" : ""}`}
+                  onClick={() => setActivePage("dashboard")}
+                >
+                  Paneli
                 </a>
               </li>
               <li className="nav-item">
-                <a className="nav-link sidebar-link" href="#">
+                <a
+                  className={`nav-link sidebar-link ${activePage === "servers" ? "active" : ""}`}
+                  onClick={() => setActivePage("servers")}
+                >
                   Serveret Aktiv
                 </a>
               </li>
               <li className="nav-item">
-                <a className="nav-link sidebar-link" href="#">
+                <a
+                  className={`nav-link sidebar-link ${activePage === "monitor" ? "active" : ""}`}
+                  onClick={() => setActivePage("monitor")}
+                >
                   Monitorimi i Planeve
                 </a>
               </li>
               <li className="nav-item">
-                <a className="nav-link sidebar-link" href="#">
-                  Kerkesat
+                <a
+                  className={`nav-link sidebar-link ${activePage === "tickets" ? "active" : ""}`}
+                  onClick={() => setActivePage("tickets")}
+                >
+                  Kerkesat(Tiketat)
                 </a>
               </li>
               <li className="nav-item">
-                <button onClick={() => logOut()}>Log Out</button>
+                <a
+                  className="nav-link sidebar-link"
+                  onClick={() => setConfirmLogOut(true)}
+                >
+                  Log Out
+                </a>
               </li>
             </ul>
           </div>
         </nav>
 
         <main className="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-          <div className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-            <h1>Dashboard</h1>
-            {/* {user && (
-              <span className="text-muted">
-                Pershendetje, {user.emri} {user.mbiemri}
-              </span>
-            )} */}
+          <div className="flex flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+            <h1>Pershendetje,</h1>
+            {user && (
+              <h1 className="h3">
+                {user.emri} {user.mbiemri}
+              </h1>
+            )}
           </div>
-          {/* <div className="row mb-4">
+
+          <div className="row mb-4">
             <div className="col-md-4">
               <div className="card shadow-sm">
                 <div className="card-body">
-                  <h6 className="card-title text-muted">Current Balance</h6>
-                  <h2 className="card-text">
-                    ${user.bilanci}
-                  </h2>
+                  <h6 className="card-title text-muted">Bilanci Juaj Aktual</h6>
+                  {user && <h2 className="card-text">${user.bilanci}</h2>}
+                  <button>Shto fonde</button>
                 </div>
               </div>
             </div>
-          </div> */}
-
-          <h2 className="mb-3">Abonimet E Juaja Gjate Kohes</h2>
-          {loading ? (
-            <p>Loading chart...</p>
-          ) : // Ide skom qysh me thon qeto shqip
-          chartData ? (
-            <Bar
-              data={chartData}
-              options={{
-                responsive: true,
-                plugins: {
-                  legend: { position: "top" },
-                  //   title: {
-                  //     display: true,
-                  //     text: "",
-                  //   },
-                },
-                scales: {
-                  y: {
-                    beginAtZero: true,
-                    ticks: {
-                      stepSize: 1,
-                    },
-                  },
-                },
-              }}
-            />
-          ) : (
-            <p>Nuk keni abonime aktive</p>
-          )}
-
-          <h2 className="mt-4">Pagesat e Juaja</h2>
-          <div className="table-responsive">
-            <table className="table table-striped table-sm">
-              <thead>
-                <tr>
-                  <th>Plani</th>
-                  <th>Data</th>
-                  <th>Statusi</th>
-                </tr>
-              </thead>
-              <tbody></tbody>
-            </table>
           </div>
+
+          {activePage == "dashboard" ? (
+            <Dashboard user={user} />
+          ) : activePage == "servers" ? (
+            <Servers />
+          ) : activePage == "monitor" ? (
+            <Plans />
+          ) : activePage == "tickets" ? (
+            <Tickets />
+          ) : (
+            <Dashboard user={user} />
+          )}
         </main>
       </div>
+      {confirmLogOut && (
+        <div
+          className="modal show d-block"
+          tabIndex="-1"
+          style={{ backgroundColor: "rgba(0,0,0,0.5)" }}
+          onClick={() => setConfirmLogOut(false)}
+        >
+          <div
+            className="modal-dialog modal-dialog-centered"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="modal-content">
+              <div className="modal-header">
+                <h5 className="modal-title">A je sigurt?</h5>
+                <button
+                  type="button"
+                  className="btn-close"
+                  onClick={() => setConfirmLogOut(false)}
+                />
+              </div>
+
+              <div className="modal-footer">
+                <button
+                  className="btn btn-secondary"
+                  onClick={() => setConfirmLogOut(false)}
+                >
+                  Jo
+                </button>
+                <button className="btn btn-danger" onClick={() => logOut()}>
+                  Po, Log Out
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
