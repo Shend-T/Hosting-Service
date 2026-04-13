@@ -1,0 +1,19 @@
+.custom-margin {
+  margin-top: 6rem;
+}
+.sidebar-link {
+  color: #333;
+  padding: 10px 15px;
+  border-radius: 5px;
+  transition: background-color 0.2s ease;
+}
+
+.sidebar-link:hover {
+  background-color: #e9ecef;
+  color: #000;
+}
+
+.sidebar-link.active {
+  background-color: var(--navbar-bg); /* uses your CSS variable */
+  color: #fff !important;
+}

@@ -10,8 +10,10 @@ import "./Register.css";
 
 function Register() {
   const URL = "http://localhost:8000/api/register";
+
   const dispatch = useDispatch();
   const { isAuthenticated } = useSelector((state) => state.auth);
+
   const navigate = useNavigate();
 
   const [form, setForm] = useState({

@@ -12,6 +12,9 @@ import About from "./pages/About/About";
 // ===== Authentikimi =====
 import Register from "./pages/Register/Register";
 
+// ===== Dashboard-i =====
+import User from "./pages/User/User";
+
 // ===== CRUD =====
 import Klienti from "./pages/Klienti/Klienti";
 import Paketa from "./pages/Paketa/Paketa";
@@ -27,6 +30,8 @@ function App() {
         <Route path="/about" element={<About />} />
         {/* Authentikimi */}
         <Route path="/register" element={<Register />} />
+        {/* Dashboard */}
+        <Route path="/user" element={<User />} />
         {/* CRUD-et */}
         <Route path="/klienti" element={<Klienti />} /> {/* Klienti CRUD */}
         <Route path="/paketa" element={<Paketa />} /> {/* Paketa CRUD */}

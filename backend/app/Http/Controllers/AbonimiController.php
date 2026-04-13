@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Abonimi;
+use Illuminate\Support\Facades\DB;
 
 class AbonimiController extends Controller
 {
@@ -62,5 +63,23 @@ class AbonimiController extends Controller
         $abonimi = Abonimi::findOrFail($id);
         $abonimi->delete();
         return response()->json("", 204);
+    }
+
+    // Kthe daten e krijimit te abonimit( na duhet per dashboard)
+    public function chartData(Request $request)
+    {
+        $data = Abonimi::where('klienti_id', $request->user()->id)
+            ->selectRaw('MONTH(created_at) as month, YEAR(created_at) as year, COUNT(*) as total')
+            ->groupByRaw('YEAR(created_at), MONTH(created_at)')
+            ->orderByRaw('YEAR(created_at), MONTH(created_at)')
+            ->get()
+            ->map(function ($item) {
+                return [
+                    'label' => date('M Y', mktime(0, 0, 0, $item->month, 1, $item->year)),
+                    'total' => $item->total,
+                ];
+            });
+
+        return response()->json($data);
     }
 }
