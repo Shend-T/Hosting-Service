@@ -26,10 +26,16 @@ function Register() {
     telefoni: "",
     adresa: "",
   });
+  const [confirmedTerms, setConfirmedTerms] = useState(false);
 
   const validateFormData = (form) => {
     // ==== Koment per ma von ====
     // Boje 'clean-up kodin, edhe mir o shqip me bo krejt tekstin
+    if (!confirmedTerms) {
+      alert("Duhet me agree to terms & services");
+      return false;
+    }
+
     if (
       !form.emri ||
       !form.emri.trim() ||
@@ -245,6 +251,22 @@ function Register() {
                       required
                     />
                     <label htmlFor="telefoni">Phone Number</label>
+                  </div>
+                  <div className="mb-3 form-check">
+                    <input
+                      className="form-check-input"
+                      type="checkbox"
+                      name="terms"
+                      id="terms"
+                      checked={confirmedTerms}
+                      onChange={(e) => setConfirmedTerms(e.target.checked)}
+                    />
+                    <label className="form-check-label ms-2" htmlFor="terms">
+                      By Clicking This Box You Agree To Our{" "}
+                      <Link to="/terms" target="_blank">
+                        Terms & Services
+                      </Link>
+                    </label>
                   </div>
 
                   <Link to="/login">Already Have An Account?</Link>

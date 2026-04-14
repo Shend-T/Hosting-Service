@@ -8,13 +8,15 @@ import Footer from "./components/Footer";
 // ===== Faqet e Zakonshme( Spo di term ma tmir) =====
 import Home from "./pages/Home/Home";
 import About from "./pages/About/About";
+import Terms from "./pages/Terms/Terms";
 
 // ===== Authentikimi =====
 import Register from "./pages/Register/Register";
 import Login from "./pages/Login/Login";
 
-// ===== Dashboard-i =====
+// ===== Dashboard-i & Faqet Tjera =====
 import User from "./pages/User/User";
+import Services from "./pages/Services/Services";
 
 // ===== CRUD =====
 import Klienti from "./pages/Klienti/Klienti";
@@ -29,11 +31,13 @@ function App() {
         {/* Faqet e zakonshme */}
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<About />} />
+        <Route path="/terms" element={<Terms />} />
         {/* Authentikimi */}
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
         {/* Dashboard */}
         <Route path="/user" element={<User />} />
+        <Route path="/services" element={<Services />} />
         {/* CRUD-et */}
         <Route path="/klienti" element={<Klienti />} /> {/* Klienti CRUD */}
         <Route path="/paketa" element={<Paketa />} /> {/* Paketa CRUD */}
