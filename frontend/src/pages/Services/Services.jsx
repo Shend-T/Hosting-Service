@@ -1,9 +1,110 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+
+import { useSelector } from "react-redux";
 
 function Services() {
+  const { isAuthenticated } = useSelector((state) => state.auth);
+  const [packets, setPackets] = useState([]);
+  useEffect(() => {
+    const getFirstThreePackets = async () => {
+      try {
+        const res = await axios.get("http://127.0.0.1:8000/api/paketa-3");
+        res.data.forEach((p) => {
+          p.pershkrimi = p.pershkrimi.split("\n");
+        });
+
+        setPackets(res.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    getFirstThreePackets();
+  }, []);
+
+  const [periudha, setPeriudha] = useState("mujore");
+
   return (
-    <div className="container" style={{ marginTop: "10vh" }}>
-      <h1>Keto Jane Te Gjitha Planet( Paketat) Qe Ne I Ofrojme</h1>
+    <div className="container mb-5 pb-5" style={{ marginTop: "15vh" }}>
+      <div className="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
+        <h1>Keto Jane Te Gjitha Planet Qe Ne I Ofrojme Momentalisht</h1>
+        <p className="lead">
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Fuga,
+          blanditiis dolorem. Quaerat, adipisci assumenda repellendus quod,
+          illum sunt reprehenderit, reiciendis aliquam voluptas alias temporibus
+          voluptatum? At, iste voluptas. Illo labore obcaecati ab aut voluptas
+          repudiandae, odio cumque optio eius sint.
+        </p>
+      </div>
+
+      <div className="container mb-5">
+        <div className="card-deck text-center my-5 py-5">
+          <div style={{ fontSize: "14px", marginBottom: "1rem" }}>
+            <div class="form-check form-check-inline">
+              <input
+                class="form-check-input"
+                type="radio"
+                name="inlineRadioOptions"
+                id="radio_mujore"
+                value="mujore"
+                onChange={(e) => setPeriudha(e.target.value)}
+                checked={periudha === "mujore"}
+              />
+              <label class="form-check-label" for="radio_mujore">
+                Planet Mujore
+              </label>
+            </div>
+            <div class="form-check form-check-inline">
+              <input
+                class="form-check-input"
+                type="radio"
+                name="inlineRadioOptions"
+                id="radio_vjetore"
+                value="vjetore"
+                onChange={(e) => setPeriudha(e.target.value)}
+                checked={periudha === "vjetore"}
+              />
+              <label class="form-check-label" for="radio_vjetore">
+                Planet Vjetore
+              </label>
+            </div>
+          </div>
+          <div className="row align-items-center justify-content-center">
+            {packets.map((packet) => (
+              <div className="col-md-4 col-sm-8 mb-3" key={packet.id}>
+                <div className="card shadow py-3 ">
+                  <div className="card-body">
+                    <h2 className="card-title">{packet.emri}</h2>
+                    <p className="card-text lead">{packet.pershkrimi[0]}</p>
+                    <p className="card-text lead">
+                      {periudha === "mujore" ? (
+                        <b>€{packet.cmimi_mujor} / muaj</b>
+                      ) : (
+                        <b>€{packet.cmimi_vjetor} / vjet</b>
+                      )}
+                    </p>
+
+                    <p className="card-text lead">{packet.pershkrimi[1]}</p>
+                    <div className="text-start px-5">
+                      <p className="lead">{packet.pershkrimi[2]}</p>
+                      <p className="lead">{packet.pershkrimi[3]}</p>
+                      <p className="lead">{packet.pershkrimi[4]}</p>
+                      <p className="lead">{packet.pershkrimi[5]}</p>
+                      <p className="lead">{packet.pershkrimi[6]}</p>
+                      <p className="lead">{packet.pershkrimi[7]}</p>
+                    </div>
+
+                    <a href="#" className="btn btn-outline-primary">
+                      Fillo Me Kete Plan
+                    </a>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
 
       {/* Per ma von */}
       {/* Merr prej backend-it krejt paketat( i gjeneron) edhe shfaqi */}

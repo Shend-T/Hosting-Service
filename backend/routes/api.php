@@ -32,8 +32,9 @@ Route::post('/abonimi', [AbonimiController::class, 'store']);          // Krijo 
 Route::put('/abonimi/{id}', [AbonimiController::class, 'update']);     // Perditso nje Abonim - Update
 Route::delete('/abonimi/{id}', [AbonimiController::class, 'destroy']); // Fshij nje Abonim    - Delete
 
-Route::get('/paketa', [PaketaController::class, 'index']);           // Kthe krejt paketat
-Route::get('/paketa/{id}', [PaketaController::class, 'show']);       // Kthe nje pakete ne baze te id-s
-Route::post('/paketa', [PaketaController::class, 'store']);          // Krijo pakete
-Route::put('/paketa/{id}', [PaketaController::class, 'update']);     // Perditso nje pakete
-Route::delete('/paketa/{id}', [PaketaController::class, 'destroy']); // Fshij nje pakete
+Route::get('/paketa', [PaketaController::class, 'index']);            // Kthe krejt paketat
+Route::get('/paketa/{id}', [PaketaController::class, 'show']);        // Kthe nje pakete ne baze te id-s
+Route::get('/paketa-3', [PaketaController::class, 'showFirstThree']); // Kthe vetem 3 paketat e para( na duhet per home page)
+Route::post('/paketa', [PaketaController::class, 'store']);           // Krijo pakete
+Route::put('/paketa/{id}', [PaketaController::class, 'update']);      // Perditso nje pakete
+Route::delete('/paketa/{id}', [PaketaController::class, 'destroy']);  // Fshij nje pakete
