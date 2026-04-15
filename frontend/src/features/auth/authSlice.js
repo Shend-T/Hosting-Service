@@ -14,9 +14,10 @@ export const authSlice = createSlice({
       state.isAuthenticated = true;
     },
     removeToken: (state) => {
-      localStorage.removeItem("token");
       state.token = null;
       state.isAuthenticated = false;
+
+      localStorage.removeItem("token");
     },
   },
 });

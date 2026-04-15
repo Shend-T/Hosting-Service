@@ -251,9 +251,9 @@ function Home() {
                     <li>{packet.pershkrimi[7]}</li>
                   </ul>
 
-                  <a href="#" className="btn btn-outline-primary">
+                  <Link to="/services" className="btn btn-outline-primary">
                     Fillo Me Kete Plan
-                  </a>
+                  </Link>
                 </div>
               </div>
             </div>

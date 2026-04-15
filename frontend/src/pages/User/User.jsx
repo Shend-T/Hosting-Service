@@ -4,6 +4,7 @@ import "./User.css";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { removeToken } from "../../features/auth/authSlice";
+import { removeUser } from "../../features/user/userSlice";
 import axios from "axios";
 
 import Dashboard from "./sections/Dashboard";
@@ -50,7 +51,6 @@ function User() {
   }, []);
 
   const [confirmLogOut, setConfirmLogOut] = useState(false);
-
   useEffect(() => {
     const handleKeyDown = (e) => {
       if (e.key === "Escape") {
@@ -66,6 +66,7 @@ function User() {
   }, [confirmLogOut]);
 
   const logOut = () => {
+    dispatch(removeUser());
     dispatch(removeToken());
   };
 

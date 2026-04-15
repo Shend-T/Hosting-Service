@@ -6,6 +6,8 @@ import { useSelector } from "react-redux";
 function Services() {
   const { isAuthenticated } = useSelector((state) => state.auth);
   const [packets, setPackets] = useState([]);
+  const [selectedPacket, setSelectedPacket] = useState(null);
+
   useEffect(() => {
     const getFirstThreePackets = async () => {
       try {
@@ -23,10 +25,24 @@ function Services() {
     getFirstThreePackets();
   }, []);
 
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === "Escape") {
+        setSelectedPacket(null);
+      }
+    };
+
+    if (selectedPacket) {
+      window.addEventListener("keydown", handleKeyDown);
+    }
+
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [selectedPacket]);
+
   const [periudha, setPeriudha] = useState("mujore");
 
   return (
-    <div className="container mb-5 pb-5" style={{ marginTop: "15vh" }}>
+    <div className="container mb-5 pb-5" style={{ paddingTop: "15vh" }}>
       <div className="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
         <h1>Keto Jane Te Gjitha Planet Qe Ne I Ofrojme Momentalisht</h1>
         <p className="lead">
@@ -41,9 +57,9 @@ function Services() {
       <div className="container mb-5">
         <div className="card-deck text-center my-5 py-5">
           <div style={{ fontSize: "14px", marginBottom: "1rem" }}>
-            <div class="form-check form-check-inline">
+            <div className="form-check form-check-inline">
               <input
-                class="form-check-input"
+                className="form-check-input"
                 type="radio"
                 name="inlineRadioOptions"
                 id="radio_mujore"
@@ -51,13 +67,13 @@ function Services() {
                 onChange={(e) => setPeriudha(e.target.value)}
                 checked={periudha === "mujore"}
               />
-              <label class="form-check-label" for="radio_mujore">
+              <label className="form-check-label" htmlFor="radio_mujore">
                 Planet Mujore
               </label>
             </div>
-            <div class="form-check form-check-inline">
+            <div className="form-check form-check-inline">
               <input
-                class="form-check-input"
+                className="form-check-input"
                 type="radio"
                 name="inlineRadioOptions"
                 id="radio_vjetore"
@@ -65,7 +81,7 @@ function Services() {
                 onChange={(e) => setPeriudha(e.target.value)}
                 checked={periudha === "vjetore"}
               />
-              <label class="form-check-label" for="radio_vjetore">
+              <label className="form-check-label" htmlFor="radio_vjetore">
                 Planet Vjetore
               </label>
             </div>
@@ -95,9 +111,12 @@ function Services() {
                       <p className="lead">{packet.pershkrimi[7]}</p>
                     </div>
 
-                    <a href="#" className="btn btn-outline-primary">
+                    <button
+                      onClick={() => setSelectedPacket(packet)}
+                      className="btn btn-outline-primary"
+                    >
                       Fillo Me Kete Plan
-                    </a>
+                    </button>
                   </div>
                 </div>
               </div>
@@ -105,9 +124,57 @@ function Services() {
           </div>
         </div>
       </div>
+      {selectedPacket ? (
+        isAuthenticated ? (
+          <div
+            className="modal show d-block"
+            tabIndex="-1"
+            style={{ backgroundColor: "rgba(0,0,0,0.5)" }}
+            onClick={() => setSelectedPacket(null)}
+          >
+            <div
+              className="modal-dialog modal-dialog-centered"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="modal-content">
+                <div className="modal-header">
+                  <h5 className="modal-title">Lorem Ipsum</h5>
+                  <button
+                    type="button"
+                    className="btn-close"
+                    onClick={() => setSelectedPacket(null)}
+                  />
+                </div>
 
-      {/* Per ma von */}
-      {/* Merr prej backend-it krejt paketat( i gjeneron) edhe shfaqi */}
+                <div className="model-body">
+                  <p className="lead">
+                    Lorem ipsum dolor sit amet consectetur, adipisicing elit.
+                    Dolorem eos consectetur sit placeat, quam debitis! Rerum
+                    debitis tenetur officia distinctio.
+                  </p>
+                </div>
+
+                <div className="modal-footer">
+                  <button
+                    className="btn btn-secondary"
+                    onClick={() => setSelectedPacket(null)}
+                  >
+                    Kthehu
+                  </button>
+                  <button
+                    className="btn btn-primary"
+                    onClick={() => buyPacket()}
+                  >
+                    Blej
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        ) : (
+          <h1>Log In FIrst</h1>
+        )
+      ) : null}
     </div>
   );
 }

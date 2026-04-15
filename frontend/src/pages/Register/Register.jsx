@@ -5,6 +5,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { setToken } from "../../features/auth/authSlice";
+import { setUser } from "../../features/user/userSlice";
 
 import "./Register.css";
 
@@ -92,6 +93,7 @@ function Register() {
         .post(URL, form)
         .then(function (response) {
           dispatch(setToken(response.data.token));
+          dispatch(setUser({ id: response.data.klienti.id, funds: 0.0 }));
         })
         .catch(function (error) {
           console.log(error);
