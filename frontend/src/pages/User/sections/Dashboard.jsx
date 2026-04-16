@@ -67,32 +67,36 @@ function Dashboard(user) {
         <p>Loading chart...</p>
       ) : // Ide skom qysh me thon qeto shqip
       chartData ? (
-        <Bar
-          data={chartData}
-          options={{
-            responsive: true,
-            plugins: {
-              legend: { position: "top" },
-              //   title: {
-              //     display: true,
-              //     text: "",
-              //   },
-            },
-            scales: {
-              y: {
-                beginAtZero: true,
-                ticks: {
-                  stepSize: 1,
+        <div style={{ height: "400px", position: "relative" }}>
+          <Bar
+            data={chartData}
+            options={{
+              responsive: true,
+              maintainAspectRatio: false,
+              plugins: {
+                legend: { position: "top" },
+                //   title: {
+                //     display: true,
+                //     text: "",
+                //   },
+              },
+              scales: {
+                y: {
+                  beginAtZero: true,
+                  ticks: {
+                    stepSize: 1,
+                  },
                 },
               },
-            },
-          }}
-        />
+            }}
+          />
+        </div>
       ) : (
         <p>Nuk keni abonime aktive</p>
       )}
 
       <h2 className="mt-4">Pagesat e Juaja</h2>
+
       <div className="table-responsive">
         <table className="table table-striped table-sm">
           <thead>

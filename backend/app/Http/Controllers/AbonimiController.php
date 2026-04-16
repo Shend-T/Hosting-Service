@@ -88,13 +88,13 @@ class AbonimiController extends Controller
     public function chartData(Request $request)
     {
         $data = Abonimi::where('klienti_id', $request->user()->id)
-            ->selectRaw('MONTH(created_at) as month, YEAR(created_at) as year, COUNT(*) as total')
-            ->groupByRaw('YEAR(created_at), MONTH(created_at)')
-            ->orderByRaw('YEAR(created_at), MONTH(created_at)')
+            ->selectRaw('DAY(created_at) as day, MONTH(created_at) as month, YEAR(created_at) as year, COUNT(*) as total')
+            ->groupByRaw('YEAR(created_at), MONTH(created_at), DAY(created_at)')
+            ->orderByRaw('YEAR(created_at), MONTH(created_at), DAY(created_at)')
             ->get()
             ->map(function ($item) {
                 return [
-                    'label' => date('M Y', mktime(0, 0, 0, $item->month, 1, $item->year)),
+                    'label' => date('j M Y', mktime(0, 0, 0, $item->month, $item->day, $item->year)),
                     'total' => $item->total,
                 ];
             });
