@@ -24,6 +24,7 @@ Route::middleware('auth:sanctum')->group(function () { // Kto linka jan te mbroj
     Route::get('/user', [AuthController::class, 'user']);
 
     Route::get('/abonimi/chart', [AbonimiController::class, 'chartData']);
+    Route::post('/abonimi/user', [AbonimiController::class, 'userStore']);
 
     Route::patch('/klienti/add-funds', [KlientController::class, 'addFunds']); 
 });

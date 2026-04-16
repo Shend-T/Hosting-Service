@@ -40,6 +40,49 @@ function Services() {
   }, [selectedPacket]);
 
   const [periudha, setPeriudha] = useState("mujore");
+  const [autoRinovim, setAutoRinovim] = useState(true);
+
+  const userId = useSelector((state) => state.user.id);
+  const token = useSelector((state) => state.auth.token);
+  // const formatDateForBackend = (date) => {
+  //   return date.toISOString().split("T")[0]; // Returns YYYY-MM-DD
+  // };
+
+  const buyPacket = async () => {
+    const form = {
+      klienti_id: Number(userId),
+      paketa_id: selectedPacket.id,
+      data_fillimit: new Date().toISOString().slice(0, 10),
+      data_skadimit:
+        periudha === "mujore"
+          ? new Date(new Date().setMonth(new Date().getMonth() + 1))
+              .toISOString()
+              .slice(0, 10)
+          : new Date(new Date().setFullYear(new Date().getFullYear() + 1))
+              .toISOString()
+              .slice(0, 10),
+      cmimi:
+        periudha === "mujore"
+          ? Number(selectedPacket.cmimi_mujor)
+          : Number(selectedPacket.cmimi_vjetor),
+      periudha: periudha,
+      auto_rinovim: autoRinovim,
+    };
+    try {
+      const res = await axios.post(
+        "http://localhost:8000/api/abonimi/user",
+        form,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        },
+      );
+
+      console.log(res.data);
+    } catch (error) {
+      console.log(error);
+    }
+    // console.log(form);
+  };
 
   return (
     <div className="container mb-5 pb-5" style={{ paddingTop: "15vh" }}>
@@ -138,7 +181,9 @@ function Services() {
             >
               <div className="modal-content">
                 <div className="modal-header">
-                  <h5 className="modal-title">Lorem Ipsum</h5>
+                  <h5 className="modal-title">
+                    Deshironi te bleni Planin <b>{selectedPacket.emri}</b>
+                  </h5>
                   <button
                     type="button"
                     className="btn-close"
@@ -146,12 +191,37 @@ function Services() {
                   />
                 </div>
 
-                <div className="model-body">
+                <div className="model-body px-5 py-3">
+                  <p className="lead">Ky Plan Perfshine</p>
+                  <div className="text-start px-5">
+                    <p className="lead">{selectedPacket.pershkrimi[2]}</p>
+                    <p className="lead">{selectedPacket.pershkrimi[3]}</p>
+                    <p className="lead">{selectedPacket.pershkrimi[4]}</p>
+                    <p className="lead">{selectedPacket.pershkrimi[5]}</p>
+                    <p className="lead">{selectedPacket.pershkrimi[6]}</p>
+                    <p className="lead">{selectedPacket.pershkrimi[7]}</p>
+                  </div>
+
                   <p className="lead">
-                    Lorem ipsum dolor sit amet consectetur, adipisicing elit.
-                    Dolorem eos consectetur sit placeat, quam debitis! Rerum
-                    debitis tenetur officia distinctio.
+                    Dhe kushton:{" "}
+                    {periudha === "mujore" ? (
+                      <b>€{selectedPacket.cmimi_mujor} / muaj</b>
+                    ) : (
+                      <b>€{selectedPacket.cmimi_vjetor} / vjet</b>
+                    )}
                   </p>
+
+                  <p className="lead">
+                    Deshironi rinovim te abonimit automatikisht?
+                  </p>
+                  <select
+                    className="form-select"
+                    defaultValue={autoRinovim}
+                    onChange={(e) => setAutoRinovim(e.target.value === "true")}
+                  >
+                    <option value={true}>Po</option>
+                    <option value={false}>Jo</option>
+                  </select>
                 </div>
 
                 <div className="modal-footer">

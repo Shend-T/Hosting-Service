@@ -39,6 +39,25 @@ class AbonimiController extends Controller
         return response()->json($abonimi, 201);
     }
 
+    public function userStore(Request $request)
+    {
+        $data = $request->validate([
+            'klienti_id'    => 'required|exists:klienti,id',
+            'paketa_id'     => 'required|exists:paketa,id',
+            'data_fillimit' => 'required|date',
+            'data_skadimit' => 'required|date|after_or_equal:data_fillimit',
+            'statusi'       => 'sometimes|in:pritje,aktiv,suspenduar,skaduar,ndalur',
+            'cmimi'         => 'sometimes|numeric',
+            'periudha'      => 'required|in:mujore,vjetore',
+            'auto_rinovim'  => 'sometimes|boolean'
+        ]);
+
+        $abonimi = Abonimi::create($data);
+        return response()->json([
+            'message' => 'Jeni abonuar me sukses',
+        ], 201);
+    }
+
     // Perditso nje abonim (Update)
     public function update(Request $request, int $id) {
         $abonimi = Abonimi::findOrFail($id);
