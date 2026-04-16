@@ -5,6 +5,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { setToken } from "../../features/auth/authSlice";
+import { setUser } from "../../features/user/userSlice";
 
 import "./Login.css";
 
@@ -44,6 +45,9 @@ function Login() {
         const res = await axios.post(URL, form);
 
         dispatch(setToken(res.data.token));
+        dispatch(
+          setUser({ id: res.data.klienti.id, funds: res.data.klienti.bilanci }),
+        );
       } catch (error) {
         console.error(error);
       }

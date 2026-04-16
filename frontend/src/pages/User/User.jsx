@@ -11,6 +11,7 @@ import Dashboard from "./sections/Dashboard";
 import Servers from "./sections/Servers";
 import Plans from "./sections/Plans";
 import Tickets from "./sections/Tickets";
+import Funds from "../../components/Funds/Funds";
 
 function User() {
   const URL = "http://localhost:8000/api/";
@@ -19,6 +20,7 @@ function User() {
   const dispatch = useDispatch();
   const token = useSelector((state) => state.auth.token);
   const { isAuthenticated } = useSelector((state) => state.auth);
+  const bilanci = useSelector((state) => state.user.funds);
 
   const [user, setUser] = useState(null);
 
@@ -49,6 +51,8 @@ function User() {
 
     getUser();
   }, []);
+
+  const [showAddFunds, setShowAddFunds] = useState(false);
 
   const [confirmLogOut, setConfirmLogOut] = useState(false);
   useEffect(() => {
@@ -144,8 +148,10 @@ function User() {
               <div className="card shadow-sm">
                 <div className="card-body">
                   <h6 className="card-title text-muted">Bilanci Juaj Aktual</h6>
-                  {user && <h2 className="card-text">${user.bilanci}</h2>}
-                  <button>Shto fonde</button>
+                  {user && <h2 className="card-text">${bilanci}</h2>}
+                  <button onClick={() => setShowAddFunds(true)}>
+                    Shto fonde
+                  </button>
                 </div>
               </div>
             </div>
@@ -164,6 +170,8 @@ function User() {
           )}
         </main>
       </div>
+      <Funds isOpen={showAddFunds} onClose={() => setShowAddFunds(false)} />
+
       {confirmLogOut && (
         <div
           className="modal show d-block"

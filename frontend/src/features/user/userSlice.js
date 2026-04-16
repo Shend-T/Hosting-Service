@@ -22,16 +22,21 @@ export const userSlice = createSlice({
       state.id = 0;
       state.funds = 0.0;
     },
+    setFunds: (state, action) => {
+      state.funds = action.payload;
+      localStorage.setItem("funds", state.funds);
+    },
     addFunds: (state, action) => {
-      state.funds += action.payload;
+      state.funds = Number((state.funds + action.payload).toFixed(2));
       localStorage.setItem("funds", state.funds);
     },
     removeFunds: (state, action) => {
-      state.funds -= action.payload;
+      state.funds = Number((state.funds - action.payload).toFixed(2));
       localStorage.setItem("funds", state.funds);
     },
   },
 });
 
-export const { setUser, removeUser, addFunds, removeFunds } = userSlice.actions;
+export const { setUser, removeUser, setFunds, addFunds, removeFunds } =
+  userSlice.actions;
 export default userSlice.reducer;
