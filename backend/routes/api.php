@@ -27,6 +27,7 @@ Route::middleware('auth:sanctum')->group(function () { // Kto linka jan te mbroj
     Route::post('/abonimi/user', [AbonimiController::class, 'userStore']);
 
     Route::patch('/klienti/add-funds', [KlientController::class, 'addFunds']); 
+    Route::patch('/klienti/remove-funds', [KlientController::class, 'removeFunds']); 
 });
 
 Route::get('/abonimi', [AbonimiController::class, 'index']);           // Lexo krejt abonimet - Get

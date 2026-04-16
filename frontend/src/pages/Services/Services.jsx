@@ -1,13 +1,17 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 
-import { useSelector } from "react-redux";
+import Funds from "../../components/Funds/Funds";
+
+import { useSelector, useDispatch } from "react-redux";
+import { setFunds } from "../../features/user/userSlice";
 
 function Services() {
+  const dispatch = useDispatch();
   const { isAuthenticated } = useSelector((state) => state.auth);
+
   const [packets, setPackets] = useState([]);
   const [selectedPacket, setSelectedPacket] = useState(null);
-
   useEffect(() => {
     const getFirstThreePackets = async () => {
       try {
@@ -44,44 +48,65 @@ function Services() {
 
   const userId = useSelector((state) => state.user.id);
   const token = useSelector((state) => state.auth.token);
-  // const formatDateForBackend = (date) => {
-  //   return date.toISOString().split("T")[0]; // Returns YYYY-MM-DD
-  // };
+  const userFunds = useSelector((state) => state.user.funds);
+
+  const [showAddFunds, setShowAddFunds] = useState(false);
 
   const buyPacket = async () => {
-    const form = {
-      klienti_id: Number(userId),
-      paketa_id: selectedPacket.id,
-      data_fillimit: new Date().toISOString().slice(0, 10),
-      data_skadimit:
+    const cmimi =
+      periudha === "mujore"
+        ? Number(selectedPacket.cmimi_mujor)
+        : Number(selectedPacket.cmimi_vjetor);
+    if (cmimi <= userFunds) {
+      const currDate = new Date().toISOString().slice(0, 10);
+      const nextDate =
         periudha === "mujore"
           ? new Date(new Date().setMonth(new Date().getMonth() + 1))
               .toISOString()
               .slice(0, 10)
           : new Date(new Date().setFullYear(new Date().getFullYear() + 1))
               .toISOString()
-              .slice(0, 10),
-      cmimi:
-        periudha === "mujore"
-          ? Number(selectedPacket.cmimi_mujor)
-          : Number(selectedPacket.cmimi_vjetor),
-      periudha: periudha,
-      auto_rinovim: autoRinovim,
-    };
-    try {
-      const res = await axios.post(
-        "http://localhost:8000/api/abonimi/user",
-        form,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        },
-      );
+              .slice(0, 10);
 
-      console.log(res.data);
-    } catch (error) {
-      console.log(error);
+      const form = {
+        klienti_id: Number(userId),
+        paketa_id: selectedPacket.id,
+        data_fillimit: currDate,
+        data_skadimit: nextDate,
+        cmimi: cmimi,
+        periudha: periudha,
+        auto_rinovim: autoRinovim,
+      };
+      try {
+        const res2 = await axios.patch(
+          "http://127.0.0.1:8000/api/klienti/remove-funds",
+          { id: Number(userId), funds: cmimi },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          },
+        );
+        dispatch(setFunds(res2.data.bilanci));
+
+        const res = await axios.post(
+          "http://localhost:8000/api/abonimi/user",
+          form,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          },
+        );
+
+        console.log(res.data);
+        console.log(res2.data);
+      } catch (error) {
+        console.log(error);
+      }
+    } else {
+      alert("Duheni te shtoni fonde!");
+      setSelectedPacket(null);
+      setShowAddFunds(true);
     }
-    // console.log(form);
   };
 
   return (
@@ -205,11 +230,12 @@ function Services() {
                   <p className="lead">
                     Dhe kushton:{" "}
                     {periudha === "mujore" ? (
-                      <b>€{selectedPacket.cmimi_mujor} / muaj</b>
+                      <b>{selectedPacket.cmimi_mujor}€ / muaj</b>
                     ) : (
-                      <b>€{selectedPacket.cmimi_vjetor} / vjet</b>
+                      <b>{selectedPacket.cmimi_vjetor}€ / vjet</b>
                     )}
                   </p>
+                  <p className="lead">Bilanci juaj: {userFunds}€</p>
 
                   <p className="lead">
                     Deshironi rinovim te abonimit automatikisht?
@@ -245,6 +271,10 @@ function Services() {
           <h1>Log In FIrst</h1>
         )
       ) : null}
+
+      <Funds isOpen={showAddFunds} onClose={() => setShowAddFunds(false)} />
+
+      {/* E permirsoj frontend-in ma von */}
     </div>
   );
 }
