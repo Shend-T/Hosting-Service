@@ -21,6 +21,12 @@ return Application::configure(basePath: dirname(__DIR__))
             'abonimi/*',
             'servers',
             'servers/*',
+            'domains',
+            'domains/*',
+            'llogari-hostings',
+            'llogari-hostings/*',
+            'monitorim-servers',
+            'monitorim-servers/*',
         ]);
         $middleware->api(prepend: [
             \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,

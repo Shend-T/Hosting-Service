@@ -20,5 +20,11 @@ class VerifyCsrfToken extends Middleware
         '/abonimi/*',
         '/servers',
         '/servers/*',
+        '/domains',
+        '/domains/*',
+        '/llogari-hostings',
+        '/llogari-hostings/*',
+        '/monitorim-servers',
+        '/monitorim-servers/*',
     ];
 }
