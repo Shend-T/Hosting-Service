@@ -9,7 +9,7 @@
   /* https://colorhunt.co/palette/db1a1afff6f68cc7c42c687b */
   --color-background: #fff6f6;
   --color-primary: #2c687b;
-  --color-primary-lighter: #8cc7c4;
+  --color-primary-lighter: #5ea19e;
   --color-secondary: #db1a1a;
 
   --text-color-primary: #121212;
@@ -40,16 +40,19 @@ body {
 h1 {
   font-family: var(--ff-secondary);
 }
+.text-important {
+  color: var(--color-secondary);
+}
 
 a {
   text-decoration: none;
   color: var(--text-color-primary);
 
-  transition: color 0.2s ease-in;
+  transition: color 0.1s ease-in;
 }
 
 a:hover {
-  color: var(--color-secondary);
+  color: var(--text-color-primary);
 }
 
 /* === Butonet === */
@@ -66,4 +69,12 @@ button {
 }
 button:hover {
   background-color: var(--color-primary);
+}
+.btn-primary {
+  background-color: var(--color-primary-lighter) !important;
+  border-color: var(--color-primary-lighter) !important;
+}
+.btn-primary:hover {
+  background-color: var(--color-primary) !important;
+  border-color: var(--color-primary) !important;
 }

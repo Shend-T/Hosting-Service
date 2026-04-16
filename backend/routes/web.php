@@ -3,8 +3,11 @@
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\KlientController;
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AbonimiController;
 use App\Http\Controllers\PaketaController;
+use App\Http\Controllers\TiketiController;
+use App\Http\Controllers\PergjigjaTiketiController;
 use App\Http\Controllers\ServerController;
 use App\Http\Controllers\DomainController;
 use App\Http\Controllers\LlogariHostingController;
