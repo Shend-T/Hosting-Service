@@ -30,6 +30,13 @@ Route::middleware('auth:sanctum')->group(function () { // Kto linka jan te mbroj
     Route::patch('/klienti/remove-funds', [KlientController::class, 'removeFunds']); 
 });
 
+Route::get('/servers', [ServerController::class, 'index']);  // Lexo krejt serverat
+Route::post('/servers', [ServerController::class, 'store']); // Krijo server
+Route::get('/servers/{server}', [ServerController::class, 'show']); // Lexo nje server
+Route::put('/servers/{server}', [ServerController::class, 'update']); // Përditëso server
+Route::patch('/servers/{server}', [ServerController::class, 'update']); // Përditëso server
+Route::delete('/servers/{server}', [ServerController::class, 'destroy']); // Fshi server
+
 Route::get('/abonimi', [AbonimiController::class, 'index']);           // Lexo krejt abonimet - Get
 Route::get('/abonimi/{id}', [AbonimiController::class, 'show']);       // Merr nje abonim     - Get
 Route::post('/abonimi', [AbonimiController::class, 'store']);          // Krijo Abonim        - Create
