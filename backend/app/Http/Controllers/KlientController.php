@@ -63,6 +63,37 @@ class KlientController extends Controller
         return response()->json($client, 200);
     }
 
+    public function addFunds(Request $request) {
+        $data = $request->validate([
+            'id'    => 'required|integer|exists:klienti,id',
+            'funds' => 'required|numeric|min:0.01',
+        ]);
+
+        $client = Klienti::findOrFail($data['id']);
+        $client->bilanci += $data['funds'];
+        $client->save();
+
+        return response()->json([
+            'message' => 'Bilanci u shtua me sukses',
+            'bilanci' => $client->bilanci,
+        ]);
+    }
+    public function removeFunds(Request $request) {
+        $data = $request->validate([
+            'id'    => 'required|integer|exists:klienti,id',
+            'funds' => 'required|numeric|min:0.01',
+        ]);
+
+        $client = Klienti::findOrFail($data['id']);
+        $client->bilanci -= $data['funds'];
+        $client->save();
+
+        return response()->json([
+            'message' => 'Bilanci u minusua', // spodi naj mezash ma tmenqem qka me qit
+            'bilanci' => $client->bilanci,
+        ]);
+    }
+
     // Fshij nje Klient( Delete)
     public function destroy(int $id) {
         $client = Klienti::findOrFail($id);

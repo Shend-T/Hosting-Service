@@ -2,10 +2,15 @@ import React, { useState, useEffect } from "react";
 import { NavLink, Link } from "react-router-dom";
 
 import logo from "../assets/logo.png";
+import { useSelector } from "react-redux";
+
+import { VscAccount } from "react-icons/vsc";
 
 function Header() {
   const [visible, setVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
+
+  const { isAuthenticated } = useSelector((state) => state.auth);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -66,6 +71,7 @@ function Header() {
                 className={({ isActive }) =>
                   isActive ? "nav-link active" : "" + "nav-link"
                 }
+                style={{ fontSize: "12px" }}
                 aria-current="page"
                 to="/"
               >
@@ -78,6 +84,7 @@ function Header() {
                 className={({ isActive }) =>
                   isActive ? "nav-link active" : "" + "nav-link"
                 }
+                style={{ fontSize: "12px" }}
                 to="/about"
                 aria-current="page"
               >
@@ -89,6 +96,7 @@ function Header() {
                 className={({ isActive }) =>
                   isActive ? "nav-link active" : "" + "nav-link"
                 }
+                style={{ fontSize: "12px" }}
                 to="/services"
               >
                 Services
@@ -99,12 +107,35 @@ function Header() {
                 className={({ isActive }) =>
                   isActive ? "nav-link active" : "" + "nav-link"
                 }
+                style={{ fontSize: "12px" }}
                 to="/contact"
               >
                 Contact
               </NavLink>
             </li>
           </ul>
+          <div className="navbar-nav nav-item">
+            {isAuthenticated ? (
+              <NavLink
+                className={({ isActive }) =>
+                  isActive ? "nav-link active" : "" + "nav-link"
+                }
+                to="/user"
+              >
+                <VscAccount size={22} />
+              </NavLink>
+            ) : (
+              <NavLink
+                className={({ isActive }) =>
+                  isActive ? "nav-link active" : "" + "nav-link"
+                }
+                style={{ fontSize: "12px" }}
+                to="/register"
+              >
+                Sign Up
+              </NavLink>
+            )}
+          </div>
         </div>
       </div>
     </nav>

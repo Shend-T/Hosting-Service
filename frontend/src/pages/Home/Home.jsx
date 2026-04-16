@@ -1,5 +1,7 @@
-import React, { useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
+
+import axios from "axios";
 
 import "./Home.css";
 import banner from "../../assets/home/world.png";
@@ -10,6 +12,24 @@ import workflow from "../../assets/home/workflow.png";
 
 function Home() {
   const navigate = useNavigate();
+
+  const [packets, setPackets] = useState([]);
+  useEffect(() => {
+    const getFirstThreePackets = async () => {
+      try {
+        const res = await axios.get("http://127.0.0.1:8000/api/paketa-3");
+        res.data.forEach((p) => {
+          p.pershkrimi = p.pershkrimi.split("\n");
+        });
+
+        setPackets(res.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    getFirstThreePackets();
+  }, []);
 
   const cardsRef = useRef([]);
   useEffect(() => {
@@ -29,7 +49,7 @@ function Home() {
     });
 
     return () => observer.disconnect();
-  }, []);
+  }, [packets]);
 
   return (
     <div className="container-main py-5">
@@ -210,89 +230,34 @@ function Home() {
           </div>
         </div>
         <div className="row align-items-center justify-content-center">
-          <div className="col-md-4 col-sm-8 mb-3">
-            <div
-              ref={(el) => (cardsRef.current[5] = el)}
-              className="card shadow py-3 pop-up-on-load-card"
-            >
-              <div className="card-body">
-                <h3 className="card-title">Basic</h3>
-                <p className="card-text">
-                  Perfect for individuals and small projects getting started
-                  with hosting.
-                </p>
-                <p className="card-text lead">€5 / month</p>
+          {packets.map((packet) => (
+            <div className="col-md-4 col-sm-8 mb-3" key={packet.id}>
+              <div
+                ref={(el) => (cardsRef.current[packet.id + 2] = el)}
+                className="card shadow py-3 pop-up-on-load-card"
+              >
+                <div className="card-body">
+                  <h3 className="card-title">{packet.emri}</h3>
+                  <p className="card-text">{packet.pershkrimi[0]}</p>
+                  <p className="card-text lead">€{packet.cmimi_mujor} / muaj</p>
 
-                <p className="card-text lead">Includes</p>
-                <ul>
-                  <li>1 Project</li>
-                  <li>Basic Performance</li>
-                  <li>1 GB Storage</li>
-                  <li>Community Support</li>
-                </ul>
+                  <p className="card-text lead">{packet.pershkrimi[1]}</p>
+                  <ul>
+                    <li>{packet.pershkrimi[2]}</li>
+                    <li>{packet.pershkrimi[3]}</li>
+                    <li>{packet.pershkrimi[4]}</li>
+                    <li>{packet.pershkrimi[5]}</li>
+                    <li>{packet.pershkrimi[6]}</li>
+                    <li>{packet.pershkrimi[7]}</li>
+                  </ul>
 
-                <a href="#" className="btn btn-outline-primary">
-                  Get Started
-                </a>
+                  <Link to="/services" className="btn btn-outline-primary">
+                    Fillo Me Kete Plan
+                  </Link>
+                </div>
               </div>
             </div>
-          </div>
-          <div className="col-md-4 col-sm-8 mb-3">
-            <div
-              ref={(el) => (cardsRef.current[6] = el)}
-              className="card shadow py-3 pop-up-on-load-card"
-            >
-              <div className="card-body">
-                <h3 className="card-title">Pro</h3>
-                <p className="card-text">
-                  Ideal for developers and growing platforms that need more
-                  power and flexibility.
-                </p>
-                <p className="card-text lead">€12 / month</p>
-
-                <p className="card-text lead">Includes</p>
-                <ul>
-                  <li>5 Projects</li>
-                  <li>High Performance</li>
-                  <li>10 GB Storage</li>
-                  <li>Custom Domains</li>
-                  <li>Email Support</li>
-                </ul>
-
-                <a href="#" className="btn btn-primary">
-                  Get Started
-                </a>
-              </div>
-            </div>
-          </div>
-          <div className="col-md-4 col-sm-8 mb-3">
-            <div
-              ref={(el) => (cardsRef.current[7] = el)}
-              className="card shadow py-3 pop-up-on-load-card"
-            >
-              <div className="card-body">
-                <h3 className="card-title">Business</h3>
-                <p className="card-text">
-                  Built for teams and companies that require scalability,
-                  reliability, and priority support.
-                </p>
-                <p className="card-text lead">€25 / month</p>
-
-                <p className="card-text lead">Includes</p>
-                <ul>
-                  <li>Unlimited Projects</li>
-                  <li>Maximum Performance</li>
-                  <li>50 GB Storage</li>
-                  <li>Custom Domains</li>
-                  <li>Priority Support</li>
-                </ul>
-
-                <a href="#" className="btn btn-dark">
-                  Get Started
-                </a>
-              </div>
-            </div>
-          </div>
+          ))}
         </div>
       </div>
       {/* <h1>Home Page</h1>

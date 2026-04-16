@@ -22,6 +22,12 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::middleware('auth:sanctum')->group(function () { // Kto linka jan te mbrojtura( duhet token)
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/user', [AuthController::class, 'user']);
+
+    Route::get('/abonimi/chart', [AbonimiController::class, 'chartData']);
+    Route::post('/abonimi/user', [AbonimiController::class, 'userStore']);
+
+    Route::patch('/klienti/add-funds', [KlientController::class, 'addFunds']); 
+    Route::patch('/klienti/remove-funds', [KlientController::class, 'removeFunds']); 
 });
 
 Route::get('/abonimi', [AbonimiController::class, 'index']);           // Lexo krejt abonimet - Get
@@ -30,8 +36,9 @@ Route::post('/abonimi', [AbonimiController::class, 'store']);          // Krijo 
 Route::put('/abonimi/{id}', [AbonimiController::class, 'update']);     // Perditso nje Abonim - Update
 Route::delete('/abonimi/{id}', [AbonimiController::class, 'destroy']); // Fshij nje Abonim    - Delete
 
-Route::get('/paketa', [PaketaController::class, 'index']);           // Kthe krejt paketat
-Route::get('/paketa/{id}', [PaketaController::class, 'show']);       // Kthe nje pakete ne baze te id-s
-Route::post('/paketa', [PaketaController::class, 'store']);          // Krijo pakete
-Route::put('/paketa/{id}', [PaketaController::class, 'update']);     // Perditso nje pakete
-Route::delete('/paketa/{id}', [PaketaController::class, 'destroy']); // Fshij nje pakete
+Route::get('/paketa', [PaketaController::class, 'index']);            // Kthe krejt paketat
+Route::get('/paketa/{id}', [PaketaController::class, 'show']);        // Kthe nje pakete ne baze te id-s
+Route::get('/paketa-3', [PaketaController::class, 'showFirstThree']); // Kthe vetem 3 paketat e para( na duhet per home page)
+Route::post('/paketa', [PaketaController::class, 'store']);           // Krijo pakete
+Route::put('/paketa/{id}', [PaketaController::class, 'update']);      // Perditso nje pakete
+Route::delete('/paketa/{id}', [PaketaController::class, 'destroy']);  // Fshij nje pakete

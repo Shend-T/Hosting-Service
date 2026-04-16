@@ -34,15 +34,3 @@
 input:focus {
   outline: none;
 }
-
-#terms {
-  width: 1.3em;
-  height: 1.3em;
-  border: 2px solid #aaa;
-  cursor: pointer;
-}
-
-#terms:checked {
-  background-color: var(--color-primary-lighter);
-  border-color: var(--color-primary-lighter);
-}
