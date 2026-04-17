@@ -7,6 +7,7 @@ use App\Http\Controllers\AbonimiController;
 use App\Http\Controllers\PaketaController;
 use App\Http\Controllers\TiketiController;
 use App\Http\Controllers\PergjigjaTiketiController;
+use App\Http\Controllers\FakturaController;
 
 $web_title = "Hosting Site";
 
@@ -48,3 +49,9 @@ Route::get('/pergjigja_tiketi/{pergjigjaTiketi}' , [PergjigjaTiketiController::c
 Route::get('/pergjigja_tiketi/{pergjigjaTiketi}/edit', [PergjigjaTiketiController::class, 'edit']); // Shfaq formen e editimit te pergjigjes se tiketis
 Route::put('/pergjigja_tiketi/{pergjigjaTiketi}', [PergjigjaTiketiController::class, 'update']); // Update pergjigjen e tiketis
 Route::delete('/pergjigja_tiketi/{pergjigjaTiketi}', [PergjigjaTiketiController::class, 'destroy']); // Fshi pergjigjen e tiket
+
+Route::get('/faturat', [FakturaController::class, 'index']);
+Route::get('/faturat/{id}', [FakturaController::class, 'show']);
+Route::post('/faturat', [FakturaController::class, 'store']);
+Route::put('/faturat/{id}', [FakturaController::class, 'update']);
+Route::delete('/faturat/{id}', [FakturaController::class, 'destroy']);
