@@ -29,6 +29,7 @@ class KlientController extends Controller
             'mbiemri'   => 'required|string|max:255',
             'kompania'  => 'required|string|max:255',
             'email'     => 'required|email|unique:klienti,email',
+            'password'  => 'required|string|min:8',
             'telefoni'  => 'required|string|max:20',
             'adresa'    => 'required|string|max:255',
             'statusi'   => 'nullable|in:aktiv,jo-aktiv,suspenduar',
@@ -50,6 +51,7 @@ class KlientController extends Controller
             'mbiemri'   => 'required|string|max:255',
             'kompania'  => 'required|string|max:255',
             'email'     => 'required|email|unique:klienti,email,' . $client->id, // sigurohu qe nese email-i nuk ndryshon nuk kthen error
+            'password'  => 'required|string|min:8',
             'telefoni'  => 'required|string|max:20',
             'adresa'    => 'required|string|max:255',
             'statusi'   => 'nullable|in:aktiv,jo-aktiv,suspenduar',
@@ -59,6 +61,37 @@ class KlientController extends Controller
         $client->update($data);
 
         return response()->json($client, 200);
+    }
+
+    public function addFunds(Request $request) {
+        $data = $request->validate([
+            'id'    => 'required|integer|exists:klienti,id',
+            'funds' => 'required|numeric|min:0.01',
+        ]);
+
+        $client = Klienti::findOrFail($data['id']);
+        $client->bilanci += $data['funds'];
+        $client->save();
+
+        return response()->json([
+            'message' => 'Bilanci u shtua me sukses',
+            'bilanci' => $client->bilanci,
+        ]);
+    }
+    public function removeFunds(Request $request) {
+        $data = $request->validate([
+            'id'    => 'required|integer|exists:klienti,id',
+            'funds' => 'required|numeric|min:0.01',
+        ]);
+
+        $client = Klienti::findOrFail($data['id']);
+        $client->bilanci -= $data['funds'];
+        $client->save();
+
+        return response()->json([
+            'message' => 'Bilanci u minusua', // spodi naj mezash ma tmenqem qka me qit
+            'bilanci' => $client->bilanci,
+        ]);
     }
 
     // Fshij nje Klient( Delete)

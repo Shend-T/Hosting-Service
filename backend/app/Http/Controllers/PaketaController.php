@@ -28,6 +28,11 @@ class PaketaController extends Controller
         }
     }
 
+    public function showFirstThree(){
+        $packets = Paketa::take(3)->get(); // Merr 3 paketat e para
+        return response()->json($packets);
+    }
+
     // Krijo pakete te rij (Create)
     public function store(Request $request)
     {
