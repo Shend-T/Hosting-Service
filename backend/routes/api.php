@@ -29,7 +29,11 @@ Route::middleware('auth:sanctum')->group(function () { // Kto linka jan te mbroj
     Route::get('/user', [AuthController::class, 'user']);
 
     Route::get('/abonimi/chart', [AbonimiController::class, 'chartData']);
+    Route::get('/abonimi/user', [AbonimiController::class, 'userAbonimi']);
     Route::post('/abonimi/user', [AbonimiController::class, 'userStore']);
+    Route::patch('/abonimi/{id}/toggle-auto-rinovim', [AbonimiController::class, 'toggleAutoRinovim']);
+    Route::patch('/abonimi/{id}/cancel', [AbonimiController::class, 'cancelAbonimi']);
+    Route::patch('/abonimi/{id}/activate', [AbonimiController::class, 'activateAbonimi']);
 
     Route::patch('/klienti/add-funds', [KlientController::class, 'addFunds']); 
     Route::patch('/klienti/remove-funds', [KlientController::class, 'removeFunds']); 

@@ -84,6 +84,62 @@ class AbonimiController extends Controller
         return response()->json("", 204);
     }
 
+    // Kthe abonimet e user-it specifik
+    public function userAbonimi(Request $request)
+    {
+        $data = Abonimi::where('klienti_id', $request->user()->id)->with('paketa')->get();
+
+        return response()->json($data);
+    }
+
+    // metod per me update-u auto_rinovim-in( na duhet per frontend)
+    public function toggleAutoRinovim(Request $request, int $id)
+    {
+        $abonimi = Abonimi::where('id', $id)
+            ->where('klienti_id', $request->user()->id)
+            ->firstOrFail();
+
+        $abonimi->auto_rinovim = !$abonimi->auto_rinovim;
+        $abonimi->save();
+
+        return response()->json($abonimi);
+    }
+    // njejt edhe per statusin
+    public function cancelAbonimi(Request $request, int $id)
+    {
+        $abonimi = Abonimi::where('id', $id)
+            ->where('klienti_id', $request->user()->id)
+            ->firstOrFail();
+
+        if ($abonimi->statusi === 'suspenduar' || $abonimi->statusi === 'skaduar') {
+            return response()->json([
+                'message' => 'Nuk mund te anuloni nje abonim te suspenduar'
+            ], 403);
+        }
+
+        $abonimi->statusi = 'ndalur';
+        $abonimi->save();
+
+        return response()->json($abonimi);
+    }
+    public function activateAbonimi(Request $request, int $id)
+    {
+        $abonimi = Abonimi::where('id', $id)
+            ->where('klienti_id', $request->user()->id)
+            ->firstOrFail();
+
+        if ($abonimi->statusi === 'suspenduar' || $abonimi->statusi === 'skaduar') {
+            return response()->json([
+                'message' => 'Nuk mund te aktivizoni nje abonim te suspenduar'
+            ], 403);
+        }
+
+        $abonimi->statusi = 'aktiv';
+        $abonimi->save();
+
+        return response()->json($abonimi);
+    }
+
     // Kthe daten e krijimit te abonimit( na duhet per dashboard)
     public function chartData(Request $request)
     {
