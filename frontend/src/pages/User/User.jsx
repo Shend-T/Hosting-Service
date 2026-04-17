@@ -110,7 +110,7 @@ function User() {
                   className={`nav-link sidebar-link ${activePage === "monitor" ? "active" : ""}`}
                   onClick={() => setActivePage("monitor")}
                 >
-                  Monitorimi i Planeve
+                  Monitorimi i Abonimeve
                 </a>
               </li>
               <li className="nav-item">
@@ -156,8 +156,8 @@ function User() {
               </div>
             </div>
           </div>
-
-          {activePage == "dashboard" ? (
+          <Plans />
+          {/* {activePage == "dashboard" ? (
             <Dashboard user={user} />
           ) : activePage == "servers" ? (
             <Servers />
@@ -167,7 +167,7 @@ function User() {
             <Tickets />
           ) : (
             <Dashboard user={user} />
-          )}
+          )} */}
         </main>
       </div>
       <Funds isOpen={showAddFunds} onClose={() => setShowAddFunds(false)} />
