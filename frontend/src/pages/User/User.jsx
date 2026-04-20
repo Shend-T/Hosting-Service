@@ -156,8 +156,8 @@ function User() {
               </div>
             </div>
           </div>
-          <Plans />
-          {/* {activePage == "dashboard" ? (
+
+          {activePage == "dashboard" ? (
             <Dashboard user={user} />
           ) : activePage == "servers" ? (
             <Servers />
@@ -167,7 +167,7 @@ function User() {
             <Tickets />
           ) : (
             <Dashboard user={user} />
-          )} */}
+          )}
         </main>
       </div>
       <Funds isOpen={showAddFunds} onClose={() => setShowAddFunds(false)} />

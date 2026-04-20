@@ -27,6 +27,7 @@ function Dashboard(user) {
 
   const token = useSelector((state) => state.auth.token);
   const [chartData, setChartData] = useState(null);
+  const [tableData, setTableData] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -57,7 +58,21 @@ function Dashboard(user) {
       }
     };
 
+    const getUserAbonimi = async () => {
+      try {
+        const response = await axios.get(URL + "abonimi/user", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+
+        const data = response.data;
+        setTableData(data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
     getUserChartData();
+    getUserAbonimi();
   }, []);
 
   return (
@@ -102,11 +117,21 @@ function Dashboard(user) {
           <thead>
             <tr>
               <th>Plani</th>
-              <th>Data</th>
+              <th>Data Skadimit</th>
               <th>Statusi</th>
             </tr>
           </thead>
-          <tbody></tbody>
+          <tbody>
+            {tableData
+              ? tableData.map((tD) => (
+                  <tr key={tD.id}>
+                    <td>{tD.paketa.emri}</td>
+                    <td>{tD.data_skadimit}</td>
+                    <td>{tD.statusi}</td>
+                  </tr>
+                ))
+              : null}
+          </tbody>
         </table>
       </div>
     </div>

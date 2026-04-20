@@ -14,12 +14,16 @@ return new class extends Migration
     {
         Schema::create('domains', function (Blueprint $table) {
             $table->id();
-            $table->string('emri');
-            $table->string('ip_address');
-            $table->enum('statusi', ['aktiv', 'jo-aktiv', 'suspenduar'])->default('aktiv');
-            $table->date('data_skadimit');
-
             $table->foreignId('klienti_id')->constrained('klienti')->cascadeOnDelete();
+
+            $table->string('emri_domainit');
+            $table->string('tld')->default(".ubt"); // Top-Level Domain
+            $table->string('nameserverat');
+
+            $table->enum('statusi', ['aktiv', 'jo-aktiv', 'suspenduar'])->default('aktiv');
+
+            $table->date('data_regjistrimit');
+            $table->date('data_skadimit');
             $table->timestamps();
         });
     }

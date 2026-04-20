@@ -6,6 +6,9 @@ use Illuminate\Http\Request;
 use App\Models\Abonimi;
 use Illuminate\Support\Facades\DB;
 
+use App\Models\Servers;
+use App\Models\LlogariHostings;
+
 class AbonimiController extends Controller
 {
     // Listo te gjitha abonimet (Read)
@@ -126,6 +129,7 @@ class AbonimiController extends Controller
     {
         $abonimi = Abonimi::where('id', $id)
             ->where('klienti_id', $request->user()->id)
+            ->with('paketa', 'klienti')
             ->firstOrFail();
 
         if ($abonimi->statusi === 'suspenduar' || $abonimi->statusi === 'skaduar') {
@@ -134,10 +138,55 @@ class AbonimiController extends Controller
             ], 403);
         }
 
-        $abonimi->statusi = 'aktiv';
-        $abonimi->save();
+        if ($abonimi->statusi === 'aktiv') {
+            return response()->json([
+                'message' => 'Ky abonim eshte tashme aktiv'
+            ], 400);
+        }
 
-        return response()->json($abonimi);
+        $paketaStorage = $abonimi->paketa->hapesira_gb;
+
+        try {
+            DB::transaction(function () use ($abonimi, $paketaStorage) {
+                $server = Servers::where('statusi', 'aktiv')
+                    ->get()
+                    ->first(function ($server) use ($paketaStorage) {
+                        $totalStorageGb = $server->hapesira_tb * 1024; // e kthen nGB
+                        $usedStorageGb  = $server->llogariHostings()->sum('hapesira_perdorur');
+                        $freeStorageGb  = $totalStorageGb - $usedStorageGb;
+                        return $freeStorageGb >= $paketaStorage;
+                    });
+
+                if (!$server) {
+                    throw new \Exception('Nuk ka server te lire per kete abonim');
+                }
+
+                LlogariHostings::create([
+                    'abonimi_id'        => $abonimi->id,
+                    'server_id'         => $server->id,
+                    'username'          => strtolower($abonimi->klienti->emri . $abonimi->klienti->mbiemri . $abonimi->klienti->id),
+                    'hapesira_perdorur' => rand(0, $abonimi->paketa->hapesira_gb),
+                    'bandwith_perdorur' => rand(0, $abonimi->paketa->bandwidth_gb),
+                    'statusi'           => 'aktiv',
+                    'ip_dedikuar'       => $server->ip_adresa,
+                    'data_krijimit'     => now()
+                ]);
+
+                $abonimi->statusi = 'aktiv';
+                $abonimi->save();
+            });
+        } catch (\Exception $e) {
+            \Log::error('Transaction failed: ' . $e->getMessage());
+            return response()->json(['message' => $e->getMessage()], 503);
+        }
+
+        // $abonimi->statusi = 'aktiv';
+        // $abonimi->save();
+
+        return response()->json([
+            'message' => 'Abonimimi u aktivizua me sukses',
+            'abonimi' => $abonimi->fresh()->load('llogariHostings', 'paketa'),
+        ]);
     }
 
     // Kthe daten e krijimit te abonimit( na duhet per dashboard)
