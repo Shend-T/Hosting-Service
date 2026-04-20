@@ -8,6 +8,7 @@ import Footer from "./components/Footer";
 // ===== Faqet e Zakonshme( Spo di term ma tmir) =====
 import Home from "./pages/Home/Home";
 import About from "./pages/About/About";
+import FAQ from "./pages/FAQ/FAQ";
 import Terms from "./pages/Terms/Terms";
 
 // ===== Authentikimi =====
@@ -31,6 +32,7 @@ function App() {
         {/* Faqet e zakonshme */}
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<About />} />
+        <Route path="/faq" element={<FAQ />} />
         <Route path="/terms" element={<Terms />} />
         {/* Authentikimi */}
         <Route path="/register" element={<Register />} />

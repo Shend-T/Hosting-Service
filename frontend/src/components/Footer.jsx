@@ -31,6 +31,11 @@ function Footer() {
               Services
             </Link>
           </li>
+          <li className="nav-item">
+            <Link className="nav-link px-2 text-body-secondary" to="/faq">
+              FAQ
+            </Link>
+          </li>
 
           <li className="nav-item">
             <Link className="nav-link px-2 text-body-secondary" to="/contact">
