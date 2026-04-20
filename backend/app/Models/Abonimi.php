@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\Klienti;
 use App\Models\Paketa;
+use App\Models\LlogariHostings;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -32,5 +33,9 @@ class Abonimi extends Model
     public function paketa()
     {
         return $this->belongsTo(Paketa::class, 'paketa_id');
+    }
+    public function llogariHostings()
+    {
+        return $this->hasOne(LlogariHostings::class, 'abonimi_id');
     }
 }

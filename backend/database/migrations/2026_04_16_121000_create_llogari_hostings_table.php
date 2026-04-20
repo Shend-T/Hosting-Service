@@ -14,13 +14,16 @@ return new class extends Migration
     {
         Schema::create('llogari_hostings', function (Blueprint $table) {
             $table->id();
-            $table->string('emri');
-            $table->enum('statusi', ['aktiv', 'jo-aktiv', 'suspenduar'])->default('aktiv');
-            $table->unsignedInteger('hapesira_disk_gb');
-
-            $table->foreignId('klienti_id')->constrained('klienti')->cascadeOnDelete();
-            $table->foreignId('paketa_id')->constrained('paketa')->cascadeOnDelete();
+            $table->foreignId('abonimi_id')->constrained('abonimi')->cascadeOnDelete();
             $table->foreignId('server_id')->constrained('servers')->cascadeOnDelete();
+
+            $table->string('username');
+            $table->integer('hapesira_perdorur');
+            $table->integer('bandwith_perdorur');
+            $table->date('data_krijimit');
+
+            $table->enum('statusi', ['aktiv', 'jo-aktiv'])->default('aktiv');
+            $table->string('ip_dedikuar')->nullable();
 
             $table->timestamps();
         });

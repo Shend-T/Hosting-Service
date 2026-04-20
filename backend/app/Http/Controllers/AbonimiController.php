@@ -6,6 +6,9 @@ use Illuminate\Http\Request;
 use App\Models\Abonimi;
 use Illuminate\Support\Facades\DB;
 
+use App\Models\Servers;
+use App\Models\LlogariHostings;
+
 class AbonimiController extends Controller
 {
     // Listo te gjitha abonimet (Read)
@@ -82,6 +85,108 @@ class AbonimiController extends Controller
         $abonimi = Abonimi::findOrFail($id);
         $abonimi->delete();
         return response()->json("", 204);
+    }
+
+    // Kthe abonimet e user-it specifik
+    public function userAbonimi(Request $request)
+    {
+        $data = Abonimi::where('klienti_id', $request->user()->id)->with('paketa')->get();
+
+        return response()->json($data);
+    }
+
+    // metod per me update-u auto_rinovim-in( na duhet per frontend)
+    public function toggleAutoRinovim(Request $request, int $id)
+    {
+        $abonimi = Abonimi::where('id', $id)
+            ->where('klienti_id', $request->user()->id)
+            ->firstOrFail();
+
+        $abonimi->auto_rinovim = !$abonimi->auto_rinovim;
+        $abonimi->save();
+
+        return response()->json($abonimi);
+    }
+    // njejt edhe per statusin
+    public function cancelAbonimi(Request $request, int $id)
+    {
+        $abonimi = Abonimi::where('id', $id)
+            ->where('klienti_id', $request->user()->id)
+            ->firstOrFail();
+
+        if ($abonimi->statusi === 'suspenduar' || $abonimi->statusi === 'skaduar') {
+            return response()->json([
+                'message' => 'Nuk mund te anuloni nje abonim te suspenduar'
+            ], 403);
+        }
+
+        $abonimi->statusi = 'ndalur';
+        $abonimi->save();
+
+        return response()->json($abonimi);
+    }
+    public function activateAbonimi(Request $request, int $id)
+    {
+        $abonimi = Abonimi::where('id', $id)
+            ->where('klienti_id', $request->user()->id)
+            ->with('paketa', 'klienti')
+            ->firstOrFail();
+
+        if ($abonimi->statusi === 'suspenduar' || $abonimi->statusi === 'skaduar') {
+            return response()->json([
+                'message' => 'Nuk mund te aktivizoni nje abonim te suspenduar'
+            ], 403);
+        }
+
+        if ($abonimi->statusi === 'aktiv') {
+            return response()->json([
+                'message' => 'Ky abonim eshte tashme aktiv'
+            ], 400);
+        }
+
+        $paketaStorage = $abonimi->paketa->hapesira_gb;
+
+        try {
+            DB::transaction(function () use ($abonimi, $paketaStorage) {
+                $server = Servers::where('statusi', 'aktiv')
+                    ->get()
+                    ->first(function ($server) use ($paketaStorage) {
+                        $totalStorageGb = $server->hapesira_tb * 1024; // e kthen nGB
+                        $usedStorageGb  = $server->llogariHostings()->sum('hapesira_perdorur');
+                        $freeStorageGb  = $totalStorageGb - $usedStorageGb;
+                        return $freeStorageGb >= $paketaStorage;
+                    });
+
+                if (!$server) {
+                    throw new \Exception('Nuk ka server te lire per kete abonim');
+                }
+
+                LlogariHostings::create([
+                    'abonimi_id'        => $abonimi->id,
+                    'server_id'         => $server->id,
+                    'username'          => strtolower($abonimi->klienti->emri . $abonimi->klienti->mbiemri . $abonimi->klienti->id),
+                    'hapesira_perdorur' => rand(0, $abonimi->paketa->hapesira_gb),
+                    'bandwith_perdorur' => rand(0, $abonimi->paketa->bandwidth_gb),
+                    'statusi'           => 'aktiv',
+                    'ip_dedikuar'       => $server->ip_adresa,
+                    'data_krijimit'     => now()
+                ]);
+
+                $abonimi->statusi = 'aktiv';
+                $abonimi->save();
+            });
+        } catch (\Exception $e) {
+            \Log::error('Transaction failed: ' . $e->getMessage());
+            return response()->json(['message' => $e->getMessage()], 503);
+        }
+
+        // $abonimi->statusi = 'aktiv';
+        // $abonimi->save();
+
+        return response()->json([
+            'message' => 'Abonimimi u aktivizua me sukses',
+            'abonimi' => $abonimi->fresh()->load('llogariHostings', 'paketa'),
+        ]);
     }
 
     // Kthe daten e krijimit te abonimit( na duhet per dashboard)

@@ -110,7 +110,7 @@ function User() {
                   className={`nav-link sidebar-link ${activePage === "monitor" ? "active" : ""}`}
                   onClick={() => setActivePage("monitor")}
                 >
-                  Monitorimi i Planeve
+                  Monitorimi i Abonimeve
                 </a>
               </li>
               <li className="nav-item">
