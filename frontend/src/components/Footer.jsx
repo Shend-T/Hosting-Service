@@ -37,11 +37,6 @@ function Footer() {
             </Link>
           </li>
 
-          <li className="nav-item">
-            <Link className="nav-link px-2 text-body-secondary" to="/contact">
-              Contact
-            </Link>
-          </li>
         </ul>
       </footer>
     </div>

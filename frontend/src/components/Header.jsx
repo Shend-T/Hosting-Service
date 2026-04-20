@@ -108,9 +108,9 @@ function Header() {
                   isActive ? "nav-link active" : "" + "nav-link"
                 }
                 style={{ fontSize: "12px" }}
-                to="/contact"
+                to="/faq"
               >
-                Contact
+                FAQ
               </NavLink>
             </li>
           </ul>
