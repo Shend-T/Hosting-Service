@@ -13,6 +13,7 @@ class PergjigjaTiketi extends Model
     protected $fillable = [
         'tiketi_id',
         'autori',
+        'lloji',
         'mesazhi',
         'data_hapjes',
         'data_mbylljes',
