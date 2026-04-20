@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Models\Server;
+
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -12,12 +14,18 @@ class MonitorimServer extends Model
     protected $table = 'monitorim_servers';
 
     protected $fillable = [
-        'server_id',
-        'cpu_usage',
-        'ram_usage',
-        'disk_usage',
+        'serveri_id',
+        'cpu_perdorim',
+        'ram_perdorim',
+        'disk_perdorim',
+        'bandwidth',
         'statusi',
-        'checked_at',
+        'alarmi'
     ];
+
+    public function server()
+    {
+        return $this->belongsTo(Server::class, 'serveri_id');
+    }
 }
 

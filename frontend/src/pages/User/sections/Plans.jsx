@@ -77,6 +77,7 @@ function Plans() {
       return;
     }
     try {
+      console.log(1);
       await axios.patch(
         `http://localhost:8000/api/abonimi/${sub.id}/activate`,
         {},

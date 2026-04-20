@@ -19,6 +19,10 @@ import Login from "./pages/Login/Login";
 import User from "./pages/User/User";
 import Services from "./pages/Services/Services";
 
+// ===== Admin =====
+import Admin from "./pages/Admin/Admin";
+import AdminLogin from "./pages/Admin/AdminLogin";
+
 // ===== CRUD =====
 import Klienti from "./pages/Klienti/Klienti";
 import Paketa from "./pages/Paketa/Paketa";
@@ -40,6 +44,9 @@ function App() {
         {/* Dashboard */}
         <Route path="/user" element={<User />} />
         <Route path="/services" element={<Services />} />
+        {/* Admin */}
+        <Route path="/admin" element={<Admin />} />
+        <Route path="/admin/login" element={<AdminLogin />} />
         {/* CRUD-et */}
         <Route path="/klienti" element={<Klienti />} /> {/* Klienti CRUD */}
         <Route path="/paketa" element={<Paketa />} /> {/* Paketa CRUD */}

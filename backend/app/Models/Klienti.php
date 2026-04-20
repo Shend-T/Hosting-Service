@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Abonimi;
+use App\Models\Domain;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -41,5 +42,9 @@ class Klienti extends Authenticatable
     public function abonimet()
     {
         return $this->hasMany(Abonimi::class, 'klienti_id');
+    }
+    public function domains()
+    {
+        return $this->hasMany(Domain::class, 'klienti_id');
     }
 }
