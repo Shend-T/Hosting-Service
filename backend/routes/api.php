@@ -42,6 +42,9 @@ Route::middleware('auth:sanctum')->group(function () { // Kto linka jan te mbroj
 
     Route::patch('/klienti/add-funds', [KlientController::class, 'addFunds']); 
     Route::patch('/klienti/remove-funds', [KlientController::class, 'removeFunds']); 
+
+    Route::get('/domains/user', [DomainController::class, 'userDomains']);
+    Route::post('/domains/user', [DomainController::class, 'userStore']);
 });
 
 // Authentikimi i admin-it
@@ -57,12 +60,11 @@ Route::get('/servers/{server}', [ServerController::class, 'show']); // Lexo nje 
 // Route::put('/servers/{server}', [ServerController::class, 'update']); // Përditëso server
 Route::delete('/servers/{server}', [ServerController::class, 'destroy']); // Fshi server
 
-Route::get('/domains', [DomainController::class, 'index']);  // Lexo te gjitha domainet
-Route::post('/domains', [DomainController::class, 'store']); // Krijo domain
-Route::get('/domains/{domain}', [DomainController::class, 'show']); // Lexo nje domain
-Route::put('/domains/{domain}', [DomainController::class, 'update']); // Përditëso domain
-Route::patch('/domains/{domain}', [DomainController::class, 'update']); // Përditëso domain
-Route::delete('/domains/{domain}', [DomainController::class, 'destroy']); // Fshi domain
+Route::get('/domain', [DomainController::class, 'index']);               // Lexo te gjitha domainet
+Route::get('/domain/{domain}', [DomainController::class, 'show']);       // Lexo nje domain
+Route::post('/domain', [DomainController::class, 'store']);              // Krijo domain
+Route::put('/domain/{domain}', [DomainController::class, 'update']);     // Përditëso domain
+Route::delete('/domain/{domain}', [DomainController::class, 'destroy']); // Fshi domain
 
 Route::get('/llogari-hostings', [LlogariHostingController::class, 'index']);  // Lexo te gjitha llogari hosting
 Route::post('/llogari-hostings', [LlogariHostingController::class, 'store']); // Krijo llogari hosting

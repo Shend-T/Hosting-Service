@@ -13,8 +13,7 @@ function Admin() {
   useEffect(() => {
     if (isAuthenticated) {
       navigate("/");
-    }
-    if (!isAdmin) {
+    } else if (!isAdmin) {
       navigate("/admin/login");
     }
   }, [isAuthenticated, isAdmin]);

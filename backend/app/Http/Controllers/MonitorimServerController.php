@@ -14,16 +14,24 @@ class MonitorimServerController extends Controller
         return response()->json($monitorimServers); // kthen JSON
     }
 
+    // Lexo nje monitorim server (Read one)
+    public function show(MonitorimServer $monitorimServer)
+    {
+        return response()->json($monitorimServer);
+    }
+
     // Krijo monitorim server te ri (Create)
     public function store(Request $request)
     {
         $data = $request->validate([
-            'server_id' => 'required|exists:servers,id',
-            'cpu_usage' => 'required|numeric|min:0',
-            'ram_usage' => 'required|numeric|min:0',
-            'disk_usage' => 'required|numeric|min:0',
-            'statusi' => 'nullable|in:normal,warning,kritik',
-            'checked_at' => 'required|date',
+            'serveri_id'    => 'required|exists:servers,id',
+            'cpu_perdorim'  => 'required|numeric|min:0',
+            'ram_perdorim'  => 'required|numeric|min:0',
+            'disk_perdorim' => 'required|numeric|min:0',
+            'bandwidth'     => 'required|numeric|min:0',
+            'statusi'       => 'sometimes|in:monitoron,nuk-monitoron',
+            // 'statusi'       => 'sometimes|in:normal,warning,kritik',
+            'alarmi'        => 'sometiemes|boolean',
         ]);
 
         $monitorimServer = MonitorimServer::create($data);
@@ -31,22 +39,18 @@ class MonitorimServerController extends Controller
         return response()->json($monitorimServer, 201); // Status 201 = Krijuar
     }
 
-    // Lexo nje monitorim server (Read one)
-    public function show(MonitorimServer $monitorimServer)
-    {
-        return response()->json($monitorimServer);
-    }
-
     // Përditëso monitorim server (Update)
     public function update(Request $request, MonitorimServer $monitorimServer)
     {
         $data = $request->validate([
-            'server_id' => 'sometimes|required|exists:servers,id',
-            'cpu_usage' => 'sometimes|required|numeric|min:0',
-            'ram_usage' => 'sometimes|required|numeric|min:0',
-            'disk_usage' => 'sometimes|required|numeric|min:0',
-            'statusi' => 'nullable|in:normal,warning,kritik',
-            'checked_at' => 'sometimes|required|date',
+            'serveri_id'    => 'sometimes|exists:servers,id',
+            'cpu_perdorim'  => 'sometimes|numeric|min:0',
+            'ram_perdorim'  => 'sometimes|numeric|min:0',
+            'disk_perdorim' => 'sometimes|numeric|min:0',
+            'bandwidth'     => 'sometimes|numeric|min:0',
+            'statusi'       => 'sometimes|in:monitoron,nuk-monitoron',
+            // 'statusi'       => 'sometimes|in:normal,warning,kritik',
+            'alarmi'        => 'sometiemes|boolean',
         ]);
 
         $monitorimServer->update($data);
