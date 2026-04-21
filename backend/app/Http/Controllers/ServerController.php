@@ -23,11 +23,12 @@ class ServerController extends Controller
             'ip_adresa'        => 'required|ip|unique:servers,ip_adresa',
             'lloji'            => 'sometimes|in:web,mail',
             'sistemi_operativ' => 'sometimes|in:ubuntu,debian,rhel',
-            'ram_gb'           => 'required|integer|min:0',
-            'cpu_core'         => 'required|integer|min:0',
-            'hapesira_tb'      => 'required|integer|min:1',
+            'ram_gb'           => 'required|integer|min:1',
+            'cpu_core'         => 'required|integer|min:1',
+            'hapesira_tb'      => 'required|numeric|min:0.5',
             'lokacioni'        => 'required|string|max:255',
             'statusi'          => 'sometimes|in:aktiv,jo-aktiv',
+            'data_instalimit'  => 'required|date'
         ]);
 
         $server = Servers::create($data);
@@ -42,26 +43,24 @@ class ServerController extends Controller
     }
 
     // Përditëso server (Update)
-    // public function update(Request $request, Servers $server)
-    // {
-        // $data = $request->validate([
-        //     'emri'       => 'sometimes|required|string|max:255',
-        //     'ip_address' => [
-        //         'sometimes',
-        //         'required',
-        //         'ip',
-        //         Rule::unique('servers', 'ip_address')->ignore($server->id),
-        //     ],
-        //     'statusi'    => 'nullable|in:aktiv,jo-aktiv,suspenduar',
-        //     'ram_gb'     => 'sometimes|required|integer|min:0',
-        //     'disk_gb'    => 'sometimes|required|integer|min:0',
-        //     'lokacioni'  => 'sometimes|required|string|max:255',
-        // ]);
+    public function update(Request $request, Servers $server)
+    {
+        $data = $request->validate([
+            'emri'             => 'required|string|max:255',
+            'ip_adresa'        => 'required|ip|unique:servers,ip_adresa',
+            'lloji'            => 'sometimes|in:web,mail',
+            'sistemi_operativ' => 'sometimes|in:ubuntu,debian,rhel',
+            'ram_gb'           => 'required|integer|min:1',
+            'cpu_core'         => 'required|integer|min:1',
+            'hapesira_tb'      => 'required|numeric|min:0.5',
+            'lokacioni'        => 'required|string|max:255',
+            'statusi'          => 'sometimes|in:aktiv,jo-aktiv',
+        ]);
 
-        // $server->update($data);
+        $server->update($data);
 
-        // return response()->json($server);
-    // }
+        return response()->json($server);
+    }
 
     // Fshi server (Delete)
     public function destroy(Servers $server)

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Klienti;
+use App\Models\LlogariHostings;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -26,6 +27,11 @@ class Domain extends Model
     public function klienti()
     {
         return $this->belongsTo(Klienti::class, 'klienti_id');
+    }
+
+    public function llogariHostings()
+    {
+        return $this->belongsTo(LlogariHostings::class, 'llogari_hostings_id');
     }
 }
 

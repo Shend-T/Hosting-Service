@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Models\Abonimi;
 use App\Models\Servers;
 use App\Models\Tiketi;
+use App\Models\Domain;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -38,6 +39,11 @@ class LlogariHostings extends Model
     public function tiketa()
     {
         return $this->hasMany(Tiketi::class, 'llogari_hostings_id');
+    }
+
+    public function domains()
+    {
+        return $this->hasMany(Domain::class, 'llogari_hostings_id');
     }
 }
 
