@@ -76,9 +76,40 @@ Route::post('/abonimi', [AbonimiController::class, 'store']);
 Route::put('/abonimi/{id}', [AbonimiController::class, 'update']);
 Route::delete('/abonimi/{id}', [AbonimiController::class, 'destroy']);
 
+<<<<<<< Updated upstream
 Route::get('/paketa', [PaketaController::class, 'index']);
 Route::get('/paketa/{id}', [PaketaController::class, 'show']);
 Route::get('/paketa-3', [PaketaController::class, 'showFirstThree']);
 Route::post('/paketa', [PaketaController::class, 'store']);
 Route::put('/paketa/{id}', [PaketaController::class, 'update']);
 Route::delete('/paketa/{id}', [PaketaController::class, 'destroy']);
+=======
+Route::get('/monitorim-servers', [MonitorimServerController::class, 'index']);  // Lexo te gjitha monitorimet
+Route::post('/monitorim-servers', [MonitorimServerController::class, 'store']); // Krijo monitorim
+Route::get('/monitorim-servers/{monitorimServer}', [MonitorimServerController::class, 'show']); // Lexo nje monitorim
+Route::put('/monitorim-servers/{monitorimServer}', [MonitorimServerController::class, 'update']); // Përditëso monitorim
+Route::patch('/monitorim-servers/{monitorimServer}', [MonitorimServerController::class, 'update']); // Përditëso monitorim
+Route::delete('/monitorim-servers/{monitorimServer}', [MonitorimServerController::class, 'destroy']); // Fshi monitorim
+
+Route::get('/abonimi', [AbonimiController::class, 'index']);           // Lexo krejt abonimet - Get
+Route::get('/abonimi/{id}', [AbonimiController::class, 'show']);       // Merr nje abonim     - Get
+Route::post('/abonimi', [AbonimiController::class, 'store']);          // Krijo Abonim        - Create
+Route::put('/abonimi/{id}', [AbonimiController::class, 'update']);     // Perditso nje Abonim - Update
+Route::delete('/abonimi/{id}', [AbonimiController::class, 'destroy']); // Fshij nje Abonim    - Delete
+
+Route::get('/paketa', [PaketaController::class, 'index']);            // Kthe krejt paketat
+Route::get('/paketa/{id}', [PaketaController::class, 'show']);        // Kthe nje pakete ne baze te id-s
+Route::get('/paketa-3', [PaketaController::class, 'showFirstThree']); // Kthe vetem 3 paketat e para( na duhet per home page)
+Route::post('/paketa', [PaketaController::class, 'store']);           // Krijo pakete
+Route::put('/paketa/{id}', [PaketaController::class, 'update']);      // Perditso nje pakete
+Route::delete('/paketa/{id}', [PaketaController::class, 'destroy']);  // Fshij nje pakete
+
+Route::get('/tiketa', [TiketiController::class, 'index']);
+Route::get('/tiketa/{id}', [TiketiController::class, 'show']);
+Route::post('/tiketa', [TiketiController::class, 'store']);
+Route::put('/tiketa/{id}', [TiketiController::class, 'update']);
+Route::delete('/tiketa/{id}', [TiketiController::class, 'destroy']);
+
+Route::post('/pergjigja_tiketi', [PergjigjaTiketiController::class, 'store']);
+Route::delete('/pergjigja_tiketi/{id}', [PergjigjaTiketiController::class, 'destroy']);
+>>>>>>> Stashed changes

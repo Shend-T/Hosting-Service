@@ -8,77 +8,57 @@ use Illuminate\Http\Request;
 
 class TiketiController extends Controller
 {
+    // GET /api/tiketa
     public function index()
     {
         $tiketa = Tiketi::with('klienti')->get();
-        return view('tiketa.index', compact('tiketa'));
+        return response()->json($tiketa);
     }
 
-    public function create()
+    // GET /api/tiketa/{id}
+    public function show(int $id)
     {
-        $klientet = Klienti::all();
-        return view('tiketa.create', compact('klientet'));
+        $tiketi = Tiketi::with(['klienti', 'pergjigjet'])->findOrFail($id);
+        return response()->json($tiketi);
     }
 
+    // POST /api/tiketa
     public function store(Request $request)
     {
-        $request->validate([
-            'klienti_id' => 'required',
-            'titulli'    => 'required|string|max:255',
-            'pershkrimi' => 'required|string',
-            'prioriteti' => 'required',
-            'kategoria'  => 'required|string',
+        $data = $request->validate([
+            'klienti_id'  => 'required|exists:klienti,id',
+            'llogaria_id' => 'nullable',
+            'titulli'     => 'required|string|max:255',
+            'pershkrimi'  => 'required|string',
+            'prioriteti'  => 'sometimes|in:i_ulet,normal,i_larte,urgjent',
+            'kategoria'   => 'required|string',
         ]);
 
-        Tiketi::create([
-            'klienti_id'  => $request->klienti_id,
-            'llogaria_id' => $request->llogaria_id,
-            'titulli'     => $request->titulli,
-            'pershkrimi'  => $request->pershkrimi,
-            'prioriteti'  => $request->prioriteti,
-            'statusi'     => 'hapur',
-            'data_hapjes' => now(),
-            'kategoria'   => $request->kategoria,
+        $tiketi = Tiketi::create($data);
+        return response()->json($tiketi, 201);
+    }
+
+    // PUT /api/tiketa/{id}
+    public function update(Request $request, int $id)
+    {
+        $tiketi = Tiketi::findOrFail($id);
+
+        $data = $request->validate([
+            'titulli'    => 'sometimes|string|max:255',
+            'pershkrimi' => 'sometimes|string',
+            'prioriteti' => 'sometimes|in:i_ulet,normal,i_larte,urgjent',
+            'statusi'    => 'sometimes|in:hapur,ne_proces,mbyllur',
+            'kategoria'  => 'sometimes|string',
         ]);
 
-        return redirect('/tiketa')->with('success', 'Tiketi u krijua me sukses!');
+        $tiketi->update($data);
+        return response()->json($tiketi);
     }
 
-    public function show(Tiketi $tiketi)
+    // DELETE /api/tiketa/{id}
+    public function destroy(int $id)
     {
-        return view('tiketa.show', compact('tiketi'));
-    }
-
-    public function edit(Tiketi $tiketi)
-    {
-        $klientet = Klienti::all();
-        return view('tiketa.edit', compact('tiketi', 'klientet'));
-    }
-
-    public function update(Request $request, Tiketi $tiketi)
-    {
-        $request->validate([
-            'titulli'    => 'required|string|max:255',
-            'pershkrimi' => 'required|string',
-            'prioriteti' => 'required',
-            'statusi'    => 'required',
-            'kategoria'  => 'required|string',
-        ]);
-
-        $tiketi->update([
-            'titulli'    => $request->titulli,
-            'pershkrimi' => $request->pershkrimi,
-            'prioriteti' => $request->prioriteti,
-            'statusi'    => $request->statusi,
-            'kategoria'  => $request->kategoria,
-        ]);
-
-        return redirect('/tiketa')->with('success', 'Tiketi u perditesua me sukses!');
-    }
-
-    public function destroy(Tiketi $tiketi)
-    {
-        $tiketi->delete();
-        return redirect('/tiketa')->with('success', 'Tiketi u fshi me sukses!');
+        Tiketi::findOrFail($id)->delete();
+        return response()->json("", 204);
     }
 }
