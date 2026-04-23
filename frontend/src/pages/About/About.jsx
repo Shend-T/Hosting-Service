@@ -77,12 +77,12 @@ function About() {
           <div className="col-md-4">
             <div className="card shadow-sm h-100">
               <div className="card-body p-4">
-                <h3 className="card-title mb-1">Eklo Kalludra</h3>
+                <h3 className="card-title mb-1">Ekloan Kalludra</h3>
                 <p className="text-primary fw-semibold mb-2">
                   Backend &amp; Support Systems Developer
                 </p>
                 <p className="card-text mb-0">
-                  Eklo works on backend features and support tools that keep
+                  Ekloan works on backend features and support tools that keep
                   everything running smoothly.
                 </p>
               </div>
