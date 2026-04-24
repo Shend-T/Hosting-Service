@@ -20,7 +20,7 @@ class LlogariHostingController extends Controller
         $data = LlogariHostings::whereHas('abonimi', function ($query) use ($request) {
             $query->where('klienti_id', $request->user()->id);
         })
-        ->with(['abonimi.paketa', 'server'])
+        ->with(['abonimi.paketa', 'server', 'domains'])
         ->get();
 
         return response()->json($data);

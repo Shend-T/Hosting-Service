@@ -9,6 +9,7 @@ function Servers() {
   const [hostingAccounts, setHostingAccounts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedAccount, setSelectedAccount] = useState(null);
+  const [showDomainForm, setShowDomainForm] = useState(false);
 
   useEffect(() => {
     const getHostingAccounts = async () => {
@@ -17,15 +18,17 @@ function Servers() {
           headers: { Authorization: `Bearer ${token}` },
         });
         setHostingAccounts(res.data);
+        console.log(res.data);
       } catch (error) {
         console.log(error);
       } finally {
         setLoading(false);
+        setShowDomainForm(false);
       }
     };
 
     getHostingAccounts();
-  }, []);
+  }, [selectedAccount]);
 
   const getStatusBadge = (statusi) => {
     switch (statusi) {
@@ -35,6 +38,33 @@ function Servers() {
         return "badge bg-secondary";
       default:
         return "badge bg-secondary";
+    }
+  };
+
+  const [domainForm, setDomainForm] = useState({
+    llogari_hostings_id: "",
+    emri_domainit: "",
+    tld: ".ubt",
+    data_skadimit: "",
+  });
+  const createDomain = async (e) => {
+    e.preventDefault();
+
+    const updatedForm = {
+      ...domainForm,
+      llogari_hostings_id: selectedAccount.id,
+      data_skadimit: selectedAccount.abonimi.data_skadimit,
+    };
+
+    try {
+      const res = await axios.post(
+        "http://127.0.0.1:8000/api/domains/user",
+        updatedForm,
+        { headers: { Authorization: `Bearer ${token}` } },
+      );
+      setSelectedAccount(null);
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -76,6 +106,14 @@ function Servers() {
                   <div className="mb-3">
                     <small className="text-muted">Username</small>
                     <p className="mb-1 font-monospace">{account.username}</p>
+
+                    <small className="text-muted">Domain-i Kryesor</small>
+                    <p className="mb-1 font-monospace">
+                      {account.domains.length > 0
+                        ? account.domains[0].emri_domainit +
+                          account.domains[0].tld
+                        : "Nuk ke domain momentalisht"}
+                    </p>
 
                     <small className="text-muted">IP Adresa</small>
                     <p className="mb-1 font-monospace">{account.ip_dedikuar}</p>
@@ -194,7 +232,110 @@ function Servers() {
                       {selectedAccount.server?.ip_adresa}
                     </p>
                   </div>
+
+                  <h5 className="fw-bold mb-3">
+                    Domain-et (max:{" "}
+                    {selectedAccount.abonimi.paketa.nr_domaineve})
+                  </h5>
+                  {selectedAccount.domains.length === 0 ? (
+                    <div className="col-6 mb-3">
+                      <p>Krijo domain-in tend</p>
+                    </div>
+                  ) : (
+                    selectedAccount.domains.map((domain) => (
+                      <div className="col-6 mb-3" key={domain.id}>
+                        <small className="text-muted">
+                          Domain-i {domain.id}
+                        </small>
+                        <p className="mb-0">{domain.emri_domainit}</p>
+                      </div>
+                    ))
+                  )}
+
+                  {selectedAccount.abonimi.paketa.nr_domaineve >
+                    selectedAccount.domains.length && (
+                    <div className="col-8">
+                      <button
+                        className="btn btn-primary"
+                        onClick={() => setShowDomainForm(!showDomainForm)}
+                      >
+                        Krijo Domain-in Tend
+                      </button>
+                    </div>
+                  )}
                 </div>
+
+                {showDomainForm && (
+                  <div className="row">
+                    <form onSubmit={createDomain}>
+                      <div className="form-floating mt-3 mb-3">
+                        <input
+                          type="text"
+                          name="emri_domainit"
+                          className="form-control"
+                          id="emri_domainit"
+                          placeholder="..."
+                          value={domainForm.emri_domainit}
+                          onChange={(e) =>
+                            setDomainForm({
+                              ...domainForm,
+                              emri_domainit: e.target.value,
+                            })
+                          }
+                          required
+                        />
+                        <label htmlFor="emri_domainit">Emri Domain-it</label>
+                      </div>
+
+                      <div className="mb-3">
+                        {/* <input
+                          type="text"
+                          name="tld"
+                          className="form-control"
+                          id="tld"
+                          placeholder="..."
+                          value={domainForm.tld}
+                          onChange={(e) =>
+                            setDomainForm({
+                              ...domainForm,
+                              tld: e.target.value,
+                            })
+                          }
+                          required
+                        />
+                        <label htmlFor="tld">Top Level Domain</label> */}
+
+                        <label htmlFor="tld" className="form-label">
+                          Top Level Domain
+                        </label>
+                        <select
+                          name="tld"
+                          className="form-control"
+                          id="tld"
+                          value={domainForm.tld}
+                          onChange={(e) =>
+                            setDomainForm({
+                              ...domainForm,
+                              tld: e.target.value,
+                            })
+                          }
+                        >
+                          <option value=".ubt">.ubt</option>
+                          <option value=".net">.net</option>
+                          <option value=".com">.com</option>
+                        </select>
+                      </div>
+
+                      <div className="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
+                        <input
+                          type="submit"
+                          className="btn btn-primary btn-lg"
+                          value="Submit"
+                        />
+                      </div>
+                    </form>
+                  </div>
+                )}
               </div>
 
               <div className="modal-footer">
