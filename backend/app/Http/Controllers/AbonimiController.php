@@ -120,6 +120,11 @@ class AbonimiController extends Controller
             ], 403);
         }
 
+        $llogariHosting = LlogariHostings::where('abonimi_id', $abonimi->id)->first();
+        if ($llogariHosting) {
+            $llogariHosting->delete();
+        }
+        
         $abonimi->statusi = 'ndalur';
         $abonimi->save();
 
@@ -152,8 +157,8 @@ class AbonimiController extends Controller
                     ->get()
                     ->first(function ($server) use ($paketaStorage) {
                         $totalStorageGb = $server->hapesira_tb * 1024; // e kthen nGB
-                        $usedStorageGb  = $server->llogariHostings()->sum('hapesira_perdorur');
-                        $freeStorageGb  = $totalStorageGb - $usedStorageGb;
+                        $usedStorageGb  = $server->llogariHostings()->sum('hapesira_perdorur'); // merr totalin e GB te perdorur
+                        $freeStorageGb  = $totalStorageGb - $usedStorageGb; // hapesira free
                         return $freeStorageGb >= $paketaStorage;
                     });
 

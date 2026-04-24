@@ -16,6 +16,7 @@ class Domain extends Model
 
     protected $fillable = [
         'klienti_id',
+        'llogari_hostings_id',
         'emri_domainit',
         'tld',
         'nameserverat',

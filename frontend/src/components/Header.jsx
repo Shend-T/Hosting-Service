@@ -2,7 +2,9 @@ import React, { useState, useEffect } from "react";
 import { NavLink, Link } from "react-router-dom";
 
 import logo from "../assets/logo.png";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { removeToken } from "../features/auth/authSlice";
+import { removeUser } from "../features/user/userSlice";
 
 import { VscAccount } from "react-icons/vsc";
 
@@ -17,10 +19,8 @@ function Header() {
       const currentScrollY = window.scrollY;
 
       if (currentScrollY > lastScrollY) {
-        // Scrolling down → hide
         setVisible(false);
       } else {
-        // Scrolling up → show
         setVisible(true);
       }
 
@@ -29,9 +29,14 @@ function Header() {
 
     window.addEventListener("scroll", handleScroll);
 
-    // Cleanup on unmount
     return () => window.removeEventListener("scroll", handleScroll);
   }, [lastScrollY]);
+
+  const dispatch = useDispatch();
+  const logOut = () => {
+    dispatch(removeUser());
+    dispatch(removeToken());
+  };
 
   return (
     <nav
@@ -113,17 +118,37 @@ function Header() {
                 FAQ
               </NavLink>
             </li>
-          </ul>
-          <div className="navbar-nav nav-item">
-            {isAuthenticated ? (
+            <li className="nav-item">
               <NavLink
                 className={({ isActive }) =>
                   isActive ? "nav-link active" : "" + "nav-link"
                 }
-                to="/user"
+                style={{ fontSize: "12px" }}
+                to="/admin"
               >
-                <VscAccount size={22} />
+                Admin
               </NavLink>
+            </li>
+          </ul>
+          <div className="navbar-nav nav-item">
+            {isAuthenticated ? (
+              <ul className="navbar-nav me-auto mb-2 mb-lg-0">
+                <li>
+                  <NavLink
+                    className={({ isActive }) =>
+                      isActive ? "nav-link active" : "" + "nav-link"
+                    }
+                    to="/user"
+                  >
+                    <VscAccount size={22} />
+                  </NavLink>
+                </li>
+                <li>
+                  <button className="btn-sm" onClick={() => logOut()}>
+                    Test
+                  </button>
+                </li>
+              </ul>
             ) : (
               <NavLink
                 className={({ isActive }) =>

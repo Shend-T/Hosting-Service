@@ -10,6 +10,7 @@ import Home from "./pages/Home/Home";
 import About from "./pages/About/About";
 import FAQ from "./pages/FAQ/FAQ";
 import Terms from "./pages/Terms/Terms";
+import FAQ from "./pages/FAQ/FAQ";
 
 // ===== Authentikimi =====
 import Register from "./pages/Register/Register";
@@ -38,6 +39,7 @@ function App() {
         <Route path="/about" element={<About />} />
         <Route path="/faq" element={<FAQ />} />
         <Route path="/terms" element={<Terms />} />
+        <Route path="/faq" element={<FAQ />} />
         {/* Authentikimi */}
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
