@@ -1,15 +1,21 @@
 import React, { useState, useEffect } from "react";
+import axios from "axios";
 
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { removeAdminToken } from "../../features/admin/adminSlice";
 
+import AdminDashboard from "./sections/AdminDashboard";
+import AdminKlienti from "./sections/AdminKlienti";
+
 function Admin() {
-  const URL = "http://localhost:8000/admin";
+  const URL = "http://localhost:8000/api/admin";
   const navigate = useNavigate();
 
   const { isAuthenticated } = useSelector((state) => state.auth);
   const isAdmin = useSelector((state) => state.admin.isAuthenticated);
+  const adminToken = useSelector((state) => state.admin.token);
+  const [me, setMe] = useState(null);
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -18,6 +24,22 @@ function Admin() {
       navigate("/admin/login");
     }
   }, [isAuthenticated, isAdmin]);
+
+  useEffect(() => {
+    const getMe = async () => {
+      try {
+        const res = await axios.get(URL + "/me", {
+          headers: { Authorization: `Bearer ${adminToken}` },
+        });
+        setMe(res.data);
+        console.log(res.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    getMe();
+  }, []);
 
   const dispatch = useDispatch();
   const logOut = () => {
@@ -53,10 +75,10 @@ function Admin() {
               </li>
               <li className="nav-item">
                 <a
-                  className={`nav-link sidebar-link ${activePage === "servers" ? "active" : ""}`}
-                  onClick={() => setActivePage("servers")}
+                  className={`nav-link sidebar-link ${activePage === "klienti" ? "active" : ""}`}
+                  onClick={() => setActivePage("klienti")}
                 >
-                  Serveret Aktiv
+                  Klientët
                 </a>
               </li>
               <li className="nav-item">
@@ -78,7 +100,8 @@ function Admin() {
               <li className="nav-item">
                 <a
                   className="nav-link sidebar-link"
-                  onClick={() => setConfirmLogOut(true)}
+                  onClick={() => logOut()}
+                  // onClick={() => setConfirmLogOut(true)}
                 >
                   Log Out
                 </a>
@@ -90,7 +113,18 @@ function Admin() {
         <main className="col-md-9 ms-sm-auto col-lg-10 px-md-4">
           <div className="flex flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
             <h1>Pershendetje,</h1>
+            <h3>
+              zotri, {me.emri} {me.mbiemri}
+            </h3>
           </div>
+
+          {activePage == "dashboard" ? (
+            <AdminDashboard />
+          ) : activePage == "klienti" ? (
+            <AdminKlienti />
+          ) : (
+            <AdminDashboard />
+          )}
         </main>
       </div>
     </div>

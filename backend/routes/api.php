@@ -50,8 +50,11 @@ Route::middleware('auth:sanctum')->group(function () { // Kto linka jan te mbroj
 // Authentikimi i admin-it
 Route::post('/admin/login', [AdminAuthController::class, 'login']);
 
-Route::middleware(['auth:sanctum', 'is_admin'])->prefix('admin')->group(function () {
+Route::middleware(['auth:sanctum'])->prefix('admin')->group(function () {
     Route::post('/logout', [AdminAuthController::class, 'logout']);
+    Route::get('/me', [AdminAuthController::class, "me"]);
+
+    Route::get('/klienti', [AdminController::class, "getAllKlienti"]);
 });
 
 Route::get('/servers', [ServerController::class, 'index']);  // Lexo krejt serverat

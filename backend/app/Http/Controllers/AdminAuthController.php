@@ -12,12 +12,10 @@ class AdminAuthController extends Controller
 {
     public function login(Request $request)
     {
-        \Log::info('1');
         $request->validate([
             'email'    => 'required|email',
             'password' => 'required',
         ]);
-        \Log::info('2');
 
         $admin = Admin::where('email', $request->email)->first();
         // if (!Auth::guard('admin')->attempt($request->only('email', 'password'))) {
@@ -26,12 +24,9 @@ class AdminAuthController extends Controller
         if (!$admin || !\Hash::check($request->password, $admin->password)) {
             return response()->json(['message' => 'Email ose pass gabim!'], 401);
         }
-        \Log::info('3');
-
         
-        $token = $admin->createToken('admin_token')->plainTextToken;
+        $token = $admin->createToken('admin_token', ['admin'])->plainTextToken;
 
-        \Log::info('4');
         return response()->json([
             'admin' => $admin,
             'token' => $token,
@@ -46,6 +41,10 @@ class AdminAuthController extends Controller
 
     public function me(Request $request)
     {
-        return response()->json($request->user());
+        if ($request->user()->tokenCan("admin")) {
+            return response()->json($request->user());
+        } else {
+            return response()->json(['message' => 'I pa autorizuar'], 403);
+        }
     }
 }
