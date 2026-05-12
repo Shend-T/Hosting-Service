@@ -23,7 +23,7 @@ class AuthController extends Controller
 
         $klienti = Klienti::create($data);
 
-        $token = $klienti->createToken('auth_token')->plainTextToken;
+        $token = $klienti->createToken('auth_token', ['user'])->plainTextToken;
 
         return response()->json([
             'klienti' => $klienti,
@@ -48,7 +48,7 @@ class AuthController extends Controller
         }
 
         $klienti = Klienti::where('email', $request->email)->first();
-        $token = $klienti->createToken('auth_token')->plainTextToken;
+        $token = $klienti->createToken('auth_token', ['user'])->plainTextToken;
 
         return response()->json([
             'klienti' => $klienti,
