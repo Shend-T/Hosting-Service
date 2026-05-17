@@ -11,6 +11,7 @@ import Dashboard from "./sections/Dashboard";
 import Servers from "./sections/Servers";
 import Plans from "./sections/Plans";
 import Tickets from "./sections/Tickets";
+import Faktura from "./sections/Faktura";
 import Funds from "../../components/Funds/Funds";
 
 function User() {
@@ -23,9 +24,7 @@ function User() {
   const bilanci = useSelector((state) => state.user.funds);
 
   const [user, setUser] = useState(null);
-
   const [sidebarOpen, setSidebarOpen] = useState(false);
-
   const [activePage, setActivePage] = useState("dashboard");
 
   useEffect(() => {
@@ -40,32 +39,26 @@ function User() {
         const response = await axios.get(URL + "user", {
           headers: { Authorization: `Bearer ${token}` },
         });
-
-        const data = response.data;
-
-        setUser(data);
+        setUser(response.data);
       } catch (error) {
         console.log(error);
       }
     };
-
     getUser();
   }, []);
 
   const [showAddFunds, setShowAddFunds] = useState(false);
-
   const [confirmLogOut, setConfirmLogOut] = useState(false);
+
   useEffect(() => {
     const handleKeyDown = (e) => {
       if (e.key === "Escape") {
         setConfirmLogOut(false);
       }
     };
-
     if (confirmLogOut) {
       window.addEventListener("keydown", handleKeyDown);
     }
-
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [confirmLogOut]);
 
@@ -113,12 +106,20 @@ function User() {
                   Monitorimi i Planeve
                 </a>
               </li>
-             <li className="nav-item">
+              <li className="nav-item">
                 <a
                   className={`nav-link sidebar-link ${activePage === "tickets" ? "active" : ""}`}
                   onClick={() => setActivePage("tickets")}
                 >
-                  Kerkesat(Tiketat)
+                  Kerkesat (Tiketat)
+                </a>
+              </li>
+              <li className="nav-item">
+                <a
+                  className={`nav-link sidebar-link ${activePage === "faturat" ? "active" : ""}`}
+                  onClick={() => setActivePage("faturat")}
+                >
+                  Faturat
                 </a>
               </li>
               <li className="nav-item">
@@ -165,6 +166,8 @@ function User() {
             <Plans />
           ) : activePage == "tickets" ? (
             <Tickets />
+          ) : activePage == "faturat" ? (
+            <Faktura />
           ) : (
             <Dashboard user={user} />
           )}
@@ -192,7 +195,6 @@ function User() {
                   onClick={() => setConfirmLogOut(false)}
                 />
               </div>
-
               <div className="modal-footer">
                 <button
                   className="btn btn-secondary"

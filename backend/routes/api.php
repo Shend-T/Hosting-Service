@@ -13,6 +13,7 @@ use App\Http\Controllers\ServerController;
 use App\Http\Controllers\DomainController;
 use App\Http\Controllers\LlogariHostingController;
 use App\Http\Controllers\MonitorimServerController;
+use App\Http\Controllers\FakturaController;
 
 Route::get('/klienti', [KlientController::class, 'index']);
 Route::get('/klienti/{id}', [KlientController::class, 'show']);
@@ -32,8 +33,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::patch('/klienti/add-funds', [KlientController::class, 'addFunds']);
     Route::patch('/klienti/remove-funds', [KlientController::class, 'removeFunds']);
-
-    // ✅ Tiketa routes — protected by auth
+    
     Route::get('/tiketa', [TiketiController::class, 'index']);
     Route::get('/tiketa/{id}', [TiketiController::class, 'show']);
     Route::post('/tiketa', [TiketiController::class, 'store']);
@@ -42,6 +42,13 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::post('/pergjigja_tiketi', [PergjigjaTiketiController::class, 'store']);
     Route::delete('/pergjigja_tiketi/{id}', [PergjigjaTiketiController::class, 'destroy']);
+
+
+    Route::get('/faturat', [FakturaController::class, 'index']);
+    Route::get('/faturat/{id}', [FakturaController::class, 'show']);
+    Route::post('/faturat', [FakturaController::class, 'store']);
+    Route::put('/faturat/{id}', [FakturaController::class, 'update']);
+    Route::delete('/faturat/{id}', [FakturaController::class, 'destroy']);
 });
 
 Route::get('/servers', [ServerController::class, 'index']);

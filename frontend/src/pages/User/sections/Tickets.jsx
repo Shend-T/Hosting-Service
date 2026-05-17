@@ -29,7 +29,7 @@ function Tickets() {
 
   const headers = { Authorization: `Bearer ${token}` };
 
-  // ✅ Fetch all tickets
+  // merr te gjith tiketat
   const getTiketa = async () => {
     try {
       const res = await axios.get(BASE_URL + "tiketa", { headers });
@@ -39,7 +39,7 @@ function Tickets() {
     }
   };
 
-  // ✅ Fetch one ticket with replies
+  // merr nje tiket 
   const getTiket = async (id) => {
     try {
       const res = await axios.get(BASE_URL + "tiketa/" + id, { headers });
@@ -50,7 +50,7 @@ function Tickets() {
     }
   };
 
-  // ✅ Create ticket
+  // Create tiket
   const createTiket = async (e) => {
     e.preventDefault();
     try {
@@ -67,7 +67,7 @@ function Tickets() {
     }
   };
 
-  // ✅ Delete ticket
+  // Delete tiket
   const deleteTiket = async (id) => {
     try {
       await axios.delete(BASE_URL + "tiketa/" + id, { headers });
@@ -78,7 +78,7 @@ function Tickets() {
     }
   };
 
-  // ✅ Add reply
+  // Add reply
   const addReply = async (e) => {
     e.preventDefault();
     try {
