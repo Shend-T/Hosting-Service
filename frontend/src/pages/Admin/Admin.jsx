@@ -8,6 +8,9 @@ import { removeAdminToken } from "../../features/admin/adminSlice";
 import AdminDashboard from "./sections/AdminDashboard";
 import AdminKlienti from "./sections/AdminKlienti";
 
+import "./Admin.css";
+import { HashLoader, RingLoader, PropagateLoader } from "react-spinners";
+
 function Admin() {
   const URL = "http://localhost:8000/api/admin";
   const navigate = useNavigate();
@@ -16,6 +19,8 @@ function Admin() {
   const isAdmin = useSelector((state) => state.admin.isAuthenticated);
   const adminToken = useSelector((state) => state.admin.token);
   const [me, setMe] = useState(null);
+
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -32,6 +37,8 @@ function Admin() {
           headers: { Authorization: `Bearer ${adminToken}` },
         });
         setMe(res.data);
+        setLoading(false);
+        // console.log(1);
         console.log(res.data);
       } catch (error) {
         console.log(error);
@@ -42,92 +49,118 @@ function Admin() {
   }, []);
 
   const dispatch = useDispatch();
-  const logOut = () => {
-    dispatch(removeAdminToken());
-    navigate("/");
+  const logOut = async () => {
+    setLoading(true);
+    try {
+      await axios.post(
+        URL + "/logout",
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${adminToken}`,
+            Accept: "application/json",
+          },
+        },
+      );
+
+      dispatch(removeAdminToken());
+      navigate("/");
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [activePage, setActivePage] = useState("dashboard");
 
   return (
-    <div className="container-fluid custom-margin">
-      <div className="row">
-        <button
-          className="btn btn-primary d-md-none m-2"
-          onClick={() => setSidebarOpen(!sidebarOpen)}
-        >
-          {sidebarOpen ? "Mbyll Menu-ne" : "Shfaq Menu-ne"}
-        </button>
-        <nav
-          className={`col-md-3 col-lg-2 bg-light sidebar ${sidebarOpen ? "d-block" : "d-none"} d-md-block`}
-          style={{ minHeight: "100vh" }}
-        >
-          <div className="position-sticky pt-3">
-            <ul className="nav flex-column">
-              <li className="nav-item">
-                <a
-                  className={`nav-link sidebar-link ${activePage === "dashboard" ? "active" : ""}`}
-                  onClick={() => setActivePage("dashboard")}
-                >
-                  Paneli
-                </a>
-              </li>
-              <li className="nav-item">
-                <a
-                  className={`nav-link sidebar-link ${activePage === "klienti" ? "active" : ""}`}
-                  onClick={() => setActivePage("klienti")}
-                >
-                  Klientët
-                </a>
-              </li>
-              <li className="nav-item">
-                <a
-                  className={`nav-link sidebar-link ${activePage === "monitor" ? "active" : ""}`}
-                  onClick={() => setActivePage("monitor")}
-                >
-                  Monitorimi i Abonimeve
-                </a>
-              </li>
-              <li className="nav-item">
-                <a
-                  className={`nav-link sidebar-link ${activePage === "tickets" ? "active" : ""}`}
-                  onClick={() => setActivePage("tickets")}
-                >
-                  Kerkesat(Tiketat)
-                </a>
-              </li>
-              <li className="nav-item">
-                <a
-                  className="nav-link sidebar-link"
-                  onClick={() => logOut()}
-                  // onClick={() => setConfirmLogOut(true)}
-                >
-                  Log Out
-                </a>
-              </li>
-            </ul>
-          </div>
-        </nav>
+    <>
+      {loading ? (
+        <div className="spinner-container">
+          <HashLoader size={70} color="#2c687b" />
+          {/* <PropagateLoader size={20} color="#2c687b" /> */}
+          {/* <RingLoader size={70} color="#2c687b" /> */}
+        </div>
+      ) : (
+        <div className="container-fluid custom-margin">
+          <div className="row">
+            <button
+              className="btn btn-primary d-md-none m-2"
+              onClick={() => setSidebarOpen(!sidebarOpen)}
+            >
+              {sidebarOpen ? "Mbyll Menu-ne" : "Shfaq Menu-ne"}
+            </button>
+            <nav
+              className={`col-md-3 col-lg-2 bg-light sidebar ${sidebarOpen ? "d-block" : "d-none"} d-md-block`}
+              style={{ minHeight: "100vh" }}
+            >
+              <div className="position-sticky pt-3">
+                <ul className="nav flex-column">
+                  <li className="nav-item">
+                    <a
+                      className={`nav-link sidebar-link ${activePage === "dashboard" ? "active" : ""}`}
+                      onClick={() => setActivePage("dashboard")}
+                    >
+                      Paneli
+                    </a>
+                  </li>
+                  <li className="nav-item">
+                    <a
+                      className={`nav-link sidebar-link ${activePage === "klienti" ? "active" : ""}`}
+                      onClick={() => setActivePage("klienti")}
+                    >
+                      Klientët
+                    </a>
+                  </li>
+                  <li className="nav-item">
+                    <a
+                      className={`nav-link sidebar-link ${activePage === "monitor" ? "active" : ""}`}
+                      onClick={() => setActivePage("monitor")}
+                    >
+                      Monitorimi i Abonimeve
+                    </a>
+                  </li>
+                  <li className="nav-item">
+                    <a
+                      className={`nav-link sidebar-link ${activePage === "tickets" ? "active" : ""}`}
+                      onClick={() => setActivePage("tickets")}
+                    >
+                      Kerkesat(Tiketat)
+                    </a>
+                  </li>
+                  <li className="nav-item">
+                    <a
+                      className="nav-link sidebar-link"
+                      onClick={() => logOut()}
+                      // onClick={() => setConfirmLogOut(true)}
+                    >
+                      Log Out
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </nav>
 
-        <main className="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-          <div className="flex flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-            <h1>Pershendetje,</h1>
-            <h3>
-              zotri, {me.emri} {me.mbiemri}
-            </h3>
-          </div>
+            <main className="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+              <div className="flex flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                <h1>Pershendetje,</h1>
+                <h3>
+                  zotri, {me.emri} {me.mbiemri}
+                </h3>
+              </div>
 
-          {activePage == "dashboard" ? (
-            <AdminDashboard />
-          ) : activePage == "klienti" ? (
-            <AdminKlienti />
-          ) : (
-            <AdminDashboard />
-          )}
-        </main>
-      </div>
-    </div>
+              {activePage == "dashboard" ? (
+                <AdminDashboard />
+              ) : activePage == "klienti" ? (
+                <AdminKlienti />
+              ) : (
+                <AdminDashboard />
+              )}
+            </main>
+          </div>
+        </div>
+      )}
+    </>
   );
 }
 

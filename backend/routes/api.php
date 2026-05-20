@@ -55,6 +55,7 @@ Route::middleware(['auth:sanctum'])->prefix('admin')->group(function () {
     Route::get('/me', [AdminAuthController::class, "me"]);
 
     Route::get('/klienti', [AdminController::class, "getAllKlienti"]);
+    Route::get('/klienti/{id}', [AdminController::class, "getKlienti"]);
 });
 
 Route::get('/servers', [ServerController::class, 'index']);  // Lexo krejt serverat
