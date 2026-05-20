@@ -18,4 +18,10 @@ class AdminController extends Controller
             return response()->json(['message' => 'I pa autorizuar'], 403);
         }
     }
+
+    public function getKlienti(int $id) {
+        $klienti = Klienti::findOrFail($id);
+
+        return response()->json($klienti, 200);
+    }
 }

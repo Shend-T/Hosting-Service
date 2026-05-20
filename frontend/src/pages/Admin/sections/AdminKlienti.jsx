@@ -27,6 +27,13 @@ function AdminKlienti() {
     };
     getKlientet();
   }, []);
+
+  const showKlientiModal = () => {};
+
+  const updateKlienti = () => {};
+
+  const deleteKlienti = () => {};
+
   return (
     <div>
       <h1>Klientet</h1>
@@ -45,6 +52,8 @@ function AdminKlienti() {
               <th scope="col">Bilanci</th>
               <th scope="col">Statusi</th>
               <th scope="col">Data Regjistrimit</th>
+              <th scope="col">Aksionet</th>
+              {/* Spo di term ma tmir se aksionet */}
             </tr>
           </thead>
           <tbody>
@@ -60,6 +69,20 @@ function AdminKlienti() {
                 <td>{klienti.bilanci}</td>
                 <td>{klienti.statusi}</td>
                 <td>{klienti.data_regjistrimit}</td>
+                <td>
+                  <button
+                    className="table-btn btn btn-warning mx-2"
+                    onClick={() => showKlientiModal()}
+                  >
+                    Perditso
+                  </button>
+                  <button
+                    className="table-btn btn btn-danger"
+                    onClick={() => deleteKlienti()}
+                  >
+                    Fshij
+                  </button>
+                </td>
               </tr>
             ))}
           </tbody>
@@ -67,6 +90,8 @@ function AdminKlienti() {
       ) : (
         <p>Nuk ka klient aktiv momentalisht</p>
       )}
+
+      {}
     </div>
   );
 }
