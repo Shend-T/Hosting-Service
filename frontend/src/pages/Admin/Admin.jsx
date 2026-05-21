@@ -38,8 +38,6 @@ function Admin() {
         });
         setMe(res.data);
         setLoading(false);
-        // console.log(1);
-        console.log(res.data);
       } catch (error) {
         console.log(error);
       }
@@ -150,7 +148,7 @@ function Admin() {
               </div>
 
               {activePage == "dashboard" ? (
-                <AdminDashboard />
+                <AdminKlienti />
               ) : activePage == "klienti" ? (
                 <AdminKlienti />
               ) : (
