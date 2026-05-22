@@ -8,6 +8,7 @@ import Modal from "../components/common/Modal";
 import { getStatusBadgeKlienti } from "../../../utils/statusUtils";
 import { useEscapeKey } from "../../../hooks/useEscapeKey";
 import KlientiForm from "../components/forms/KlientiForm";
+import KlientiDisplay from "../components/display/KlientiDisplay";
 
 const URL = "http://127.0.0.1:8000/api/admin/klienti";
 
@@ -34,6 +35,8 @@ function AdminKlienti() {
   useEffect(() => {
     getKlientet();
   }, []);
+
+  const [showKlientiModal, setShowKlientiModal] = useState(false);
 
   const [klientiForm, setKlientiForm] = useState({
     emri: "",
@@ -135,8 +138,14 @@ function AdminKlienti() {
             </thead>
             <tbody>
               {klientet.map((klienti) => (
-                <tr key={klienti.id}>
-                  <th scope="row">{klienti.id}</th>
+                <tr
+                  key={klienti.id}
+                  onClick={() => {
+                    setKlienti(klienti);
+                    setShowKlientiModal(true);
+                  }}
+                >
+                  <td>{klienti.id}</td>
                   <td>{klienti.emri}</td>
                   <td>{klienti.mbiemri}</td>
                   <td>{klienti.kompania}</td>
@@ -144,18 +153,19 @@ function AdminKlienti() {
                   <td>{klienti.telefoni}</td>
                   <td>{klienti.adresa}</td>
                   <td>{klienti.bilanci}</td>
-                  <td
-                    className={getStatusBadgeKlienti(klienti.statusi)}
-                    style={{
-                      padding: "5px",
-                      fontSize: "8px",
-                      marginTop: "5px",
-                    }}
-                  >
-                    {klienti.statusi}
+                  <td>
+                    <span
+                      className={`${getStatusBadgeKlienti(klienti.statusi)}`}
+                      style={{
+                        padding: "5px",
+                        marginTop: "5px",
+                      }}
+                    >
+                      {klienti.statusi}
+                    </span>
                   </td>
                   <td>{klienti.data_regjistrimit}</td>
-                  <td>
+                  <td onClick={(e) => e.stopPropagation()}>
                     <button
                       className="table-btn btn btn-warning m-2"
                       onClick={() => {
@@ -183,6 +193,26 @@ function AdminKlienti() {
         </div>
       )}
 
+      {showKlientiModal && (
+        <Modal
+          show={showKlientiModal}
+          onClose={() => setShowKlientiModal(false)}
+          title={`Klienti: #${klienti.id} - ${klienti.emri} ${klienti.mbiemri}`}
+        >
+          <div className="modal-body">
+            <KlientiDisplay klienti={klienti} />
+          </div>
+          <div className="modal-footer">
+            <button
+              className="btn btn-secondary"
+              onClick={() => setShowKlientiModal(false)}
+            >
+              Mbyll
+            </button>
+          </div>
+        </Modal>
+      )}
+
       {showKlientiCreateModal && (
         <Modal
           show={showKlientiCreateModal}
@@ -195,6 +225,14 @@ function AdminKlienti() {
               setForm={setKlientiForm}
               onSubmit={createKlienti}
             />
+          </div>
+          <div className="modal-footer">
+            <button
+              className="btn btn-secondary"
+              onClick={() => setShowKlientiCreateModal(false)}
+            >
+              Mbyll
+            </button>
           </div>
         </Modal>
       )}

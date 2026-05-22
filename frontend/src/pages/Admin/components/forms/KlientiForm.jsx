@@ -1,6 +1,6 @@
 import React from "react";
-import Input from "./Input";
-import Select from "./Select";
+import Input from "./common/Input";
+import Select from "./common/Select";
 
 function KlientiForm({ form, setForm, onSubmit, isEdit = false }) {
   const handleChange = (field, value) => {
