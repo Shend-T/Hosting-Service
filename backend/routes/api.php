@@ -59,6 +59,9 @@ Route::middleware(['auth:sanctum'])->prefix('admin')->group(function () {
     Route::post('/klienti', [AdminController::class, "createKlienti"]);
     Route::put('/klienti/{id}', [AdminController::class, "updateKlienti"]);
     Route::delete('/klienti/{id}', [AdminController::class, "deleteKlienti"]);
+
+    Route::get('/paketa', [AdminController::class, "getAllPaketa"]);
+    Route::post('/paketa', [AdminController::class, "createPaketa"]);
 });
 
 Route::get('/servers', [ServerController::class, 'index']);  // Lexo krejt serverat

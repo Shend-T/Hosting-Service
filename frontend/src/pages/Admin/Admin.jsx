@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import "./Admin.css";
+
 import axios from "axios";
 
 import { useNavigate } from "react-router-dom";
@@ -7,8 +9,10 @@ import { removeAdminToken } from "../../features/admin/adminSlice";
 
 import AdminDashboard from "./sections/AdminDashboard";
 import AdminKlienti from "./sections/AdminKlienti";
+import AdminPaketa from "./sections/AdminPaketa";
 
-import "./Admin.css";
+import Modal from "./components/common/Modal";
+
 import { HashLoader, RingLoader, PropagateLoader } from "react-spinners";
 
 function Admin() {
@@ -47,6 +51,7 @@ function Admin() {
   }, []);
 
   const dispatch = useDispatch();
+  const [showLogOutModal, setShowLogOutModal] = useState(false);
   const logOut = async () => {
     setLoading(true);
     try {
@@ -112,10 +117,10 @@ function Admin() {
                   </li>
                   <li className="nav-item">
                     <a
-                      className={`nav-link sidebar-link ${activePage === "monitor" ? "active" : ""}`}
-                      onClick={() => setActivePage("monitor")}
+                      className={`nav-link sidebar-link ${activePage === "paketa" ? "active" : ""}`}
+                      onClick={() => setActivePage("paketa")}
                     >
-                      Monitorimi i Abonimeve
+                      Paketat
                     </a>
                   </li>
                   <li className="nav-item">
@@ -129,8 +134,7 @@ function Admin() {
                   <li className="nav-item">
                     <a
                       className="nav-link sidebar-link"
-                      onClick={() => logOut()}
-                      // onClick={() => setConfirmLogOut(true)}
+                      onClick={() => setShowLogOutModal(true)}
                     >
                       Log Out
                     </a>
@@ -148,15 +152,37 @@ function Admin() {
               </div>
 
               {activePage == "dashboard" ? (
-                <AdminKlienti />
+                <AdminPaketa />
               ) : activePage == "klienti" ? (
                 <AdminKlienti />
+              ) : activePage == "paketa" ? (
+                <AdminPaketa />
               ) : (
                 <AdminDashboard />
               )}
             </main>
           </div>
         </div>
+      )}
+
+      {showLogOutModal && (
+        <Modal
+          show={showLogOutModal}
+          onClose={() => setShowLogOutModal(false)}
+          title="A jeni sigurt?"
+        >
+          <div className="modal-footer">
+            <button className="btn btn-danger" onClick={() => logOut()}>
+              Po, Log Out
+            </button>
+            <button
+              className="btn btn-secondary"
+              onClick={() => setShowLogOutModal(false)}
+            >
+              Jo, Mbyll
+            </button>
+          </div>
+        </Modal>
       )}
     </>
   );

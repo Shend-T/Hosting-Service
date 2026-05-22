@@ -4,3 +4,7 @@
   align-items: center;
   height: 100vh;
 }
+table tbody tr:hover td {
+  background-color: rgba(0, 0, 0, 0.103) !important;
+  cursor: pointer;
+}

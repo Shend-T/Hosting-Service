@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Klienti;
+use App\Models\Paketa;
 
 class AdminController extends Controller
 {
@@ -12,7 +13,6 @@ class AdminController extends Controller
     {
         if ($request->user()->tokenCan("admin")) {
             $clients = Klienti::all();
-            \Log::info(gettype($clients));
             return response()->json($clients, 200);
         } else {
             return response()->json(['message' => 'I pa autorizuar'], 403);
@@ -67,5 +67,37 @@ class AdminController extends Controller
         $klienti->delete();
 
         return response()->json("", 204);
+    }
+
+    // ========== Paketa ==========
+    public function getAllPaketa(Request $request) {
+        if ($request->user()->tokenCan("admin")) {
+            $paketat = Paketa::all();
+            return response()->json($paketat, 200);
+        } else {
+            return response()->json(['message' => 'I pa autorizuar'], 403);
+        }
+    }
+    public function createPaketa(Request $request) {
+        if ($request->user()->tokenCan("admin")) {
+            $data = $request->validate([
+                'emri'         => 'required|string|max:255',
+                'pershkrimi'   => 'nullable|string',
+                'hapesira_gb'  => 'required|integer',
+                'bandwidth_gb' => 'required|integer',
+                'nr_domaineve' => 'required|integer',
+                'nr_emaileve'  => 'required|integer',
+                'ssl'          => 'sometimes|boolean',
+                'cmimi_mujor'  => 'required|numeric',
+                'cmimi_vjetor' => 'required|numeric',
+                'statusi'      => 'nullable|in:aktiv,jo-aktiv'
+            ]);
+
+            $paketa = Paketa::create($data);
+
+            return response()->json($paketa, 201);
+        } else {
+            return response()->json(['message' => 'I pa autorizuar'], 403);
+        }
     }
 }
