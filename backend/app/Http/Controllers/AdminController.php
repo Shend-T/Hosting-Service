@@ -89,6 +89,27 @@ class AdminController extends Controller
         return response()->json($paketa, 201);
     }
 
+    public function updatePaketa(Request $request, int $id) {
+        $paketa = Paketa::findOrFail($id);
+
+        $data = $request->validate([
+            'emri'         => 'required|string|max:255',
+            'pershkrimi'   => 'nullable|string',
+            'hapesira_gb'  => 'required|integer',
+            'bandwidth_gb' => 'required|integer',
+            'nr_domaineve' => 'required|integer',
+            'nr_emaileve'  => 'required|integer',
+            'ssl'          => 'sometimes|boolean',
+            'cmimi_mujor'  => 'required|numeric',
+            'cmimi_vjetor' => 'required|numeric',
+            'statusi'      => 'nullable|in:aktiv,jo-aktiv'
+        ]);
+
+        $paketa->update($data);
+
+        return response()->json($paketa, 200);
+    }
+
     public function deletePaketa(Request $request, int $id) {
         $paketa = Paketa::findOrFail($id);
         $paketa->delete();

@@ -72,6 +72,27 @@ function AdminPaketa() {
   });
 
   const [paketa, setPaketa] = useState(null);
+  const [showPaketaUpdateModal, setShowPaketaUpdateModal] = useState(false);
+  const updatePaketa = async (e) => {
+    e.preventDefault();
+    try {
+      await axios.put(URL + "/" + paketa.id, paketaForm, HEADERS);
+
+      getPaketat();
+      setShowPaketaUpdateModal(false);
+      setPaketaForm(FORM);
+    } catch (error) {
+      console.log(error);
+
+      const statusCode = error.response?.status;
+      const responseBody = error.response?.data;
+      const statusText = error.response?.statusText;
+
+      console.log("Status Kodi:", statusCode);
+      console.log("Response Body:", responseBody);
+      console.log("Status Teksti:", statusText);
+    }
+  };
 
   const [showPaketaDeleteModal, setShowPaketaDeleteModal] = useState(false);
   const deletePaketa = async () => {
@@ -149,14 +170,14 @@ function AdminPaketa() {
                       {paketa.statusi}
                     </span>
                   </td>
-                  <td>
+                  <td onClick={(e) => e.stopPropagation()}>
                     <button
                       className="table-btn btn btn-warning m-2"
-                      //   onClick={() => {
-                      //     setShowKlientiUpdateModal(true);
-                      //     setKlienti(klienti);
-                      //     setKlientiUpdateForm(klienti);
-                      //   }}
+                      onClick={() => {
+                        setShowPaketaUpdateModal(true);
+                        setPaketa(paketa);
+                        setPaketaForm(paketa);
+                      }}
                     >
                       Perditso
                     </button>
@@ -215,6 +236,31 @@ function AdminPaketa() {
             <button
               className="btn btn-secondary"
               onClick={() => setShowPaketaCreateModal(false)}
+            >
+              Mbyll
+            </button>
+          </div>
+        </Modal>
+      )}
+
+      {showPaketaUpdateModal && (
+        <Modal
+          show={showPaketaUpdateModal}
+          onClose={() => setShowPaketaUpdateModal(false)}
+          title={`Perditso Paketen #${paketa.id}`}
+        >
+          <div className="modal-body">
+            <PaketaForm
+              form={paketaForm}
+              setForm={setPaketaForm}
+              onSubmit={updatePaketa}
+              isEdit={true}
+            />
+          </div>
+          <div className="modal-footer">
+            <button
+              className="btn btn-secondary"
+              onClick={() => setShowPaketaUpdateModal(false)}
             >
               Mbyll
             </button>
