@@ -12,7 +12,9 @@ function Input({ label, value, name, onChange, type = "text" }) {
         value={value}
         id={name}
         name={name}
-        onChange={(e) => onChange(e.target.value)}
+        onChange={(e) =>
+          onChange(type === "number" ? Number(e.target.value) : e.target.value)
+        }
       />
     </div>
   );
