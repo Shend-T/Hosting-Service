@@ -28,6 +28,7 @@ import AdminLogin from "./pages/Admin/AdminLogin";
 import Klienti from "./pages/Klienti/Klienti";
 import Paketa from "./pages/Paketa/Paketa";
 import Abonimi from "./pages/Abonimi/Abonimi";
+import NotFound from "./components/Error/NotFound";
 
 function App() {
   return (
@@ -53,6 +54,8 @@ function App() {
         <Route path="/klienti" element={<Klienti />} /> {/* Klienti CRUD */}
         <Route path="/paketa" element={<Paketa />} /> {/* Paketa CRUD */}
         <Route path="/abonimi" element={<Abonimi />} /> {/* Abonimi CRUD */}
+        {/* 404 Page */}
+        <Route path="*" element={<NotFound />} />
       </Routes>
       <Footer />
     </BrowserRouter>

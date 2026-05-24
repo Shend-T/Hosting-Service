@@ -11,7 +11,7 @@ import AdminDashboard from "./sections/AdminDashboard";
 import AdminKlienti from "./sections/AdminKlienti";
 import AdminPaketa from "./sections/AdminPaketa";
 
-import Modal from "./components/common/Modal";
+import Modal from "../../components/Common/Modal";
 
 import { HashLoader, RingLoader, PropagateLoader } from "react-spinners";
 

@@ -3,12 +3,13 @@ import axios from "axios";
 
 import { useSelector, useDispatch } from "react-redux";
 
-import Modal from "../components/common/Modal";
+import Modal from "../../../components/Common/Modal";
+import ErrorModal from "../../../components/Error/ErrorModal";
 
 import { getStatusBadgeKlienti } from "../../../utils/statusUtils";
 import { useEscapeKey } from "../../../hooks/useEscapeKey";
-import KlientiForm from "../components/forms/KlientiForm";
-import KlientiDisplay from "../components/display/KlientiDisplay";
+import KlientiForm from "../components/Forms/KlientiForm";
+import KlientiDisplay from "../components/Display/KlientiDisplay";
 
 const URL = "http://127.0.0.1:8000/api/admin/klienti";
 
@@ -34,6 +35,13 @@ function AdminKlienti() {
     },
   };
 
+  const [error, setError] = useState(null);
+  const [showErrorModal, setShowErrorModal] = useState(false);
+  useEscapeKey(showErrorModal, () => {
+    setShowErrorModal(false);
+    setError(null);
+  });
+
   const [klientet, setKlientet] = useState([]);
   const getKlientet = async () => {
     try {
@@ -41,7 +49,8 @@ function AdminKlienti() {
 
       setKlientet(res.data);
     } catch (error) {
-      console.log(error);
+      setError(error);
+      setShowErrorModal(true);
     }
   };
   useEffect(() => {
@@ -49,21 +58,25 @@ function AdminKlienti() {
   }, []);
 
   const [showKlientiModal, setShowKlientiModal] = useState(false);
+  useEscapeKey(showKlientiModal, () => {
+    setShowKlientiModal(false);
+  });
 
   const [klientiForm, setKlientiForm] = useState(FORM);
   const [showKlientiCreateModal, setShowKlientiCreateModal] = useState(false);
-
   const createKlienti = async (e) => {
     e.preventDefault();
 
     try {
       await axios.post(URL, klientiForm, HEADERS);
 
-      setShowKlientiCreateModal(false);
-      setKlientiForm(FORM);
       getKlientet();
     } catch (error) {
-      console.log(error);
+      setError(error);
+      setShowErrorModal(true);
+    } finally {
+      setShowKlientiCreateModal(false);
+      setKlientiForm(FORM);
     }
   };
   useEscapeKey(showKlientiCreateModal, () => {
@@ -79,12 +92,15 @@ function AdminKlienti() {
 
     try {
       await axios.put(URL + "/" + klienti.id, klientiUpdateForm, HEADERS);
+
+      getKlientet();
+    } catch (error) {
+      setError(error);
+      setShowErrorModal(true);
+    } finally {
       setShowKlientiUpdateModal(false);
       setKlienti(null);
       setKlientiUpdateForm(null);
-      getKlientet();
-    } catch (error) {
-      console.log(error);
     }
   };
   useEscapeKey(showKlientiUpdateModal, () => {
@@ -98,11 +114,13 @@ function AdminKlienti() {
     try {
       await axios.delete(URL + "/" + klienti.id, HEADERS);
 
-      setShowKlientiDeleteModal(false);
-      setKlienti(null);
       getKlientet();
     } catch (error) {
-      console.log(error);
+      setError(error);
+      setShowErrorModal(true);
+    } finally {
+      setShowKlientiDeleteModal(false);
+      setKlienti(null);
     }
   };
   useEscapeKey(showKlientiDeleteModal, () => {
@@ -283,6 +301,16 @@ function AdminKlienti() {
             </button>
           </div>
         </Modal>
+      )}
+
+      {showErrorModal && (
+        <ErrorModal
+          show={showErrorModal}
+          onClose={() => setShowErrorModal(false)}
+          errorCode={error.response?.status}
+          errorBody={error.response?.data}
+          errorText={error.response?.statusText}
+        />
       )}
     </div>
   );
