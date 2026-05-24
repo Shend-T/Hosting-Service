@@ -5,10 +5,25 @@ import { useSelector, useDispatch } from "react-redux";
 
 import Modal from "../components/common/Modal";
 
+import { getStatusBadgePaketa } from "../../../utils/statusUtils";
 import { useEscapeKey } from "../../../hooks/useEscapeKey";
 import PaketaForm from "../components/forms/PaketaForm";
+import PaketaDisplay from "../components/display/PaketaDisplay";
 
 const URL = "http://127.0.0.1:8000/api/admin/paketa";
+
+const FORM = {
+  emri: "",
+  pershkrimi: "",
+  hapesira_gb: 0,
+  bandwidth_gb: 0,
+  nr_domaineve: 0,
+  nr_emaileve: 0,
+  ssl: false,
+  cmimi_mujor: 0,
+  cmimi_vjetor: 0,
+  statusi: "aktiv",
+};
 function AdminPaketa() {
   const adminToken = useSelector((state) => state.admin.token);
 
@@ -33,26 +48,46 @@ function AdminPaketa() {
     getPaketat();
   }, []);
 
-  const [showPaketaCreateModal, setShowPaketaCreateModal] = useState(false);
-  const [paketaForm, setPaketaForm] = useState({
-    emri: "",
-    pershkrimi: "",
-    hapesira_gb: 0,
-    bandwidth_gb: 0,
-    nr_domaineve: 0,
-    nr_emaileve: 0,
-    ssl: false,
-    cmimi_mujor: 0,
-    cmimi_vjetor: 0,
-    statusi: "aktiv",
+  const [showPaketaModal, setShowPaketaModal] = useState(false);
+  useEscapeKey(showPaketaModal, () => {
+    setShowPaketaModal(false);
   });
+
+  const [showPaketaCreateModal, setShowPaketaCreateModal] = useState(false);
+  const [paketaForm, setPaketaForm] = useState(FORM);
   const createPaketa = async (e) => {
     e.preventDefault();
-    // setPaketaForm({ ...paketaForm, ssl: ssl === "1" });
-    console.log(paketaForm);
+    try {
+      await axios.post(URL, paketaForm, HEADERS);
+
+      setShowPaketaCreateModal(false);
+      setPaketaForm(FORM);
+      getPaketat();
+    } catch (error) {
+      console.log(error);
+    }
   };
   useEscapeKey(showPaketaCreateModal, () => {
     setShowPaketaCreateModal(false);
+  });
+
+  const [paketa, setPaketa] = useState(null);
+
+  const [showPaketaDeleteModal, setShowPaketaDeleteModal] = useState(false);
+  const deletePaketa = async () => {
+    try {
+      await axios.delete(URL + "/" + paketa.id, HEADERS);
+
+      setShowPaketaDeleteModal(false);
+      setPaketa(null);
+      getPaketat();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  useEscapeKey(showPaketaDeleteModal, () => {
+    setShowPaketaDeleteModal(false);
+    setPaketa(null);
   });
 
   return (
@@ -86,7 +121,13 @@ function AdminPaketa() {
             </thead>
             <tbody>
               {paketat.map((paketa) => (
-                <tr key={paketa.id}>
+                <tr
+                  key={paketa.id}
+                  onClick={() => {
+                    setPaketa(paketa);
+                    setShowPaketaModal(true);
+                  }}
+                >
                   <td>{paketa.id}</td>
                   <td>{paketa.emri}</td>
                   <td>{paketa.pershkrimi.substring(0, 20) + "..."}</td>
@@ -94,10 +135,20 @@ function AdminPaketa() {
                   <td>{paketa.bandwidth_gb}</td>
                   <td>{paketa.nr_domaineve}</td>
                   <td>{paketa.nr_emaileve}</td>
-                  <td>{paketa.ssl}</td>
+                  <td>{paketa.ssl === 1 ? "Po" : "Jo"}</td>
                   <td>{paketa.cmimi_mujor}</td>
                   <td>{paketa.cmimi_vjetor}</td>
-                  <td>{paketa.statusi}</td>
+                  <td>
+                    <span
+                      className={`${getStatusBadgePaketa(paketa.statusi)}`}
+                      style={{
+                        padding: "5px",
+                        marginTop: "5px",
+                      }}
+                    >
+                      {paketa.statusi}
+                    </span>
+                  </td>
                   <td>
                     <button
                       className="table-btn btn btn-warning m-2"
@@ -111,10 +162,10 @@ function AdminPaketa() {
                     </button>
                     <button
                       className="table-btn btn btn-danger"
-                      //   onClick={() => {
-                      //     setShowKlientiDeleteModal(true);
-                      //     setKlienti(klienti);
-                      //   }}
+                      onClick={() => {
+                        setShowPaketaDeleteModal(true);
+                        setPaketa(paketa);
+                      }}
                     >
                       Fshij
                     </button>
@@ -124,6 +175,26 @@ function AdminPaketa() {
             </tbody>
           </table>
         </div>
+      )}
+
+      {showPaketaModal && (
+        <Modal
+          show={showPaketaModal}
+          onClose={() => setShowPaketaModal(false)}
+          title={`Paketa #${paketa.id}`}
+        >
+          <div className="modal-body">
+            <PaketaDisplay paketa={paketa} />
+          </div>
+          <div className="modal-footer">
+            <button
+              className="btn btn-secondary"
+              onClick={() => setShowPaketaModal(false)}
+            >
+              Mbyll
+            </button>
+          </div>
+        </Modal>
       )}
 
       {showPaketaCreateModal && (
@@ -146,6 +217,26 @@ function AdminPaketa() {
               onClick={() => setShowPaketaCreateModal(false)}
             >
               Mbyll
+            </button>
+          </div>
+        </Modal>
+      )}
+
+      {showPaketaDeleteModal && (
+        <Modal
+          show={showPaketaDeleteModal}
+          onClose={() => setShowPaketaDeleteModal(false)}
+          title={`Deshironi ta fshini paketen: #${paketa.id}`}
+        >
+          <div className="modal-footer">
+            <button className="btn btn-danger" onClick={() => deletePaketa()}>
+              Po, Fshij
+            </button>
+            <button
+              className="btn btn-secondary"
+              onClick={() => setShowPaketaDeleteModal(false)}
+            >
+              Jo, Mbyll
             </button>
           </div>
         </Modal>

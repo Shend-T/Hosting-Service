@@ -11,12 +11,8 @@ class AdminController extends Controller
     // ========== Klienti ==========
     public function getAllKlienti(Request $request) 
     {
-        if ($request->user()->tokenCan("admin")) {
-            $clients = Klienti::all();
-            return response()->json($clients, 200);
-        } else {
-            return response()->json(['message' => 'I pa autorizuar'], 403);
-        }
+        $klienti = Klienti::all();
+        return response()->json($klienti, 200);
     }
 
     public function getKlienti(int $id) {
@@ -71,33 +67,32 @@ class AdminController extends Controller
 
     // ========== Paketa ==========
     public function getAllPaketa(Request $request) {
-        if ($request->user()->tokenCan("admin")) {
-            $paketat = Paketa::all();
-            return response()->json($paketat, 200);
-        } else {
-            return response()->json(['message' => 'I pa autorizuar'], 403);
-        }
+        $paketat = Paketa::all();
+        return response()->json($paketat, 200);
     }
     public function createPaketa(Request $request) {
-        if ($request->user()->tokenCan("admin")) {
-            $data = $request->validate([
-                'emri'         => 'required|string|max:255',
-                'pershkrimi'   => 'nullable|string',
-                'hapesira_gb'  => 'required|integer',
-                'bandwidth_gb' => 'required|integer',
-                'nr_domaineve' => 'required|integer',
-                'nr_emaileve'  => 'required|integer',
-                'ssl'          => 'sometimes|boolean',
-                'cmimi_mujor'  => 'required|numeric',
-                'cmimi_vjetor' => 'required|numeric',
-                'statusi'      => 'nullable|in:aktiv,jo-aktiv'
-            ]);
+        $data = $request->validate([
+            'emri'         => 'required|string|max:255',
+            'pershkrimi'   => 'nullable|string',
+            'hapesira_gb'  => 'required|integer',
+            'bandwidth_gb' => 'required|integer',
+            'nr_domaineve' => 'required|integer',
+            'nr_emaileve'  => 'required|integer',
+            'ssl'          => 'sometimes|boolean',
+            'cmimi_mujor'  => 'required|numeric',
+            'cmimi_vjetor' => 'required|numeric',
+            'statusi'      => 'nullable|in:aktiv,jo-aktiv'
+        ]);
 
-            $paketa = Paketa::create($data);
+        $paketa = Paketa::create($data);
 
-            return response()->json($paketa, 201);
-        } else {
-            return response()->json(['message' => 'I pa autorizuar'], 403);
-        }
+        return response()->json($paketa, 201);
+    }
+
+    public function deletePaketa(Request $request, int $id) {
+        $paketa = Paketa::findOrFail($id);
+        $paketa->delete();
+
+        return response()->json("", 204);
     }
 }

@@ -50,7 +50,7 @@ Route::middleware('auth:sanctum')->group(function () { // Kto linka jan te mbroj
 // Authentikimi i admin-it
 Route::post('/admin/login', [AdminAuthController::class, 'login']);
 
-Route::middleware(['auth:sanctum'])->prefix('admin')->group(function () {
+Route::middleware(['auth:sanctum', 'admin'])->prefix('admin')->group(function () {
     Route::post('/logout', [AdminAuthController::class, 'logout']);
     Route::get('/me', [AdminAuthController::class, "me"]);
 
@@ -62,6 +62,7 @@ Route::middleware(['auth:sanctum'])->prefix('admin')->group(function () {
 
     Route::get('/paketa', [AdminController::class, "getAllPaketa"]);
     Route::post('/paketa', [AdminController::class, "createPaketa"]);
+    Route::delete('/paketa/{id}', [AdminController::class, "deletePaketa"]);
 });
 
 Route::get('/servers', [ServerController::class, 'index']);  // Lexo krejt serverat

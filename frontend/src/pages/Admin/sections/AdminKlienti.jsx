@@ -12,6 +12,18 @@ import KlientiDisplay from "../components/display/KlientiDisplay";
 
 const URL = "http://127.0.0.1:8000/api/admin/klienti";
 
+const FORM = {
+  emri: "",
+  mbiemri: "",
+  kompania: "",
+  email: "",
+  password: "",
+  telefoni: "",
+  adresa: "",
+  bilanci: 0,
+  statusi: "aktiv",
+};
+
 function AdminKlienti() {
   const adminToken = useSelector((state) => state.admin.token);
 
@@ -38,17 +50,7 @@ function AdminKlienti() {
 
   const [showKlientiModal, setShowKlientiModal] = useState(false);
 
-  const [klientiForm, setKlientiForm] = useState({
-    emri: "",
-    mbiemri: "",
-    kompania: "",
-    email: "",
-    password: "",
-    telefoni: "",
-    adresa: "",
-    bilanci: 0,
-    statusi: "aktiv",
-  });
+  const [klientiForm, setKlientiForm] = useState(FORM);
   const [showKlientiCreateModal, setShowKlientiCreateModal] = useState(false);
 
   const createKlienti = async (e) => {
@@ -57,8 +59,9 @@ function AdminKlienti() {
     try {
       await axios.post(URL, klientiForm, HEADERS);
 
-      getKlientet();
       setShowKlientiCreateModal(false);
+      setKlientiForm(FORM);
+      getKlientet();
     } catch (error) {
       console.log(error);
     }
