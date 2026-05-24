@@ -3,12 +3,14 @@ import axios from "axios";
 
 import { useSelector, useDispatch } from "react-redux";
 
-import Modal from "../components/common/Modal";
+import Modal from "../../../components/Common/Modal";
+import ErrorModal from "../../../components/Error/ErrorModal";
 
 import { getStatusBadgePaketa } from "../../../utils/statusUtils";
 import { useEscapeKey } from "../../../hooks/useEscapeKey";
-import PaketaForm from "../components/forms/PaketaForm";
-import PaketaDisplay from "../components/display/PaketaDisplay";
+
+import PaketaForm from "../components/Forms/PaketaForm";
+import PaketaDisplay from "../components/Display/PaketaDisplay";
 
 const URL = "http://127.0.0.1:8000/api/admin/paketa";
 
@@ -34,6 +36,13 @@ function AdminPaketa() {
     },
   };
 
+  const [error, setError] = useState(null);
+  const [showErrorModal, setShowErrorModal] = useState(false);
+  useEscapeKey(showErrorModal, () => {
+    setShowErrorModal(false);
+    setError(null);
+  });
+
   const [paketat, setPaketat] = useState([]);
   const getPaketat = async () => {
     try {
@@ -41,7 +50,8 @@ function AdminPaketa() {
 
       setPaketat(res.data);
     } catch (error) {
-      console.log(error);
+      setError(error);
+      setShowErrorModal(true);
     }
   };
   useEffect(() => {
@@ -60,11 +70,13 @@ function AdminPaketa() {
     try {
       await axios.post(URL, paketaForm, HEADERS);
 
-      setShowPaketaCreateModal(false);
-      setPaketaForm(FORM);
       getPaketat();
     } catch (error) {
-      console.log(error);
+      setError(error);
+      setShowErrorModal(true);
+    } finally {
+      setShowPaketaCreateModal(false);
+      setPaketaForm(FORM);
     }
   };
   useEscapeKey(showPaketaCreateModal, () => {
@@ -77,20 +89,17 @@ function AdminPaketa() {
     e.preventDefault();
     try {
       await axios.put(URL + "/" + paketa.id, paketaForm, HEADERS);
+      // await axios.put(URL + "/" + paketa.id, paketaForm, {
+      //   headers: { Accept: "application/json" },
+      // });
 
       getPaketat();
+    } catch (error) {
+      setError(error);
+      setShowErrorModal(true);
+    } finally {
       setShowPaketaUpdateModal(false);
       setPaketaForm(FORM);
-    } catch (error) {
-      console.log(error);
-
-      const statusCode = error.response?.status;
-      const responseBody = error.response?.data;
-      const statusText = error.response?.statusText;
-
-      console.log("Status Kodi:", statusCode);
-      console.log("Response Body:", responseBody);
-      console.log("Status Teksti:", statusText);
     }
   };
 
@@ -99,11 +108,13 @@ function AdminPaketa() {
     try {
       await axios.delete(URL + "/" + paketa.id, HEADERS);
 
-      setShowPaketaDeleteModal(false);
-      setPaketa(null);
       getPaketat();
     } catch (error) {
-      console.log(error);
+      setError(error);
+      setShowErrorModal(true);
+    } finally {
+      setShowPaketaDeleteModal(false);
+      setPaketa(null);
     }
   };
   useEscapeKey(showPaketaDeleteModal, () => {
@@ -286,6 +297,16 @@ function AdminPaketa() {
             </button>
           </div>
         </Modal>
+      )}
+
+      {showErrorModal && (
+        <ErrorModal
+          show={showErrorModal}
+          onClose={() => setShowErrorModal(false)}
+          errorCode={error.response?.status}
+          errorBody={error.response?.data}
+          errorText={error.response?.statusText}
+        />
       )}
     </div>
   );

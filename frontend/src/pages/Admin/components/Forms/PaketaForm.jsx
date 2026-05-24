@@ -1,7 +1,7 @@
 import React from "react";
-import Input from "./common/Input";
-import Select from "./common/Select";
-import TextArea from "./common/TextArea";
+import Input from "./Common/Input";
+import Select from "./Common/Select";
+import TextArea from "./Common/TextArea";
 
 function PaketaForm({ form, setForm, onSubmit, isEdit = false }) {
   const handleChange = (field, value) => {
