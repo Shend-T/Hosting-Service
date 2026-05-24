@@ -62,6 +62,7 @@ Route::middleware(['auth:sanctum', 'admin'])->prefix('admin')->group(function ()
 
     Route::get('/paketa', [AdminController::class, "getAllPaketa"]);
     Route::post('/paketa', [AdminController::class, "createPaketa"]);
+    Route::put('/paketa/{id}', [AdminController::class, "updatePaketa"]);
     Route::delete('/paketa/{id}', [AdminController::class, "deletePaketa"]);
 });
 
