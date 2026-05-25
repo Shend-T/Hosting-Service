@@ -19,6 +19,10 @@ import AdminFaktura from "./sections/AdminFaktura";
 
 import AdminMonitorimServers from "./sections/AdminMonitorimServers";
 
+import AdminServeret from "./sections/AdminServeret";
+import AdminLlogariHostings from "./sections/AdminLlogariHostings";
+import AdminDomainet from "./sections/AdminDomainet";
+
 import Modal from "../../components/Common/Modal";
 import Loader from "../../components/Common/Loader";
 
@@ -134,6 +138,32 @@ function Admin() {
                     <a
                       className={`nav-link sidebar-link ${activePage === "monitorim-servers" ? "active" : ""}`}
                       onClick={() => setActivePage("monitorim-servers")}
+                      className={`nav-link sidebar-link ${activePage === "servers" ? "active" : ""}`}
+                      onClick={() => setActivePage("servers")}
+                    >
+                      Serverët
+                    </a>
+                  </li>
+                  <li className="nav-item">
+                    <a
+                      className={`nav-link sidebar-link ${activePage === "llogari-hostings" ? "active" : ""}`}
+                      onClick={() => setActivePage("llogari-hostings")}
+                    >
+                      Llogaritë e Hostingut
+                    </a>
+                  </li>
+                  <li className="nav-item">
+                    <a
+                      className={`nav-link sidebar-link ${activePage === "domainet" ? "active" : ""}`}
+                      onClick={() => setActivePage("domainet")}
+                    >
+                      Domainet
+                    </a>
+                  </li>
+                  <li className="nav-item">
+                    <a
+                      className={`nav-link sidebar-link ${activePage === "tickets" ? "active" : ""}`}
+                      onClick={() => setActivePage("tickets")}
                     >
                       Monitoro Serveret
                     </a>
@@ -198,6 +228,12 @@ function Admin() {
                 <AdminPergjigjet />
               ) : activePage == "faturat" ? (
                 <AdminFaktura />
+              ) : activePage == "servers" ? (
+                <AdminServeret />
+              ) : activePage == "llogari-hostings" ? (
+                <AdminLlogariHostings />
+              ) : activePage == "domainet" ? (
+                <AdminDomainet />
               ) : (
                 <AdminDashboard />
               )}
