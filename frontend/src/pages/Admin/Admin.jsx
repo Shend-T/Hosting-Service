@@ -10,6 +10,9 @@ import { removeAdminToken } from "../../features/admin/adminSlice";
 import AdminDashboard from "./sections/AdminDashboard";
 import AdminKlienti from "./sections/AdminKlienti";
 import AdminPaketa from "./sections/AdminPaketa";
+import AdminServeret from "./sections/AdminServeret";
+import AdminLlogariHostings from "./sections/AdminLlogariHostings";
+import AdminDomainet from "./sections/AdminDomainet";
 
 import Modal from "../../components/Common/Modal";
 
@@ -134,6 +137,30 @@ function Admin() {
                   </li>
                   <li className="nav-item">
                     <a
+                      className={`nav-link sidebar-link ${activePage === "servers" ? "active" : ""}`}
+                      onClick={() => setActivePage("servers")}
+                    >
+                      Serverët
+                    </a>
+                  </li>
+                  <li className="nav-item">
+                    <a
+                      className={`nav-link sidebar-link ${activePage === "llogari-hostings" ? "active" : ""}`}
+                      onClick={() => setActivePage("llogari-hostings")}
+                    >
+                      Llogaritë e Hostingut
+                    </a>
+                  </li>
+                  <li className="nav-item">
+                    <a
+                      className={`nav-link sidebar-link ${activePage === "domainet" ? "active" : ""}`}
+                      onClick={() => setActivePage("domainet")}
+                    >
+                      Domainet
+                    </a>
+                  </li>
+                  <li className="nav-item">
+                    <a
                       className={`nav-link sidebar-link ${activePage === "tickets" ? "active" : ""}`}
                       onClick={() => setActivePage("tickets")}
                     >
@@ -161,13 +188,19 @@ function Admin() {
               </div>
 
               {activePage == "dashboard" ? (
-                <AdminAbonimi />
+                <AdminDashboard />
               ) : activePage == "klienti" ? (
                 <AdminKlienti />
               ) : activePage == "paketa" ? (
                 <AdminPaketa />
               ) : activePage == "abonimi" ? (
                 <AdminAbonimi />
+              ) : activePage == "servers" ? (
+                <AdminServeret />
+              ) : activePage == "llogari-hostings" ? (
+                <AdminLlogariHostings />
+              ) : activePage == "domainet" ? (
+                <AdminDomainet />
               ) : (
                 <AdminDashboard />
               )}

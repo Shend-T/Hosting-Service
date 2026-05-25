@@ -13,6 +13,7 @@ use App\Http\Controllers\ServerController;
 use App\Http\Controllers\DomainController;
 use App\Http\Controllers\LlogariHostingController;
 use App\Http\Controllers\MonitorimServerController;
+use App\Http\Controllers\FakturaController;
 
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AdminAuthController;
@@ -68,32 +69,50 @@ Route::middleware(['auth:sanctum', 'admin'])->prefix('admin')->group(function ()
 
     Route::get('/abonimi', [AdminController::class, "getAllAbonimi"]);
     Route::get('/abonimi/{id}', [AdminController::class, "getAbonimi"]);
+
+    Route::get('/servers', [AdminController::class, 'getAllServers']);
+    Route::get('/servers/{id}', [AdminController::class, 'getServer']);
+    Route::post('/servers', [AdminController::class, 'createServer']);
+    Route::put('/servers/{id}', [AdminController::class, 'updateServer']);
+    Route::delete('/servers/{id}', [AdminController::class, 'deleteServer']);
+
+    Route::get('/llogari-hostings', [AdminController::class, 'getAllLlogariHostings']);
+    Route::get('/llogari-hostings/{id}', [AdminController::class, 'getLlogariHosting']);
+    Route::post('/llogari-hostings', [AdminController::class, 'createLlogariHosting']);
+    Route::put('/llogari-hostings/{id}', [AdminController::class, 'updateLlogariHosting']);
+    Route::delete('/llogari-hostings/{id}', [AdminController::class, 'deleteLlogariHosting']);
+
+    Route::get('/domainet', [AdminController::class, 'getAllDomainet']);
+    Route::get('/domainet/{id}', [AdminController::class, 'getDomain']);
+    Route::post('/domainet', [AdminController::class, 'createDomain']);
+    Route::put('/domainet/{id}', [AdminController::class, 'updateDomain']);
+    Route::delete('/domainet/{id}', [AdminController::class, 'deleteDomain']);
 });
 
 Route::get('/servers', [ServerController::class, 'index']);  // Lexo krejt serverat
 Route::post('/servers', [ServerController::class, 'store']); // Krijo server
 Route::get('/servers/{server}', [ServerController::class, 'show']); // Lexo nje server
-// Route::put('/servers/{server}', [ServerController::class, 'update']); // Përditëso server
+// Route::put('/servers/{server}', [ServerController::class, 'update']); // Perditeso server
 Route::delete('/servers/{server}', [ServerController::class, 'destroy']); // Fshi server
 
 Route::get('/domain', [DomainController::class, 'index']);               // Lexo te gjitha domainet
 Route::get('/domain/{domain}', [DomainController::class, 'show']);       // Lexo nje domain
 Route::post('/domain', [DomainController::class, 'store']);              // Krijo domain
-Route::put('/domain/{domain}', [DomainController::class, 'update']);     // Përditëso domain
+Route::put('/domain/{domain}', [DomainController::class, 'update']);     // Perditeso domain
 Route::delete('/domain/{domain}', [DomainController::class, 'destroy']); // Fshi domain
 
 Route::get('/llogari-hostings', [LlogariHostingController::class, 'index']);  // Lexo te gjitha llogari hosting
 Route::post('/llogari-hostings', [LlogariHostingController::class, 'store']); // Krijo llogari hosting
 Route::get('/llogari-hostings/{llogariHosting}', [LlogariHostingController::class, 'show']); // Lexo nje llogari hosting
-Route::put('/llogari-hostings/{llogariHosting}', [LlogariHostingController::class, 'update']); // Përditëso llogari hosting
-Route::patch('/llogari-hostings/{llogariHosting}', [LlogariHostingController::class, 'update']); // Përditëso llogari hosting
+Route::put('/llogari-hostings/{llogariHosting}', [LlogariHostingController::class, 'update']); // Perditeso llogari hosting
+Route::patch('/llogari-hostings/{llogariHosting}', [LlogariHostingController::class, 'update']); // Perditeso llogari hosting
 Route::delete('/llogari-hostings/{llogariHosting}', [LlogariHostingController::class, 'destroy']); // Fshi llogari hosting
 
 Route::get('/monitorim-servers', [MonitorimServerController::class, 'index']);  // Lexo te gjitha monitorimet
 Route::post('/monitorim-servers', [MonitorimServerController::class, 'store']); // Krijo monitorim
 Route::get('/monitorim-servers/{monitorimServer}', [MonitorimServerController::class, 'show']); // Lexo nje monitorim
-Route::put('/monitorim-servers/{monitorimServer}', [MonitorimServerController::class, 'update']); // Përditëso monitorim
-Route::patch('/monitorim-servers/{monitorimServer}', [MonitorimServerController::class, 'update']); // Përditëso monitorim
+Route::put('/monitorim-servers/{monitorimServer}', [MonitorimServerController::class, 'update']); // Perditeso monitorim
+Route::patch('/monitorim-servers/{monitorimServer}', [MonitorimServerController::class, 'update']); // Perditeso monitorim
 Route::delete('/monitorim-servers/{monitorimServer}', [MonitorimServerController::class, 'destroy']); // Fshi monitorim
 
 Route::get('/abonimi', [AbonimiController::class, 'index']);           // Lexo krejt abonimet - Get
@@ -108,3 +127,15 @@ Route::get('/paketa-3', [PaketaController::class, 'showFirstThree']); // Kthe ve
 Route::post('/paketa', [PaketaController::class, 'store']);           // Krijo pakete
 Route::put('/paketa/{id}', [PaketaController::class, 'update']);      // Perditso nje pakete
 Route::delete('/paketa/{id}', [PaketaController::class, 'destroy']);  // Fshij nje pakete
+
+Route::post('/pergjigja_tiketi', [PergjigjaTiketiController::class, 'store']);
+Route::get('/pergjigja_tiketi/{pergjigjaTiketi}', [PergjigjaTiketiController::class, 'show']);
+Route::get('/pergjigja_tiketi/{pergjigjaTiketi}/edit', [PergjigjaTiketiController::class, 'edit']);
+Route::put('/pergjigja_tiketi/{pergjigjaTiketi}', [PergjigjaTiketiController::class, 'update']);
+Route::delete('/pergjigja_tiketi/{pergjigjaTiketi}', [PergjigjaTiketiController::class, 'destroy']);
+
+Route::get('/faturat', [FakturaController::class, 'index']);
+Route::get('/faturat/{id}', [FakturaController::class, 'show']);
+Route::post('/faturat', [FakturaController::class, 'store']);
+Route::put('/faturat/{id}', [FakturaController::class, 'update']);
+Route::delete('/faturat/{id}', [FakturaController::class, 'destroy']);
