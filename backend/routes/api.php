@@ -68,6 +68,7 @@ Route::middleware(['auth:sanctum', 'admin'])->prefix('admin')->group(function ()
 
     Route::get('/abonimi', [AdminController::class, "getAllAbonimi"]);
     Route::get('/abonimi/{id}', [AdminController::class, "getAbonimi"]);
+    Route::delete('/abonimi/{id}', [AdminController::class, "deleteAbonimi"]);
 });
 
 Route::get('/servers', [ServerController::class, 'index']);  // Lexo krejt serverat

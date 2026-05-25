@@ -12,6 +12,17 @@ import { useEscapeKey } from "../../../hooks/useEscapeKey";
 import AbonimiForm from "../components/Forms/AbonimiForm";
 import AbonimiDisplay from "../components/Display/AbonimiDisplay";
 
+const FORM = {
+  klienti_id: 0,
+  paketa_id: 0,
+  data_fillimit: new Date(),
+  data_skadimit: new Date(),
+  statusi: "aktiv",
+  cmimi: 0,
+  periudha: "mujore",
+  auto_rinovim: false,
+};
+
 const URL = "http://127.0.0.1:8000/api/admin/abonimi";
 function AdminAbonimi() {
   const adminToken = useSelector((state) => state.admin.token);
@@ -52,6 +63,33 @@ function AdminAbonimi() {
   });
 
   const [showAbonimiCreateModal, setShowAbonimiCreateModal] = useState(false);
+  const [abonimiForm, setAbonimiForm] = useState(FORM);
+  const createAbonimi = async (e) => {
+    e.preventDefault();
+    console.log(abonimiForm);
+  };
+  useEscapeKey(showAbonimiCreateModal, () => {
+    setShowAbonimiCreateModal(false);
+  });
+
+  const [showAbonimiDeleteModal, setShowAbonimiDeleteModal] = useState(false);
+  const deleteAbonimi = async () => {
+    try {
+      await axios.delete(URL + "/" + abonimi.id, HEADERS);
+
+      getAbonimet();
+    } catch (error) {
+      setError(error);
+      setShowErrorModal(true);
+    } finally {
+      setShowAbonimiDeleteModal(false);
+      setAbonimi(null);
+    }
+  };
+  useEscapeKey(showAbonimiDeleteModal, () => {
+    setShowAbonimiDeleteModal(false);
+    setAbonimi(null);
+  });
 
   return (
     <div>
@@ -121,10 +159,10 @@ function AdminAbonimi() {
                     </button>
                     <button
                       className="table-btn btn btn-danger"
-                      // onClick={() => {
-                      //   setShowAbonimiDeleteModal(true);
-                      //   setAbonimi(abonimi);
-                      // }}
+                      onClick={() => {
+                        setShowAbonimiDeleteModal(true);
+                        setAbonimi(abonimi);
+                      }}
                     >
                       Fshij
                     </button>
@@ -151,6 +189,51 @@ function AdminAbonimi() {
               onClick={() => setShowAbonimiModal(false)}
             >
               Mbyll
+            </button>
+          </div>
+        </Modal>
+      )}
+
+      {showAbonimiCreateModal && (
+        <Modal
+          show={showAbonimiCreateModal}
+          onClose={() => setShowAbonimiCreateModal(false)}
+          title="Krijo Pakete"
+        >
+          <div className="modal-body">
+            <AbonimiForm
+              form={abonimiForm}
+              setForm={setAbonimiForm}
+              onSubmit={createAbonimi}
+            />
+          </div>
+
+          <div className="modal-footer">
+            <button
+              className="btn btn-secondary"
+              onClick={() => setShowAbonimiCreateModal(false)}
+            >
+              Mbyll
+            </button>
+          </div>
+        </Modal>
+      )}
+
+      {showAbonimiDeleteModal && (
+        <Modal
+          show={showAbonimiDeleteModal}
+          onClose={() => setShowAbonimiDeleteModal(false)}
+          title={`Deshironi ta fshini abonimin: #${abonimi.id}`}
+        >
+          <div className="modal-footer">
+            <button className="btn btn-danger" onClick={() => deleteAbonimi()}>
+              Po, Fshij
+            </button>
+            <button
+              className="btn btn-secondary"
+              onClick={() => setShowAbonimiDeleteModal(false)}
+            >
+              Jo, Mbyll
             </button>
           </div>
         </Modal>

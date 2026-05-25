@@ -10,11 +10,11 @@ import { removeAdminToken } from "../../features/admin/adminSlice";
 import AdminDashboard from "./sections/AdminDashboard";
 import AdminKlienti from "./sections/AdminKlienti";
 import AdminPaketa from "./sections/AdminPaketa";
+import AdminAbonimi from "./sections/AdminAbonimi";
 
 import Modal from "../../components/Common/Modal";
-
-import { HashLoader, RingLoader, PropagateLoader } from "react-spinners";
-import AdminAbonimi from "./sections/AdminAbonimi";
+import Loader from "../../components/Common/Loader";
+// import { HashLoader, RingLoader, PropagateLoader } from "react-spinners";
 
 function Admin() {
   const URL = "http://localhost:8000/api/admin";
@@ -80,11 +80,7 @@ function Admin() {
   return (
     <>
       {loading ? (
-        <div className="spinner-container">
-          <HashLoader size={70} color="#2c687b" />
-          {/* <PropagateLoader size={20} color="#2c687b" /> */}
-          {/* <RingLoader size={70} color="#2c687b" /> */}
-        </div>
+        <Loader />
       ) : (
         <div className="container-fluid custom-margin">
           <div className="row">
