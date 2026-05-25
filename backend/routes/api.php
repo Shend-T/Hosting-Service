@@ -61,9 +61,13 @@ Route::middleware(['auth:sanctum', 'admin'])->prefix('admin')->group(function ()
     Route::delete('/klienti/{id}', [AdminController::class, "deleteKlienti"]);
 
     Route::get('/paketa', [AdminController::class, "getAllPaketa"]);
+    Route::get('/paketa/{id}', [AdminController::class, "getPaketa"]);
     Route::post('/paketa', [AdminController::class, "createPaketa"]);
     Route::put('/paketa/{id}', [AdminController::class, "updatePaketa"]);
     Route::delete('/paketa/{id}', [AdminController::class, "deletePaketa"]);
+
+    Route::get('/abonimi', [AdminController::class, "getAllAbonimi"]);
+    Route::get('/abonimi/{id}', [AdminController::class, "getAbonimi"]);
 });
 
 Route::get('/servers', [ServerController::class, 'index']);  // Lexo krejt serverat

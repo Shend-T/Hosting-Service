@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Klienti;
 use App\Models\Paketa;
+use App\Models\Abonimi;
 
 class AdminController extends Controller
 {
@@ -15,7 +16,7 @@ class AdminController extends Controller
         return response()->json($klienti, 200);
     }
 
-    public function getKlienti(int $id) {
+    public function getKlienti(Request $request, int $id) {
         $klienti = Klienti::findOrFail($id);
 
         return response()->json($klienti, 200);
@@ -58,7 +59,7 @@ class AdminController extends Controller
         return response()->json($klienti, 200);
     }
 
-    public function deleteKlienti(int $id) {
+    public function deleteKlienti(Request $request, int $id) {
         $klienti = Klienti::findOrFail($id);
         $klienti->delete();
 
@@ -70,6 +71,12 @@ class AdminController extends Controller
         $paketat = Paketa::all();
         return response()->json($paketat, 200);
     }
+    public function getPaketa(Request $request, int $id) {
+        $paketa = Paketa::findOrFail($id);
+
+        return response()->json($paketa, 200);
+    }
+
     public function createPaketa(Request $request) {
         $data = $request->validate([
             'emri'         => 'required|string|max:255',
@@ -115,5 +122,16 @@ class AdminController extends Controller
         $paketa->delete();
 
         return response()->json("", 204);
+    }
+
+    //  ========== Abonimi ==========
+    public function getAllAbonimi(Request $request) {
+        $abonimet = Abonimi::all();
+        return response()->json($abonimet, 200);
+    }
+    public function getAbonimi(Request $request, int $id) {
+        $abonimi = Abonimi::findOrFail($id);
+
+        return response()->json($abonimi, 200);
     }
 }

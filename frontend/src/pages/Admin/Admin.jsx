@@ -14,6 +14,7 @@ import AdminPaketa from "./sections/AdminPaketa";
 import Modal from "../../components/Common/Modal";
 
 import { HashLoader, RingLoader, PropagateLoader } from "react-spinners";
+import AdminAbonimi from "./sections/AdminAbonimi";
 
 function Admin() {
   const URL = "http://localhost:8000/api/admin";
@@ -125,6 +126,14 @@ function Admin() {
                   </li>
                   <li className="nav-item">
                     <a
+                      className={`nav-link sidebar-link ${activePage === "abonimi" ? "active" : ""}`}
+                      onClick={() => setActivePage("abonimi")}
+                    >
+                      Abonimet
+                    </a>
+                  </li>
+                  <li className="nav-item">
+                    <a
                       className={`nav-link sidebar-link ${activePage === "tickets" ? "active" : ""}`}
                       onClick={() => setActivePage("tickets")}
                     >
@@ -152,11 +161,13 @@ function Admin() {
               </div>
 
               {activePage == "dashboard" ? (
-                <AdminPaketa />
+                <AdminAbonimi />
               ) : activePage == "klienti" ? (
                 <AdminKlienti />
               ) : activePage == "paketa" ? (
                 <AdminPaketa />
+              ) : activePage == "abonimi" ? (
+                <AdminAbonimi />
               ) : (
                 <AdminDashboard />
               )}

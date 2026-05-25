@@ -21,3 +21,20 @@ export const getStatusBadgePaketa = (statusi) => {
       return "badge bg-secondary text-white";
   }
 };
+
+export const getStatusBadgeAbonimi = (statusi) => {
+  switch (statusi) {
+    case "pritje":
+      return "badge bg-secondary text-white";
+    case "aktiv":
+      return "badge bg-success text-white";
+    case "suspenduar":
+      return "badge bg-danger text-white";
+    case "skaduar":
+      return "badge bg-warning text-white";
+    case "ndalur":
+      return "badge bg-info text-white";
+    default:
+      return "badge bg-secondary text-white";
+  }
+};
