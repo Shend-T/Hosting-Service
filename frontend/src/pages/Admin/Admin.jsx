@@ -17,10 +17,10 @@ import AdminTiketa from "./sections/AdminTiketa";
 import AdminPergjigjet from "./sections/AdminPergjigjet";
 import AdminFaktura from "./sections/AdminFaktura";
 
+import AdminMonitorimServers from "./sections/AdminMonitorimServers";
+
 import Modal from "../../components/Common/Modal";
 import Loader from "../../components/Common/Loader";
-
-import AdminMonitorimServers from "./sections/AdminMonitorimServers";
 
 function Admin() {
   const URL = "http://localhost:8000/api/admin";
