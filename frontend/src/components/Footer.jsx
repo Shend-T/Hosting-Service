@@ -33,8 +33,8 @@ function Footer() {
           </li>
 
           <li className="nav-item">
-            <Link className="nav-link px-2 text-body-secondary" to="/contact">
-              Contact
+            <Link className="nav-link px-2 text-body-secondary" to="/faq">
+              FAQ
             </Link>
           </li>
         </ul>

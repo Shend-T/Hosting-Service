@@ -14,14 +14,14 @@ return new class extends Migration
     {
         Schema::create('monitorim_servers', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('server_id')->constrained('servers')->cascadeOnDelete();
 
-            $table->decimal('cpu_usage', 10, 2);
-            $table->decimal('ram_usage', 10, 2);
-            $table->decimal('disk_usage', 10, 2);
-
-            $table->enum('statusi', ['normal', 'warning', 'kritik'])->default('normal');
-            $table->timestamp('checked_at');
+            $table->foreignId('serveri_id')->constrained('servers')->cascadeOnDelete();
+            $table->decimal('cpu_perdorim', 5, 2)->default(0);
+            $table->decimal('ram_perdorim', 5, 2)->default(0);
+            $table->decimal('disk_perdorim', 5, 2)->default(0);
+            $table->integer('bandwidth')->default(0);
+            $table->enum('statusi', ['monitoron', 'nuk monitoron'])->default('nuk monitoron');
+            $table->boolean('alarmi')->default(false);
         });
     }
 

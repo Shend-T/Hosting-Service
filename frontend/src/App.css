@@ -1,3 +1,10 @@
 .navbar-logo {
   filter: drop-shadow(0px 0px 6px #ffffff);
 }
+
+.spinner-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}

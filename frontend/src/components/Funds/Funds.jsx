@@ -103,7 +103,7 @@ function Funds({ isOpen, onClose }) {
                 type="text"
                 name="card_numbers"
                 id="card_numbers"
-                placeholder="Filan..."
+                placeholder="0000 0000 0000 0000"
               />
             </div>
             <div className="mt-3" style={{ fontSize: "12px" }}>
@@ -113,7 +113,7 @@ function Funds({ isOpen, onClose }) {
                 type="text"
                 name="cvv"
                 id="cvv"
-                placeholder="Filan..."
+                placeholder="000"
               />
             </div>
 
