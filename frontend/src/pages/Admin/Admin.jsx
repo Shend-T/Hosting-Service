@@ -8,24 +8,27 @@ import { useSelector, useDispatch } from "react-redux";
 import { removeAdminToken } from "../../features/admin/adminSlice";
 
 import AdminDashboard from "./sections/AdminDashboard";
+
 import AdminKlienti from "./sections/AdminKlienti";
 import AdminPaketa from "./sections/AdminPaketa";
 import AdminAbonimi from "./sections/AdminAbonimi";
 
+import AdminTiketa from "./sections/AdminTiketa";
+import AdminPergjigjet from "./sections/AdminPergjigjet";
+import AdminFaktura from "./sections/AdminFaktura";
+
 import Modal from "../../components/Common/Modal";
 import Loader from "../../components/Common/Loader";
+
 import AdminMonitorimServers from "./sections/AdminMonitorimServers";
-// import { HashLoader, RingLoader, PropagateLoader } from "react-spinners";
 
 function Admin() {
   const URL = "http://localhost:8000/api/admin";
   const navigate = useNavigate();
-
   const { isAuthenticated } = useSelector((state) => state.auth);
   const isAdmin = useSelector((state) => state.admin.isAuthenticated);
   const adminToken = useSelector((state) => state.admin.token);
   const [me, setMe] = useState(null);
-
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -48,7 +51,6 @@ function Admin() {
         console.log(error);
       }
     };
-
     getMe();
   }, []);
 
@@ -67,7 +69,6 @@ function Admin() {
           },
         },
       );
-
       dispatch(removeAdminToken());
       navigate("/");
     } catch (error) {
@@ -139,6 +140,30 @@ function Admin() {
                   </li>
                   <li className="nav-item">
                     <a
+                      className={`nav-link sidebar-link ${activePage === "tiketa" ? "active" : ""}`}
+                      onClick={() => setActivePage("tiketa")}
+                    >
+                      Tiketat
+                    </a>
+                  </li>
+                  <li className="nav-item">
+                    <a
+                      className={`nav-link sidebar-link ${activePage === "pergjigjet" ? "active" : ""}`}
+                      onClick={() => setActivePage("pergjigjet")}
+                    >
+                      Pergjigjet
+                    </a>
+                  </li>
+                  <li className="nav-item">
+                    <a
+                      className={`nav-link sidebar-link ${activePage === "faturat" ? "active" : ""}`}
+                      onClick={() => setActivePage("faturat")}
+                    >
+                      Faturat
+                    </a>
+                  </li>
+                  <li className="nav-item">
+                    <a
                       className="nav-link sidebar-link"
                       onClick={() => setShowLogOutModal(true)}
                     >
@@ -167,6 +192,12 @@ function Admin() {
                 <AdminAbonimi />
               ) : activePage == "monitorim-servers" ? (
                 <AdminMonitorimServers />
+              ) : activePage == "tiketa" ? (
+                <AdminTiketa />
+              ) : activePage == "pergjigjet" ? (
+                <AdminPergjigjet />
+              ) : activePage == "faturat" ? (
+                <AdminFaktura />
               ) : (
                 <AdminDashboard />
               )}
