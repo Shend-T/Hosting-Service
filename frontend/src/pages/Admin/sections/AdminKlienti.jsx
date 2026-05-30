@@ -8,6 +8,8 @@ import ErrorModal from "../../../components/Error/ErrorModal";
 import Loader from "../../../components/Common/Loader";
 
 import { getStatusBadgeKlienti } from "../../../utils/statusUtils";
+import { KLIENTI_FORM } from "../constants/forms";
+import { validateKlienti } from "../../../utils/validators";
 
 import { useEscapeKey } from "../../../hooks/useEscapeKey";
 import useAdminCrud from "../../../hooks/useAdminCrud";
@@ -15,30 +17,7 @@ import useAdminCrud from "../../../hooks/useAdminCrud";
 import KlientiForm from "../components/Forms/KlientiForm";
 import KlientiDisplay from "../components/Display/KlientiDisplay";
 
-const URL = "http://127.0.0.1:8000/api/admin/klienti";
-
-const FORM = {
-  emri: "",
-  mbiemri: "",
-  kompania: "",
-  email: "",
-  password: "",
-  telefoni: "",
-  adresa: "",
-  bilanci: 0,
-  statusi: "aktiv",
-};
-
 function AdminKlienti() {
-  const adminToken = useSelector((state) => state.admin.token);
-
-  const HEADERS = {
-    headers: {
-      Authorization: `Bearer ${adminToken}`,
-      Accept: "application/json",
-    },
-  };
-
   const {
     data: klientet,
     error,
@@ -50,15 +29,25 @@ function AdminKlienti() {
     remove,
   } = useAdminCrud("klienti");
 
-  const [showErrorModal, setShowErrorModal] = useState(false);
-  useEscapeKey(showErrorModal, () => {
-    setShowErrorModal(false);
-    setError(null);
+  const [modals, setModals] = useState({
+    show: false,
+    create: false,
+    update: false,
+    delete: false,
+    error: false,
   });
+
+  const openModal = (name) => setModals({ ...modals, [name]: true });
+  const closeModal = (name) => {
+    setModals({ ...modals, [name]: false });
+    setKlienti(null);
+    setKlientiForm(KLIENTI_FORM);
+    setKlientiUpdateForm(null);
+  };
 
   useEffect(() => {
     if (error !== null) {
-      setShowErrorModal(true);
+      openModal("error");
     }
   }, [error]);
 
@@ -66,74 +55,41 @@ function AdminKlienti() {
     getAll();
   }, []);
 
-  const [showKlientiModal, setShowKlientiModal] = useState(false);
-  useEscapeKey(showKlientiModal, () => {
-    setShowKlientiModal(false);
-  });
-
-  const validateKlienti = (form, isEdit) => {
-    let inputErrors = "";
-    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-    const telefoniRegex = /^\+(?:[0-9] ?){6,14}[0-9]$/;
-
-    if (!form.emri?.trim()) inputErrors += " Emri eshte i detyrushem";
-    if (!form.mbiemri?.trim()) inputErrors += " Mbiemri eshte i detyrushem";
-    if (!form.kompania?.trim()) inputErrors += " Kompania eshte e detyrueshme";
-    if (!form.email?.trim() || !emailRegex.test(form.email))
-      inputErrors += " Email-i duhet te jete valid";
-    if (!isEdit && form.password.length < 8)
-      inputErrors += " Password-i eshte i detyrushem";
-    if (!form.telefoni?.trim() || !telefoniRegex.test(form.telefoni))
-      inputErrors += " Numri telefonit duhet tja nis me + (p.sh. +38344123456)";
-    if (!form.adresa?.trim()) inputErrors += " Adresa eshte e detyrueshme";
-    if (form.bilanci < 0) inputErrors += " Bilanci nuk mund te jete negativ";
-
-    if (inputErrors.length !== 0) alert(inputErrors);
-    return inputErrors.length === 0;
-  };
-
-  const [klientiForm, setKlientiForm] = useState(FORM);
-  const [showKlientiCreateModal, setShowKlientiCreateModal] = useState(false);
+  const [klienti, setKlienti] = useState(null);
+  const [klientiForm, setKlientiForm] = useState(KLIENTI_FORM);
   const createKlienti = async (e) => {
     e.preventDefault();
     if (!validateKlienti(klientiForm, false)) return;
 
     create(klientiForm);
-    setShowKlientiCreateModal(false);
-    setKlientiForm(FORM);
+    closeModal("create");
   };
-  useEscapeKey(showKlientiCreateModal, () => {
-    setShowKlientiCreateModal(false);
-    setKlientiForm(FORM);
-  });
 
-  const [klienti, setKlienti] = useState(null);
   const [klientiUpdateForm, setKlientiUpdateForm] = useState(null);
-  const [showKlientiUpdateModal, setShowKlientiUpdateModal] = useState(false);
   const updateKlienti = async (e) => {
     e.preventDefault();
     if (!validateKlienti(klientiUpdateForm, true)) return;
 
     update(klienti.id, klientiUpdateForm);
-    setShowKlientiUpdateModal(false);
-    setKlienti(null);
-    setKlientiUpdateForm(null);
+    closeModal("update");
   };
-  useEscapeKey(showKlientiUpdateModal, () => {
-    setShowKlientiUpdateModal(false);
-    setKlienti(null);
-    setKlientiUpdateForm(null);
-  });
 
-  const [showKlientiDeleteModal, setShowKlientiDeleteModal] = useState(false);
   const deleteKlienti = async () => {
     remove(klienti.id);
-    setShowKlientiDeleteModal(false);
-    setKlienti(null);
+    closeModal("delete");
   };
-  useEscapeKey(showKlientiDeleteModal, () => {
-    setShowKlientiDeleteModal(false);
+
+  useEscapeKey(modals, () => {
+    setModals({
+      show: false,
+      create: false,
+      update: false,
+      delete: false,
+      error: false,
+    });
     setKlienti(null);
+    setKlientiForm(KLIENTI_FORM);
+    setKlientiUpdateForm(null);
   });
 
   if (loading) {
@@ -147,7 +103,7 @@ function AdminKlienti() {
         <button
           className="btn btn-primary"
           onClick={() => {
-            setShowKlientiCreateModal(true);
+            openModal("create");
           }}
         >
           Shto Klient
@@ -179,7 +135,7 @@ function AdminKlienti() {
                   key={klienti.id}
                   onClick={() => {
                     setKlienti(klienti);
-                    setShowKlientiModal(true);
+                    openModal("show");
                   }}
                 >
                   <td>{klienti.id}</td>
@@ -206,7 +162,7 @@ function AdminKlienti() {
                     <button
                       className="table-btn btn btn-warning m-2"
                       onClick={() => {
-                        setShowKlientiUpdateModal(true);
+                        openModal("update");
                         setKlienti(klienti);
                         setKlientiUpdateForm(klienti);
                       }}
@@ -216,7 +172,7 @@ function AdminKlienti() {
                     <button
                       className="table-btn btn btn-danger"
                       onClick={() => {
-                        setShowKlientiDeleteModal(true);
+                        openModal("delete");
                         setKlienti(klienti);
                       }}
                     >
@@ -230,10 +186,10 @@ function AdminKlienti() {
         </div>
       )}
 
-      {showKlientiModal && (
+      {modals.show && (
         <Modal
-          show={showKlientiModal}
-          onClose={() => setShowKlientiModal(false)}
+          show={modals.show}
+          onClose={() => closeModal("show")}
           title={`Klienti: #${klienti.id} - ${klienti.emri} ${klienti.mbiemri}`}
         >
           <div className="modal-body">
@@ -242,7 +198,7 @@ function AdminKlienti() {
           <div className="modal-footer">
             <button
               className="btn btn-secondary"
-              onClick={() => setShowKlientiModal(false)}
+              onClick={() => closeModal("show")}
             >
               Mbyll
             </button>
@@ -250,10 +206,10 @@ function AdminKlienti() {
         </Modal>
       )}
 
-      {showKlientiCreateModal && (
+      {modals.create && (
         <Modal
-          show={showKlientiCreateModal}
-          onClose={() => setShowKlientiCreateModal(false)}
+          show={modals.create}
+          onClose={() => closeModal("create")}
           title="Shto Klient"
         >
           <div className="modal-body">
@@ -266,7 +222,7 @@ function AdminKlienti() {
           <div className="modal-footer">
             <button
               className="btn btn-secondary"
-              onClick={() => setShowKlientiCreateModal(false)}
+              onClick={() => closeModal("create")}
             >
               Mbyll
             </button>
@@ -274,10 +230,10 @@ function AdminKlienti() {
         </Modal>
       )}
 
-      {showKlientiUpdateModal && (
+      {modals.update && (
         <Modal
-          show={showKlientiUpdateModal}
-          onClose={() => setShowKlientiUpdateModal(false)}
+          show={modals.update}
+          onClose={() => closeModal("update")}
           title={`Perditso Klientin: #${klienti.id} - ${klienti.emri} ${klienti.mbiemri}`}
         >
           <div className="modal-body">
@@ -291,7 +247,7 @@ function AdminKlienti() {
           <div className="modal-footer">
             <button
               className="btn btn-secondary"
-              onClick={() => setShowKlientiUpdateModal(false)}
+              onClick={() => closeModal("update")}
             >
               Mbyll
             </button>
@@ -299,10 +255,10 @@ function AdminKlienti() {
         </Modal>
       )}
 
-      {showKlientiDeleteModal && (
+      {modals.delete && (
         <Modal
-          show={showKlientiDeleteModal}
-          onClose={() => setShowKlientiDeleteModal(false)}
+          show={modals.delete}
+          onClose={() => closeModal("delete")}
           title={`Deshironi ta fshini klientin: #${klienti.id} - ${klienti.emri} ${klienti.mbiemri}`}
         >
           <div className="modal-footer">
@@ -311,7 +267,7 @@ function AdminKlienti() {
             </button>
             <button
               className="btn btn-secondary"
-              onClick={() => setShowKlientiDeleteModal(false)}
+              onClick={() => closeModal("delete")}
             >
               Jo, Mbyll
             </button>
@@ -319,10 +275,10 @@ function AdminKlienti() {
         </Modal>
       )}
 
-      {showErrorModal && (
+      {modals.error && (
         <ErrorModal
-          show={showErrorModal}
-          onClose={() => setShowErrorModal(false)}
+          show={modals.error}
+          onClose={() => closeModal("error")}
           errorCode={error.response?.status}
           errorBody={error.response?.data}
           errorText={error.response?.statusText}
