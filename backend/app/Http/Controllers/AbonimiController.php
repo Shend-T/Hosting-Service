@@ -163,7 +163,7 @@ class AbonimiController extends Controller
                     });
 
                 if (!$server) {
-                    throw new \Exception('Nuk ka server te lire per kete abonim');
+                    throw new \Exception('Nuk ka server te lire per kete abonim, ju lutem kontaktoni suportin');
                 }
 
                 LlogariHostings::create([
@@ -181,7 +181,7 @@ class AbonimiController extends Controller
                 $abonimi->save();
             });
         } catch (\Exception $e) {
-            \Log::error('Transaction failed: ' . $e->getMessage());
+            \Log::error('Transaksioni deshtoi: ' . $e->getMessage());
             return response()->json(['message' => $e->getMessage()], 503);
         }
 

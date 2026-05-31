@@ -33,3 +33,8 @@ export const ABONIMI_FORM = {
   periudha: "mujore",
   auto_rinovim: false,
 };
+
+export const MONITORIM_SERVERS_FORM = {
+  serveri_id: 0,
+  statusi: "nuk monitoron",
+};

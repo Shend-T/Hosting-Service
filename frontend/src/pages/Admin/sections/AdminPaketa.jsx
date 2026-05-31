@@ -105,7 +105,7 @@ function AdminPaketa() {
 
       {paketat && (
         <div className="table-responsive-md">
-          <table className="table text-center fs-5">
+          <table className="table text-center align-middle fs-5">
             <thead>
               <tr>
                 <th scope="col">#</th>
