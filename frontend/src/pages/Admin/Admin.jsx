@@ -14,6 +14,7 @@ import AdminAbonimi from "./sections/AdminAbonimi";
 
 import Modal from "../../components/Common/Modal";
 import Loader from "../../components/Common/Loader";
+import AdminMonitorimServers from "./sections/AdminMonitorimServers";
 // import { HashLoader, RingLoader, PropagateLoader } from "react-spinners";
 
 function Admin() {
@@ -130,10 +131,10 @@ function Admin() {
                   </li>
                   <li className="nav-item">
                     <a
-                      className={`nav-link sidebar-link ${activePage === "tickets" ? "active" : ""}`}
-                      onClick={() => setActivePage("tickets")}
+                      className={`nav-link sidebar-link ${activePage === "monitorim-servers" ? "active" : ""}`}
+                      onClick={() => setActivePage("monitorim-servers")}
                     >
-                      Kerkesat(Tiketat)
+                      Monitoro Serveret
                     </a>
                   </li>
                   <li className="nav-item">
@@ -157,13 +158,15 @@ function Admin() {
               </div>
 
               {activePage == "dashboard" ? (
-                <AdminAbonimi />
+                <AdminMonitorimServers />
               ) : activePage == "klienti" ? (
                 <AdminKlienti />
               ) : activePage == "paketa" ? (
                 <AdminPaketa />
               ) : activePage == "abonimi" ? (
                 <AdminAbonimi />
+              ) : activePage == "monitorim-servers" ? (
+                <AdminMonitorimServers />
               ) : (
                 <AdminDashboard />
               )}

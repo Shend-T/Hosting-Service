@@ -71,6 +71,8 @@ Route::middleware(['auth:sanctum', 'admin'])->prefix('admin')->group(function ()
     Route::post('/abonimi', [AdminController::class, "createAbonimi"]);
     Route::put('/abonimi/{id}', [AdminController::class, "updateAbonimi"]);
     Route::delete('/abonimi/{id}', [AdminController::class, "deleteAbonimi"]);
+
+    Route::get('/monitorim-servers', [AdminController::class, "getAllMonitorimServer"]);
 });
 
 Route::get('/servers', [ServerController::class, 'index']);  // Lexo krejt serverat

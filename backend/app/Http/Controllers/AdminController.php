@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Klienti;
 use App\Models\Paketa;
 use App\Models\Abonimi;
+use App\Models\MonitorimServer;
 
 class AdminController extends Controller
 {
@@ -174,5 +175,11 @@ class AdminController extends Controller
         $abonimi->delete();
 
         return response()->json("", 204);
+    }
+
+    // ========== Monitorim Server ==========
+    public function getAllMonitorimServer(Request $request) {
+        $monitoret = MonitorimServer::all();
+        return response()->json($monitoret, 200);
     }
 }
