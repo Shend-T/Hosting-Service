@@ -150,6 +150,25 @@ class AdminController extends Controller
         return response()->json($abonimi, 201);
     }
 
+    public function updateAbonimi(Request $request, int $id) {
+        $abonimi = Abonimi::findOrFail($id);
+
+        $data = $request->validate([
+            'klienti_id'    => 'required|exists:klienti,id',
+            'paketa_id'     => 'required|exists:paketa,id',
+            'data_fillimit' => 'required|date',
+            'data_skadimit' => 'required|date|after_or_equal:data_fillimit',
+            'statusi'       => 'sometimes|in:pritje,aktiv,suspenduar,skaduar,ndalur',
+            'cmimi'         => 'required|numeric',
+            'periudha'      => 'required|in:mujore,vjetore',
+            'auto_rinovim'  => 'sometimes|boolean'
+        ]);
+
+        $abonimi->update($data);
+
+        return response()->json($abonimi, 200);
+    }
+
     public function deleteAbonimi(Request $request, int $id) {
         $abonimi = Abonimi::findOrFail($id);
         $abonimi->delete();

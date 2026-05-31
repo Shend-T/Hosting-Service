@@ -68,6 +68,8 @@ Route::middleware(['auth:sanctum', 'admin'])->prefix('admin')->group(function ()
 
     Route::get('/abonimi', [AdminController::class, "getAllAbonimi"]);
     Route::get('/abonimi/{id}', [AdminController::class, "getAbonimi"]);
+    Route::post('/abonimi', [AdminController::class, "createAbonimi"]);
+    Route::put('/abonimi/{id}', [AdminController::class, "updateAbonimi"]);
     Route::delete('/abonimi/{id}', [AdminController::class, "deleteAbonimi"]);
 });
 

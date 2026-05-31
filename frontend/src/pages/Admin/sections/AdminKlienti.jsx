@@ -1,15 +1,14 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 
-import { useSelector, useDispatch } from "react-redux";
-
 import Modal from "../../../components/Common/Modal";
 import ErrorModal from "../../../components/Error/ErrorModal";
 import Loader from "../../../components/Common/Loader";
 
-import { getStatusBadgeKlienti } from "../../../utils/statusUtils";
 import { KLIENTI_FORM } from "../constants/forms";
+
 import { validateKlienti } from "../../../utils/validators";
+import { getStatusBadgeKlienti } from "../../../utils/statusUtils";
 
 import { useEscapeKey } from "../../../hooks/useEscapeKey";
 import useAdminCrud from "../../../hooks/useAdminCrud";
@@ -100,12 +99,7 @@ function AdminKlienti() {
     <div>
       <>
         <h1>Klientet</h1>
-        <button
-          className="btn btn-primary"
-          onClick={() => {
-            openModal("create");
-          }}
-        >
+        <button className="btn btn-primary" onClick={() => openModal("create")}>
           Shto Klient
         </button>
       </>

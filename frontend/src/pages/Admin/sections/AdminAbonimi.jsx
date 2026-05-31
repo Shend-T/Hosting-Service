@@ -5,101 +5,118 @@ import { useSelector, useDispatch } from "react-redux";
 
 import Modal from "../../../components/Common/Modal";
 import ErrorModal from "../../../components/Error/ErrorModal";
+import Loader from "../../../components/Common/Loader";
 
+import { ABONIMI_FORM } from "../constants/forms";
+
+// import { validateAbonimi } from "../../../utils/validators";
 import { getStatusBadgeAbonimi } from "../../../utils/statusUtils";
+
 import { useEscapeKey } from "../../../hooks/useEscapeKey";
+import useAdminCrud from "../../../hooks/useAdminCrud";
 
 import AbonimiForm from "../components/Forms/AbonimiForm";
 import AbonimiDisplay from "../components/Display/AbonimiDisplay";
 
-const FORM = {
-  klienti_id: 0,
-  paketa_id: 0,
-  data_fillimit: new Date(),
-  data_skadimit: new Date(),
-  statusi: "aktiv",
-  cmimi: 0,
-  periudha: "mujore",
-  auto_rinovim: false,
-};
-
-const URL = "http://127.0.0.1:8000/api/admin/abonimi";
 function AdminAbonimi() {
-  const adminToken = useSelector((state) => state.admin.token);
+  const {
+    data: abonimet,
+    error,
+    loading,
+    getAll,
+    getOne,
+    create,
+    update,
+    remove,
+  } = useAdminCrud("abonimi");
+  const { data: klientet, getAll: klientiGetAll } = useAdminCrud("klienti");
+  const { data: paketat, getAll: paketaGetAll } = useAdminCrud("paketa");
 
-  const HEADERS = {
-    headers: {
-      Authorization: `Bearer ${adminToken}`,
-      Accept: "application/json",
-    },
-  };
-
-  const [error, setError] = useState(null);
-  const [showErrorModal, setShowErrorModal] = useState(false);
-  useEscapeKey(showErrorModal, () => {
-    setShowErrorModal(false);
-    setError(null);
+  const [modals, setModals] = useState({
+    show: false,
+    create: false,
+    update: false,
+    delete: false,
+    error: false,
   });
 
-  const [abonimet, setAbonimet] = useState([]);
-  const getAbonimet = async () => {
-    try {
-      const res = await axios.get(URL, HEADERS);
-
-      setAbonimet(res.data);
-    } catch (error) {
-      setError(error);
-      setShowErrorModal(true);
-    }
+  const openModal = (name) => setModals({ ...modals, [name]: true });
+  const closeModal = (name) => {
+    setModals({ ...modals, [name]: false });
+    setAbonimi(null);
+    setAbonimiForm(ABONIMI_FORM);
   };
+
   useEffect(() => {
-    getAbonimet();
+    if (error !== null) {
+      openModal("error");
+    }
+  }, [error]);
+
+  useEffect(() => {
+    getAll();
+    klientiGetAll();
+    paketaGetAll();
   }, []);
 
   const [abonimi, setAbonimi] = useState(null);
-  const [showAbonimiModal, setShowAbonimiModal] = useState(false);
-  useEscapeKey(showAbonimiModal, () => {
-    setShowAbonimiModal(false);
-  });
 
-  const [showAbonimiCreateModal, setShowAbonimiCreateModal] = useState(false);
-  const [abonimiForm, setAbonimiForm] = useState(FORM);
+  const [abonimiForm, setAbonimiForm] = useState(ABONIMI_FORM);
   const createAbonimi = async (e) => {
     e.preventDefault();
-    console.log(abonimiForm);
-  };
-  useEscapeKey(showAbonimiCreateModal, () => {
-    setShowAbonimiCreateModal(false);
-  });
+    // if (!validateAbonimi(abonimiForm, false)) return;
 
-  const [showAbonimiDeleteModal, setShowAbonimiDeleteModal] = useState(false);
+    create(abonimiForm);
+    closeModal("create");
+  };
+
+  const updateAbonimi = async (e) => {
+    e.preventDefault();
+
+    update(abonimi.id, abonimiForm);
+    closeModal("update");
+  };
+
   const deleteAbonimi = async () => {
-    try {
-      await axios.delete(URL + "/" + abonimi.id, HEADERS);
-
-      getAbonimet();
-    } catch (error) {
-      setError(error);
-      setShowErrorModal(true);
-    } finally {
-      setShowAbonimiDeleteModal(false);
-      setAbonimi(null);
-    }
+    remove(abonimi.id);
+    closeModal("delete");
   };
-  useEscapeKey(showAbonimiDeleteModal, () => {
-    setShowAbonimiDeleteModal(false);
+
+  useEscapeKey(modals, () => {
+    setModals({
+      show: false,
+      create: false,
+      update: false,
+      delete: false,
+      error: false,
+    });
     setAbonimi(null);
+    setAbonimiForm(ABONIMI_FORM);
   });
+
+  if (loading) {
+    return <Loader />;
+  }
 
   return (
     <div>
-      <h1>Abonimet</h1>
-      <button
-        className="btn btn-primary"
-        onClick={() => setShowAbonimiCreateModal(true)}
-      >
-        Shto Abonim
-      </button>
+      <>
+        <h1>Abonimet</h1>
+        <button
+          className="btn btn-primary"
+          onClick={() => {
+            setAbonimiForm({
+              ...abonimiForm,
+              klienti_id: klientet[0].id,
+              paketa_id: paketat[0].id,
+              cmimi: Number(paketat[0].cmimi_mujor),
+            });
+            openModal("create");
+          }}
+        >
+          Shto Abonim
+        </button>
+      </>
 
       {abonimet && (
         <div className="table-responsive-md">
@@ -124,7 +141,7 @@ function AdminAbonimi() {
                   key={abonimi.id}
                   onClick={() => {
                     setAbonimi(abonimi);
-                    setShowAbonimiModal(true);
+                    openModal("show");
                   }}
                 >
                   <td>{abonimi.id}</td>
@@ -149,18 +166,18 @@ function AdminAbonimi() {
                   <td onClick={(e) => e.stopPropagation()}>
                     <button
                       className="table-btn btn btn-warning m-2"
-                      // onClick={() => {
-                      //   setShowAbonimiUpdateModal(true);
-                      //   setAbonimi(abonimi);
-                      //   setAbonimiForm(abonimi);
-                      // }}
+                      onClick={() => {
+                        openModal("update");
+                        setAbonimi(abonimi);
+                        setAbonimiForm(abonimi);
+                      }}
                     >
                       Perditso
                     </button>
                     <button
                       className="table-btn btn btn-danger"
                       onClick={() => {
-                        setShowAbonimiDeleteModal(true);
+                        openModal("delete");
                         setAbonimi(abonimi);
                       }}
                     >
@@ -174,10 +191,10 @@ function AdminAbonimi() {
         </div>
       )}
 
-      {showAbonimiModal && (
+      {modals.show && (
         <Modal
-          show={showAbonimiModal}
-          onClose={() => setShowAbonimiModal(false)}
+          show={modals.show}
+          onClose={() => closeModal("show")}
           title={`Abonimi #${abonimi.id}`}
         >
           <div className="modal-body">
@@ -186,7 +203,7 @@ function AdminAbonimi() {
           <div className="modal-footer">
             <button
               className="btn btn-secondary"
-              onClick={() => setShowAbonimiModal(false)}
+              onClick={() => closeModal("show")}
             >
               Mbyll
             </button>
@@ -194,10 +211,10 @@ function AdminAbonimi() {
         </Modal>
       )}
 
-      {showAbonimiCreateModal && (
+      {modals.create && (
         <Modal
-          show={showAbonimiCreateModal}
-          onClose={() => setShowAbonimiCreateModal(false)}
+          show={modals.create}
+          onClose={() => closeModal("create")}
           title="Krijo Pakete"
         >
           <div className="modal-body">
@@ -205,13 +222,15 @@ function AdminAbonimi() {
               form={abonimiForm}
               setForm={setAbonimiForm}
               onSubmit={createAbonimi}
+              klientet={klientet}
+              paketat={paketat}
             />
           </div>
 
           <div className="modal-footer">
             <button
               className="btn btn-secondary"
-              onClick={() => setShowAbonimiCreateModal(false)}
+              onClick={() => closeModal("create")}
             >
               Mbyll
             </button>
@@ -219,10 +238,38 @@ function AdminAbonimi() {
         </Modal>
       )}
 
-      {showAbonimiDeleteModal && (
+      {modals.update && (
         <Modal
-          show={showAbonimiDeleteModal}
-          onClose={() => setShowAbonimiDeleteModal(false)}
+          show={modals.update}
+          onClose={() => closeModal("update")}
+          title={`Perditso Abonimin #${abonimi.id}`}
+        >
+          <div className="modal-body">
+            <AbonimiForm
+              form={abonimiForm}
+              setForm={setAbonimiForm}
+              onSubmit={updateAbonimi}
+              klientet={klientet}
+              paketat={paketat}
+              isEdit={true}
+            />
+          </div>
+
+          <div className="modal-footer">
+            <button
+              className="btn btn-secondary"
+              onClick={() => closeModal("update")}
+            >
+              Mbyll
+            </button>
+          </div>
+        </Modal>
+      )}
+
+      {modals.delete && (
+        <Modal
+          show={modals.delete}
+          onClose={() => closeModal("delete")}
           title={`Deshironi ta fshini abonimin: #${abonimi.id}`}
         >
           <div className="modal-footer">
@@ -231,7 +278,7 @@ function AdminAbonimi() {
             </button>
             <button
               className="btn btn-secondary"
-              onClick={() => setShowAbonimiDeleteModal(false)}
+              onClick={() => closeModal("delete")}
             >
               Jo, Mbyll
             </button>
@@ -239,10 +286,10 @@ function AdminAbonimi() {
         </Modal>
       )}
 
-      {showErrorModal && (
+      {modals.error && (
         <ErrorModal
-          show={showErrorModal}
-          onClose={() => setShowErrorModal(false)}
+          show={modals.error}
+          onClose={() => closeModal("error")}
           errorCode={error.response?.status}
           errorBody={error.response?.data}
           errorText={error.response?.statusText}

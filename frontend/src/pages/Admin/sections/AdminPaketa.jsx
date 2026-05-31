@@ -5,159 +5,103 @@ import { useSelector, useDispatch } from "react-redux";
 
 import Modal from "../../../components/Common/Modal";
 import ErrorModal from "../../../components/Error/ErrorModal";
+import Loader from "../../../components/Common/Loader";
 
+import { PAKETA_FORM } from "../constants/forms";
+
+import { validatePaketa } from "../../../utils/validators";
 import { getStatusBadgePaketa } from "../../../utils/statusUtils";
+
 import { useEscapeKey } from "../../../hooks/useEscapeKey";
+import useAdminCrud from "../../../hooks/useAdminCrud";
 
 import PaketaForm from "../components/Forms/PaketaForm";
 import PaketaDisplay from "../components/Display/PaketaDisplay";
 
-const URL = "http://127.0.0.1:8000/api/admin/paketa";
-
-const FORM = {
-  emri: "",
-  pershkrimi: "",
-  hapesira_gb: 0,
-  bandwidth_gb: 0,
-  nr_domaineve: 0,
-  nr_emaileve: 0,
-  ssl: false,
-  cmimi_mujor: 0,
-  cmimi_vjetor: 0,
-  statusi: "aktiv",
-};
 function AdminPaketa() {
-  const adminToken = useSelector((state) => state.admin.token);
+  const {
+    data: paketat,
+    error,
+    loading,
+    getAll,
+    getOne,
+    create,
+    update,
+    remove,
+  } = useAdminCrud("paketa");
 
-  const HEADERS = {
-    headers: {
-      Authorization: `Bearer ${adminToken}`,
-      Accept: "application/json",
-    },
-  };
-
-  const [error, setError] = useState(null);
-  const [showErrorModal, setShowErrorModal] = useState(false);
-  useEscapeKey(showErrorModal, () => {
-    setShowErrorModal(false);
-    setError(null);
+  const [modals, setModals] = useState({
+    show: false,
+    create: false,
+    update: false,
+    delete: false,
+    error: false,
   });
 
-  const validatePaketa = (form) => {
-    let inputErrors = "";
-
-    if (!form.emri?.trim()) inputErrors += " Emri eshte i detyrushem";
-    if (!form.pershkrimi?.trim())
-      inputErrors += " Pershkrimi eshte i detyrushem";
-    if (!form.hapesira_gb <= 0)
-      inputErrors += " hapesira_gb eshte i detyrushem";
-    if (!form.bandwidth_gb <= 0)
-      inputErrors += " bandwidth_gb eshte i detyrushem";
-    if (!form.nr_domaineve <= 0)
-      inputErrors += " nr_domaineve eshte i detyrushem";
-    if (!form.nr_emaileve <= 0)
-      inputErrors += " nr_emaileve eshte i detyrushem";
-    if (!form.cmimi_mujor <= 0)
-      inputErrors += " cmimi_mujor eshte i detyrushem";
-    if (!form.cmimi_vjetor <= 0)
-      inputErrors += " cmimi_vjetor eshte i detyrushem";
-
-    if (inputErrors.length !== 0) alert(inputErrors);
-    return inputErrors.length === 0;
+  const openModal = (name) => setModals({ ...modals, [name]: true });
+  const closeModal = (name) => {
+    setModals({ ...modals, [name]: false });
+    setPaketa(null);
+    setPaketaForm(PAKETA_FORM);
   };
 
-  const [paketat, setPaketat] = useState([]);
-  const getPaketat = async () => {
-    try {
-      const res = await axios.get(URL, HEADERS);
-
-      setPaketat(res.data);
-    } catch (error) {
-      setError(error);
-      setShowErrorModal(true);
-    }
-  };
   useEffect(() => {
-    getPaketat();
+    if (error !== null) {
+      openModal("error");
+    }
+  }, [error]);
+
+  useEffect(() => {
+    getAll();
   }, []);
 
-  const [showPaketaModal, setShowPaketaModal] = useState(false);
-  useEscapeKey(showPaketaModal, () => {
-    setShowPaketaModal(false);
-  });
-
-  const [showPaketaCreateModal, setShowPaketaCreateModal] = useState(false);
-  const [paketaForm, setPaketaForm] = useState(FORM);
+  const [paketa, setPaketa] = useState(null);
+  const [paketaForm, setPaketaForm] = useState(PAKETA_FORM);
   const createPaketa = async (e) => {
     e.preventDefault();
     if (!validatePaketa(paketaForm)) return;
 
-    try {
-      await axios.post(URL, paketaForm, HEADERS);
-
-      getPaketat();
-    } catch (error) {
-      setError(error);
-      setShowErrorModal(true);
-    } finally {
-      setShowPaketaCreateModal(false);
-      setPaketaForm(FORM);
-    }
+    create(paketaForm);
+    closeModal("create");
   };
-  useEscapeKey(showPaketaCreateModal, () => {
-    setShowPaketaCreateModal(false);
-  });
 
-  const [paketa, setPaketa] = useState(null);
-  const [showPaketaUpdateModal, setShowPaketaUpdateModal] = useState(false);
   const updatePaketa = async (e) => {
     e.preventDefault();
     if (!validatePaketa(paketaForm)) return;
 
-    try {
-      await axios.put(URL + "/" + paketa.id, paketaForm, HEADERS);
-      // await axios.put(URL + "/" + paketa.id, paketaForm, {
-      //   headers: { Accept: "application/json" },
-      // });
-
-      getPaketat();
-    } catch (error) {
-      setError(error);
-      setShowErrorModal(true);
-    } finally {
-      setShowPaketaUpdateModal(false);
-      setPaketaForm(FORM);
-    }
+    update(paketa.id, paketaForm);
+    closeModal("update");
   };
 
-  const [showPaketaDeleteModal, setShowPaketaDeleteModal] = useState(false);
   const deletePaketa = async () => {
-    try {
-      await axios.delete(URL + "/" + paketa.id, HEADERS);
-
-      getPaketat();
-    } catch (error) {
-      setError(error);
-      setShowErrorModal(true);
-    } finally {
-      setShowPaketaDeleteModal(false);
-      setPaketa(null);
-    }
+    remove(paketa.id);
+    closeModal("delete");
   };
-  useEscapeKey(showPaketaDeleteModal, () => {
-    setShowPaketaDeleteModal(false);
+
+  useEscapeKey(modals, () => {
+    setModals({
+      show: false,
+      create: false,
+      update: false,
+      delete: false,
+      error: false,
+    });
     setPaketa(null);
+    setPaketaForm(PAKETA_FORM);
   });
+
+  if (loading) {
+    return <Loader />;
+  }
 
   return (
     <div>
-      <h1>Paketat</h1>
-      <button
-        className="btn btn-primary"
-        onClick={() => setShowPaketaCreateModal(true)}
-      >
-        Shto Pakete
-      </button>
+      <>
+        <h1>Paketat</h1>
+        <button className="btn btn-primary" onClick={() => openModal("create")}>
+          Shto Pakete
+        </button>
+      </>
 
       {paketat && (
         <div className="table-responsive-md">
@@ -184,7 +128,7 @@ function AdminPaketa() {
                   key={paketa.id}
                   onClick={() => {
                     setPaketa(paketa);
-                    setShowPaketaModal(true);
+                    openModal("show");
                   }}
                 >
                   <td>{paketa.id}</td>
@@ -212,7 +156,7 @@ function AdminPaketa() {
                     <button
                       className="table-btn btn btn-warning m-2"
                       onClick={() => {
-                        setShowPaketaUpdateModal(true);
+                        openModal("update");
                         setPaketa(paketa);
                         setPaketaForm(paketa);
                       }}
@@ -222,7 +166,7 @@ function AdminPaketa() {
                     <button
                       className="table-btn btn btn-danger"
                       onClick={() => {
-                        setShowPaketaDeleteModal(true);
+                        openModal("delete");
                         setPaketa(paketa);
                       }}
                     >
@@ -236,10 +180,10 @@ function AdminPaketa() {
         </div>
       )}
 
-      {showPaketaModal && (
+      {modals.show && (
         <Modal
-          show={showPaketaModal}
-          onClose={() => setShowPaketaModal(false)}
+          show={modals.show}
+          onClose={() => closeModal("show")}
           title={`Paketa #${paketa.id}`}
         >
           <div className="modal-body">
@@ -248,7 +192,7 @@ function AdminPaketa() {
           <div className="modal-footer">
             <button
               className="btn btn-secondary"
-              onClick={() => setShowPaketaModal(false)}
+              onClick={() => closeModal("show")}
             >
               Mbyll
             </button>
@@ -256,10 +200,10 @@ function AdminPaketa() {
         </Modal>
       )}
 
-      {showPaketaCreateModal && (
+      {modals.create && (
         <Modal
-          show={showPaketaCreateModal}
-          onClose={() => setShowPaketaCreateModal(false)}
+          show={modals.create}
+          onClose={() => closeModal("create")}
           title="Krijo Pakete"
         >
           <div className="modal-body">
@@ -273,7 +217,7 @@ function AdminPaketa() {
           <div className="modal-footer">
             <button
               className="btn btn-secondary"
-              onClick={() => setShowPaketaCreateModal(false)}
+              onClick={() => closeModal("create")}
             >
               Mbyll
             </button>
@@ -281,10 +225,10 @@ function AdminPaketa() {
         </Modal>
       )}
 
-      {showPaketaUpdateModal && (
+      {modals.update && (
         <Modal
-          show={showPaketaUpdateModal}
-          onClose={() => setShowPaketaUpdateModal(false)}
+          show={modals.update}
+          onClose={() => closeModal("update")}
           title={`Perditso Paketen #${paketa.id}`}
         >
           <div className="modal-body">
@@ -298,7 +242,7 @@ function AdminPaketa() {
           <div className="modal-footer">
             <button
               className="btn btn-secondary"
-              onClick={() => setShowPaketaUpdateModal(false)}
+              onClick={() => closeModal("update")}
             >
               Mbyll
             </button>
@@ -306,10 +250,10 @@ function AdminPaketa() {
         </Modal>
       )}
 
-      {showPaketaDeleteModal && (
+      {modals.delete && (
         <Modal
-          show={showPaketaDeleteModal}
-          onClose={() => setShowPaketaDeleteModal(false)}
+          show={modals.delete}
+          onClose={() => closeModal("delete")}
           title={`Deshironi ta fshini paketen: #${paketa.id}`}
         >
           <div className="modal-footer">
@@ -318,7 +262,7 @@ function AdminPaketa() {
             </button>
             <button
               className="btn btn-secondary"
-              onClick={() => setShowPaketaDeleteModal(false)}
+              onClick={() => closeModal("delete")}
             >
               Jo, Mbyll
             </button>
@@ -326,10 +270,10 @@ function AdminPaketa() {
         </Modal>
       )}
 
-      {showErrorModal && (
+      {modals.error && (
         <ErrorModal
-          show={showErrorModal}
-          onClose={() => setShowErrorModal(false)}
+          show={modals.error}
+          onClose={() => closeModal("error")}
           errorCode={error.response?.status}
           errorBody={error.response?.data}
           errorText={error.response?.statusText}
