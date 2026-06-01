@@ -27,6 +27,7 @@ function AdminMonitorimServers() {
     update,
     remove,
   } = useAdminCrud("monitorim-servers");
+  const { data: serveret, getAll: getAllServeret } = useAdminCrud("servers");
 
   const [modals, setModals] = useState({
     show: false,
@@ -52,6 +53,7 @@ function AdminMonitorimServers() {
 
   useEffect(() => {
     getAll();
+    getAllServeret();
   }, []);
 
   const [monitori, setMonitori] = useState(null);
@@ -59,7 +61,21 @@ function AdminMonitorimServers() {
 
   const createMonitori = async (e) => {
     e.preventDefault();
-    console.log(monitoriForm);
+
+    create(monitoriForm);
+    closeModal("create");
+  };
+
+  const updateMonitori = async (e) => {
+    e.preventDefault();
+
+    update(monitori.id, monitoriForm);
+    closeModal("update");
+  };
+
+  const deleteMonitori = async () => {
+    remove(monitori.id);
+    closeModal("delete");
   };
 
   useEscapeKey(modals, () => {
@@ -72,7 +88,6 @@ function AdminMonitorimServers() {
     });
     setMonitori(null);
     setMonitoriForm(MONITORIM_SERVERS_FORM);
-    // setKlientiUpdateForm(null);
   });
 
   if (loading) {
@@ -163,8 +178,8 @@ function AdminMonitorimServers() {
                       className="table-btn btn btn-warning m-2"
                       onClick={() => {
                         openModal("update");
-                        // setKlienti(klienti);
-                        // setKlientiUpdateForm(klienti);
+                        setMonitori(monitori);
+                        setMonitoriForm(monitori);
                       }}
                     >
                       Perditso
@@ -173,7 +188,7 @@ function AdminMonitorimServers() {
                       className="table-btn btn btn-danger"
                       onClick={() => {
                         openModal("delete");
-                        // setKlienti(klienti);
+                        setMonitori(monitori);
                       }}
                     >
                       Fshij
@@ -217,6 +232,7 @@ function AdminMonitorimServers() {
               form={monitoriForm}
               setForm={setMonitoriForm}
               onSubmit={createMonitori}
+              serveret={serveret}
             />
           </div>
           <div className="modal-footer">
@@ -225,6 +241,52 @@ function AdminMonitorimServers() {
               onClick={() => closeModal("create")}
             >
               Mbyll
+            </button>
+          </div>
+        </Modal>
+      )}
+
+      {modals.update && (
+        <Modal
+          show={modals.update}
+          onClose={() => closeModal("update")}
+          title={`Perditso Monitorin: #${monitori.id}`}
+        >
+          <div className="modal-body">
+            <MonitorimServersForm
+              form={monitoriForm}
+              setForm={setMonitoriForm}
+              onSubmit={updateMonitori}
+              serveret={serveret}
+              isEdit={true}
+            />
+          </div>
+          <div className="modal-footer">
+            <button
+              className="btn btn-secondary"
+              onClick={() => closeModal("update")}
+            >
+              Mbyll
+            </button>
+          </div>
+        </Modal>
+      )}
+
+      {modals.delete && (
+        <Modal
+          show={modals.delete}
+          onClose={() => closeModal("delete")}
+          title={`Deshironi ta fshini Monitorin: #${monitori.id}`}
+        >
+          <div className="modal-footer">
+            <button className="btn btn-danger" onClick={() => deleteMonitori()}>
+              Po, Fshij
+            </button>
+            <button
+              className="btn btn-secondary"
+              onClick={() => closeModal("delete")}
+            >
+              Jo, Mbyll
             </button>
           </div>
         </Modal>

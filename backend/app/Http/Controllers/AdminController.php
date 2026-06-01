@@ -179,9 +179,60 @@ class AdminController extends Controller
     }
 
     // ========== Monitorim Server ==========
+    private function checkAlarmi(array $data): array {
+        if (
+            (isset($data['cpu_perdorim'])  && $data['cpu_perdorim']  > 80) ||
+            (isset($data['ram_perdorim'])  && $data['ram_perdorim']  > 80)) 
+        {
+            $data['alarmi'] = true;
+        } else {
+            $data['alarmi'] = false;
+        }
+
+        return $data;
+    }
+
     public function getAllMonitorimServer(Request $request) {
         $monitoret = MonitorimServer::all();
         return response()->json($monitoret, 200);
+    }
+
+    public function createMonitorimServer(Request $request) {
+        $data = $request->validate([
+            'serveri_id'    => 'required|exists:servers,id',
+            'cpu_perdorim'  => 'required|numeric|min:0',
+            'ram_perdorim'  => 'required|numeric|min:0',
+            'disk_perdorim' => 'required|numeric|min:0',
+            'bandwidth'     => 'required|numeric|min:0',
+            'statusi'       => 'sometimes|in:monitoron,nuk monitoron',
+            'alarmi'        => 'sometimes|boolean',
+        ]);
+        $data = $this->checkAlarmi($data);
+
+        $monitori = MonitorimServer::create($data);
+        return response()->json($monitori, 201);
+    }
+    public function updateMonitorimServer(Request $request, int $id) {
+        $monitori = MonitorimServer::findOrFail($id);
+
+        $data = $request->validate([
+            'serveri_id'    => 'sometimes|exists:servers,id',
+            'cpu_perdorim'  => 'sometimes|numeric|min:0',
+            'ram_perdorim'  => 'sometimes|numeric|min:0',
+            'disk_perdorim' => 'sometimes|numeric|min:0',
+            'bandwidth'     => 'sometimes|numeric|min:0',
+            'statusi'       => 'sometimes|in:monitoron,nuk monitoron',
+            'alarmi'        => 'sometimes|boolean',
+        ]);
+        $data = $this->checkAlarmi($data);
+
+        $monitori->update($data);
+        return response()->json($monitori, 200);
+    }
+    public function deleteMonitorimServer(Request $request, int $id) {
+        $monitori = MonitorimServer::findOrFail($id);
+        $monitori->delete();
+        return response()->json("", 204);
     }
 
     // ========== Tiketa ==========

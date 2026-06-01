@@ -13,7 +13,8 @@ function LlogariHostingsForm({
   const handleChange = (field, value) => {
     setForm({
       ...form,
-      [field]: field === "abonimi_id" || field === "server_id" ? Number(value) : value,
+      [field]:
+        field === "abonimi_id" || field === "server_id" ? Number(value) : value,
     });
   };
 

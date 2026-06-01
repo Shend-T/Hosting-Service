@@ -63,10 +63,10 @@ function PaketaForm({ form, setForm, onSubmit, isEdit = false }) {
         label="Ka SSL?"
         value={form.ssl}
         name="ssl"
-        onChange={(v) => handleChange("ssl", v === "true")}
+        onChange={(v) => handleChange("ssl", Number(v))}
         options={[
-          { value: true, label: "Po" },
-          { value: false, label: "Jo" },
+          { value: 1, label: "Po" },
+          { value: 0, label: "Jo" },
         ]}
       />
 

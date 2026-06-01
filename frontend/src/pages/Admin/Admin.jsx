@@ -162,8 +162,8 @@ function Admin() {
                   </li>
                   <li className="nav-item">
                     <a
-                      className={`nav-link sidebar-link ${activePage === "tickets" ? "active" : ""}`}
-                      onClick={() => setActivePage("tickets")}
+                      className={`nav-link sidebar-link ${activePage === "monitorim-servers" ? "active" : ""}`}
+                      onClick={() => setActivePage("monitorim-servers")}
                     >
                       Monitoro Serveret
                     </a>

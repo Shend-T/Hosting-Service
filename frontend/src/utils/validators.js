@@ -25,15 +25,12 @@ export const validatePaketa = (form) => {
 
   if (!form.emri?.trim()) inputErrors += " Emri eshte i detyrushem";
   if (!form.pershkrimi?.trim()) inputErrors += " Pershkrimi eshte i detyrushem";
-  if (!form.hapesira_gb <= 0) inputErrors += " hapesira_gb eshte i detyrushem";
-  if (!form.bandwidth_gb <= 0)
-    inputErrors += " bandwidth_gb eshte i detyrushem";
-  if (!form.nr_domaineve <= 0)
-    inputErrors += " nr_domaineve eshte i detyrushem";
-  if (!form.nr_emaileve <= 0) inputErrors += " nr_emaileve eshte i detyrushem";
-  if (!form.cmimi_mujor <= 0) inputErrors += " cmimi_mujor eshte i detyrushem";
-  if (!form.cmimi_vjetor <= 0)
-    inputErrors += " cmimi_vjetor eshte i detyrushem";
+  if (form.hapesira_gb <= 0) inputErrors += " hapesira_gb eshte i detyrushem";
+  if (form.bandwidth_gb <= 0) inputErrors += " bandwidth_gb eshte i detyrushem";
+  if (form.nr_domaineve <= 0) inputErrors += " nr_domaineve eshte i detyrushem";
+  if (form.nr_emaileve <= 0) inputErrors += " nr_emaileve eshte i detyrushem";
+  if (form.cmimi_mujor <= 0) inputErrors += " cmimi_mujor eshte i detyrushem";
+  if (form.cmimi_vjetor <= 0) inputErrors += " cmimi_vjetor eshte i detyrushem";
 
   if (inputErrors.length !== 0) alert(inputErrors);
   return inputErrors.length === 0;

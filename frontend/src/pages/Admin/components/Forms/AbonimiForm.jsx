@@ -73,14 +73,14 @@ function AbonimiForm({
         value={form.klienti_id}
         name="klienti_id"
         onChange={(v) => handleChange("klienti_id", Number(v))}
-        options={klientetList}
+        options={[{ value: 0, label: "Zgjeth Klientin" }, ...klientetList]}
       />
       <Select
         label="Paketa"
         value={form.paketa_id}
         name="paketa_id"
         onChange={(v) => handleChange("paketa_id", Number(v))}
-        options={paketatList}
+        options={[{ value: 0, label: "Zgjeth Paketen" }, ...paketatList]}
       />
 
       <DateInput
@@ -94,10 +94,10 @@ function AbonimiForm({
         label="Auto Rinovim?"
         value={form.auto_rinovim}
         name="auto_rinovim"
-        onChange={(v) => handleChange("auto_rinovim", v === "true")}
+        onChange={(v) => handleChange("auto_rinovim", Number(v))}
         options={[
-          { value: true, label: "Po" },
-          { value: false, label: "Jo" },
+          { value: 1, label: "Po" },
+          { value: 0, label: "Jo" },
         ]}
       />
       <Select

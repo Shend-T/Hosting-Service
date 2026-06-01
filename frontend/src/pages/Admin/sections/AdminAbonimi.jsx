@@ -107,8 +107,6 @@ function AdminAbonimi() {
           onClick={() => {
             setAbonimiForm({
               ...abonimiForm,
-              klienti_id: klientet[0].id,
-              paketa_id: paketat[0].id,
               cmimi: Number(paketat[0].cmimi_mujor),
             });
             openModal("create");

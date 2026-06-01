@@ -74,6 +74,9 @@ Route::middleware(['auth:sanctum', 'admin'])->prefix('admin')->group(function ()
     Route::delete('/abonimi/{id}', [AdminController::class, "deleteAbonimi"]);
 
     Route::get('/monitorim-servers', [AdminController::class, "getAllMonitorimServer"]);
+    Route::post('/monitorim-servers', [AdminController::class, "createMonitorimServer"]);
+    Route::put('/monitorim-servers/{id}', [AdminController::class, "updateMonitorimServer"]);
+    Route::delete('/monitorim-servers/{id}', [AdminController::class, 'deleteMonitorimServer']);
 
     // ✅ Admin Tiketa routes (we will add these)
     Route::get('/tiketa', [AdminController::class, 'getAllTiketa']);

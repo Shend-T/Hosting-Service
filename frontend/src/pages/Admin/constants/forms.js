@@ -37,4 +37,9 @@ export const ABONIMI_FORM = {
 export const MONITORIM_SERVERS_FORM = {
   serveri_id: 0,
   statusi: "nuk monitoron",
+  cpu_perdorim: 0,
+  ram_perdorim: 0,
+  disk_perdorim: 0,
+  bandwidth: 0,
+  alarmi: false,
 };

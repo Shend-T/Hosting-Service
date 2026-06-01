@@ -156,9 +156,9 @@ function AdminPaketa() {
                     <button
                       className="table-btn btn btn-warning m-2"
                       onClick={() => {
-                        openModal("update");
                         setPaketa(paketa);
                         setPaketaForm(paketa);
+                        openModal("update");
                       }}
                     >
                       Perditso

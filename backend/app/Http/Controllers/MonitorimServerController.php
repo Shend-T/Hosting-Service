@@ -30,7 +30,6 @@ class MonitorimServerController extends Controller
             'disk_perdorim' => 'required|numeric|min:0',
             'bandwidth'     => 'required|numeric|min:0',
             'statusi'       => 'sometimes|in:monitoron,nuk-monitoron',
-            // 'statusi'       => 'sometimes|in:normal,warning,kritik',
             'alarmi'        => 'sometiemes|boolean',
         ]);
 
