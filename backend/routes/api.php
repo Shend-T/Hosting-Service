@@ -73,6 +73,25 @@ Route::middleware(['auth:sanctum', 'admin'])->prefix('admin')->group(function ()
     Route::delete('/abonimi/{id}', [AdminController::class, "deleteAbonimi"]);
 
     Route::get('/monitorim-servers', [AdminController::class, "getAllMonitorimServer"]);
+
+    // ✅ Admin Tiketa routes (we will add these)
+    Route::get('/tiketa', [AdminController::class, 'getAllTiketa']);
+    Route::get('/tiketa/{id}', [AdminController::class, 'getTiketi']);
+    Route::post('/tiketa', [AdminController::class, 'createTiketi']);
+    Route::put('/tiketa/{id}', [AdminController::class, 'updateTiketi']);
+    Route::delete('/tiketa/{id}', [AdminController::class, 'deleteTiketi']);
+
+    // ✅ Admin Pergjigjet routes
+    Route::get('/pergjigjet', [AdminController::class, 'getAllPergjigjet']);
+    Route::post('/pergjigjet', [AdminController::class, 'createPergjigje']);
+    Route::delete('/pergjigjet/{id}', [AdminController::class, 'deletePergjigje']);
+
+    // ✅ Admin Faturat routes
+    Route::get('/faturat', [AdminController::class, 'getAllFaturat']);
+    Route::get('/faturat/{id}', [AdminController::class, 'getFaktura']);
+    Route::post('/faturat', [AdminController::class, 'createFaktura']);
+    Route::put('/faturat/{id}', [AdminController::class, 'updateFaktura']);
+    Route::delete('/faturat/{id}', [AdminController::class, 'deleteFaktura']);
 });
 
 Route::get('/servers', [ServerController::class, 'index']);  // Lexo krejt serverat
