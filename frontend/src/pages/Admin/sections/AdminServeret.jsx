@@ -66,7 +66,8 @@ function AdminServeret() {
     let inputErrors = "";
 
     if (!form.emri?.trim()) inputErrors += " Emri eshte i detyrushem";
-    if (!form.ip_adresa?.trim()) inputErrors += " IP adresa eshte e detyrueshme";
+    if (!form.ip_adresa?.trim())
+      inputErrors += " IP adresa eshte e detyrueshme";
     if (!form.lokacioni?.trim()) inputErrors += " Lokacioni eshte i detyrushem";
     if (!form.ram_gb || form.ram_gb < 1)
       inputErrors += " RAM duhet te jete te pakten 1 GB";

@@ -9,7 +9,7 @@ use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 
 use App\Models\Abonimi;
-use App\Models\Klienti;
+use App\Models\LlogariHostings;
 
 #[Signature('app:check-abonimi-skaduar')]
 #[Description('Kontrollo abonimet e skaduara, \n Ne rast se abonimi ka `auto_rinovim = true` ateher provojm te marrim nga klienti fonded e duhura per ta vazhduar abonimin. Nese fonded nuk mjaftojne abonimi ndalet. \n Ne rast se abonimi ka `auto_rinovim = false` ateher abonimi skadohet')]
@@ -54,17 +54,35 @@ class CheckAbonimiSkaduar extends Command
                         $a->save();
 
                         $this->info("Abonimi i rinovua per klientin {$klienti->id}. Bilanci tash: {$klienti->bilanci}");
+
+                        $llogariHosting = LlogariHostings::where('abonimi_id', $a->id)->first();
+                        if($llogariHosting) {
+                            $llogariHosting->statusi = 'aktiv';
+                            $llogariHosting->save();
+                        }
                     } else {
                         $a->statusi = 'skaduar';
                         $a->save();
 
                         $this->info("Klienti {$klienti->id}. Nuk ka bilanc te mjaftueshem: {$klienti->bilanci}");
+
+                        $llogariHosting = LlogariHostings::where('abonimi_id', $a->id)->first();
+                        if($llogariHosting) {
+                            $llogariHosting->statusi = 'jo-aktiv';
+                            $llogariHosting->save();
+                        }
                     }
                 } else {
                     $a->statusi = 'skaduar';
                     $a->save();
 
                     $this->info("Abonimi {$a->id} skadoi per klientin {$klienti->id}");
+
+                    $llogariHosting = LlogariHostings::where('abonimi_id', $a->id)->first();
+                    if($llogariHosting) {
+                        $llogariHosting->statusi = 'jo-aktiv';
+                        $llogariHosting->save();
+                    }
                 }
             }
         });

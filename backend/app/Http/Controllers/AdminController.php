@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
 use App\Models\Klienti;
 use App\Models\Paketa;
 use App\Models\Abonimi;
@@ -137,39 +139,89 @@ class AdminController extends Controller
         return response()->json($abonimi, 200);
     }
 
+    private function dynamicLlogariHosting(Abonimi $abonimi, string $newStatusi) {
+        $llogariHosting = LlogariHostings::where('abonimi_id', $abonimi->id)->first();
+        if($llogariHosting) {
+            if (in_array($newStatusi, ['pritje', 'skaduar', 'ndalur', 'suspenduar'])) {
+                $llogariHosting->statusi = 'jo-aktiv';
+                $llogariHosting->save();
+            } else {
+                $llogariHosting->statusi = 'aktiv';
+                $llogariHosting->save();
+            }
+        } else {
+            $paketaStorage = $abonimi->paketa->hapesira_gb;
+
+            $server = Servers::where('statusi', 'aktiv')
+                ->get()
+                ->first(function ($server) use ($paketaStorage) {
+                    $totalStorageGb = $server->hapesira_tb * 1024;
+                    $usedStorageGb  = $server->llogariHostings()->sum('hapesira_perdorur');
+                    $freeStorageGb  = $totalStorageGb - $usedStorageGb;
+                    return $freeStorageGb >= $paketaStorage;
+                });
+
+            if (!$server) {
+                throw new \Exception('Nuk ka server te lire per kete abonim');
+            }
+
+            LlogariHostings::create([
+                'abonimi_id'        => $abonimi->id,
+                'server_id'         => $server->id,
+                'username'          => strtolower($abonimi->klienti->emri . $abonimi->klienti->mbiemri . $abonimi->klienti->id),
+                'hapesira_perdorur' => rand(0, $abonimi->paketa->hapesira_gb),
+                'bandwith_perdorur' => rand(0, $abonimi->paketa->bandwidth_gb),
+                'statusi'           => ($abonimi->statusi === "aktiv") ? 'aktiv' : 'jo-aktiv',
+                'ip_dedikuar'       => $server->ip_adresa,
+                'data_krijimit'     => now()
+            ]);
+        }
+    }
+
     public function createAbonimi(Request $request) {
         $data = $request->validate([
             'klienti_id'    => 'required|exists:klienti,id',
             'paketa_id'     => 'required|exists:paketa,id',
             'data_fillimit' => 'required|date',
             'data_skadimit' => 'required|date|after_or_equal:data_fillimit',
-            'statusi'       => 'sometimes|in:pritje,aktiv,suspenduar,skaduar,ndalur',
+            'statusi'       => 'required|in:pritje,aktiv,suspenduar,skaduar,ndalur',
             'cmimi'         => 'required|numeric',
             'periudha'      => 'required|in:mujore,vjetore',
             'auto_rinovim'  => 'sometimes|boolean'
         ]);
 
-        $abonimi = Abonimi::create($data);
-        return response()->json($abonimi, 201);
+        DB::transaction(function () use ($data) {
+            $abonimi = Abonimi::create($data);
+            $abonimi->load('paketa', 'klienti');
+            $this->dynamicLlogariHosting($abonimi, $data['statusi']);
+            
+            return response()->json($abonimi, 201);
+        });
     }
 
     public function updateAbonimi(Request $request, int $id) {
-        $abonimi = Abonimi::findOrFail($id);
-
         $data = $request->validate([
             'klienti_id'    => 'required|exists:klienti,id',
             'paketa_id'     => 'required|exists:paketa,id',
             'data_fillimit' => 'required|date',
             'data_skadimit' => 'required|date|after_or_equal:data_fillimit',
-            'statusi'       => 'sometimes|in:pritje,aktiv,suspenduar,skaduar,ndalur',
+            'statusi'       => 'required|in:pritje,aktiv,suspenduar,skaduar,ndalur',
             'cmimi'         => 'required|numeric',
             'periudha'      => 'required|in:mujore,vjetore',
             'auto_rinovim'  => 'sometimes|boolean'
         ]);
 
-        $abonimi->update($data);
+        DB::transaction(function () use ($data, $id) {
+            $abonimi = Abonimi::findOrFail($id);
+            $abonimi->update($data);
+            $abonimi->load('paketa', 'klienti');
+            $this->dynamicLlogariHosting($abonimi, $data['statusi']);
+            
+            return response()->json($abonimi, 201);
+        });
+        // $abonimi->update($data);
 
-        return response()->json($abonimi, 200);
+        // return response()->json($abonimi, 200);
     }
 
     public function deleteAbonimi(Request $request, int $id) {
