@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\DB;
 
 use App\Models\Abonimi;
 use App\Models\LlogariHostings;
+use App\Models\Domain;
 
 #[Signature('app:check-abonimi-skaduar')]
 #[Description('Kontrollo abonimet e skaduara, \n Ne rast se abonimi ka `auto_rinovim = true` ateher provojm te marrim nga klienti fonded e duhura per ta vazhduar abonimin. Nese fonded nuk mjaftojne abonimi ndalet. \n Ne rast se abonimi ka `auto_rinovim = false` ateher abonimi skadohet')]
@@ -59,6 +60,13 @@ class CheckAbonimiSkaduar extends Command
                         if($llogariHosting) {
                             $llogariHosting->statusi = 'aktiv';
                             $llogariHosting->save();
+
+                            $domains = Domain::where("llogari_hostings_id", $llogariHosting->id)
+                                ->get();
+                            foreach($domains as $d) {
+                                $d->statusi = "aktiv";
+                                $d->save();
+                            }
                         }
                     } else {
                         $a->statusi = 'skaduar';
@@ -70,6 +78,12 @@ class CheckAbonimiSkaduar extends Command
                         if($llogariHosting) {
                             $llogariHosting->statusi = 'jo-aktiv';
                             $llogariHosting->save();
+                            $domains = Domain::where("llogari_hostings_id", $llogariHosting->id)
+                                ->get();
+                            foreach($domains as $d) {
+                                $d->statusi = "jo-aktiv";
+                                $d->save();
+                            }
                         }
                     }
                 } else {
@@ -82,6 +96,13 @@ class CheckAbonimiSkaduar extends Command
                     if($llogariHosting) {
                         $llogariHosting->statusi = 'jo-aktiv';
                         $llogariHosting->save();
+                        
+                        $domains = Domain::where("llogari_hostings_id", $llogariHosting->id)
+                            ->get();
+                        foreach($domains as $d) {
+                            $d->statusi = "jo-aktiv";
+                            $d->save();
+                        }
                     }
                 }
             }
