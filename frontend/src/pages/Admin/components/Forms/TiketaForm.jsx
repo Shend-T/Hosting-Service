@@ -1,8 +1,14 @@
-import React from "react";
-import Input from "./Common/Input";
+import React, { useEffect, useState } from "react";
 import Select from "./Common/Select";
+import useAdminCrud from "../../../../hooks/useAdminCrud";
 
 function TiketaForm({ form, setForm, onSubmit, isEdit = false }) {
+  const { data: klientet, getAll } = useAdminCrud("klienti");
+
+  useEffect(() => {
+    getAll();
+  }, []);
+
   const handleChange = (field, value) => {
     setForm({
       ...form,
@@ -12,31 +18,56 @@ function TiketaForm({ form, setForm, onSubmit, isEdit = false }) {
 
   return (
     <form onSubmit={onSubmit}>
-      <Input
-        label="Klienti ID"
-        type="number"
-        value={form.klienti_id}
-        name="klienti_id"
-        onChange={(v) => handleChange("klienti_id", Number(v))}
-      />
-      <Input
-        label="Titulli"
-        value={form.titulli}
-        name="titulli"
-        onChange={(v) => handleChange("titulli", v)}
-      />
-      <Input
-        label="Pershkrimi"
-        value={form.pershkrimi}
-        name="pershkrimi"
-        onChange={(v) => handleChange("pershkrimi", v)}
-      />
-      <Input
-        label="Kategoria"
-        value={form.kategoria}
-        name="kategoria"
-        onChange={(v) => handleChange("kategoria", v)}
-      />
+      <div className="mb-3">
+        <label className="form-label">Klienti</label>
+        <select
+          className="form-select"
+          value={form.klienti_id}
+          onChange={(e) => handleChange("klienti_id", Number(e.target.value))}
+          required
+        >
+          <option value="">-- Zgjedh Klientin --</option>
+          {klientet && klientet.map((k) => (
+            <option key={k.id} value={k.id}>
+              #{k.id} - {k.emri} {k.mbiemri} 
+            </option>
+          ))}
+        </select>
+      </div>
+
+      <div className="mb-3">
+        <label className="form-label">Titulli</label>
+        <input
+          type="text"
+          className="form-control"
+          value={form.titulli}
+          onChange={(e) => handleChange("titulli", e.target.value)}
+          required
+        />
+      </div>
+
+      <div className="mb-3">
+        <label className="form-label">Pershkrimi</label>
+        <input
+          type="text"
+          className="form-control"
+          value={form.pershkrimi}
+          onChange={(e) => handleChange("pershkrimi", e.target.value)}
+          required
+        />
+      </div>
+
+      <div className="mb-3">
+        <label className="form-label">Kategoria</label>
+        <input
+          type="text"
+          className="form-control"
+          value={form.kategoria}
+          onChange={(e) => handleChange("kategoria", e.target.value)}
+          required
+        />
+      </div>
+
       <Select
         label="Prioriteti"
         value={form.prioriteti}
@@ -60,7 +91,7 @@ function TiketaForm({ form, setForm, onSubmit, isEdit = false }) {
           { value: "mbyllur", label: "Mbyllur" },
         ]}
       />
-      <button className="btn btn-primary" type="submit">
+      <button className="btn btn-primary mt-2" type="submit">
         {isEdit ? "Perditso Tiketin" : "Shto Tiketin"}
       </button>
     </form>
