@@ -261,4 +261,16 @@ class AdminController extends Controller
         Faktura::findOrFail($id)->delete();
         return response()->json("", 204);
     }
+    
+    public function updatePergjigje(Request $request, int $id) {
+    $pergjigja = PergjigjaTiketi::findOrFail($id);
+    $data = $request->validate([
+        'autori'    => 'sometimes|string|max:100',
+        'mesazhi'   => 'sometimes|string',
+        'pergjigja' => 'sometimes|string',
+        'lloji'     => 'sometimes|in:klient,admin',
+    ]);
+    $pergjigja->update($data);
+    return response()->json($pergjigja, 200);
+}
 }

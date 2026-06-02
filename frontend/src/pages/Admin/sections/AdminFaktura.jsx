@@ -7,27 +7,29 @@ import Loader from "../../../components/Common/Loader";
 import { useEscapeKey } from "../../../hooks/useEscapeKey";
 import useAdminCrud from "../../../hooks/useAdminCrud";
 
-import PergjigjetForm from "../components/Forms/PergjigjetForm";
-import PergjigjetDisplay from "../components/Display/PergjigjetDisplay";
+import FakturaForm from "../components/Forms/FakturaForm";
+import FakturaDisplay from "../components/Display/FakturaDisplay";
 
 const FORM = {
-  tiketi_id: 0,
-  autori: "",
-  mesazhi: "",
-  pergjigja: "",
-  lloji: "klient",
+  klienti_id: 0,
+  abonimi_id: 0,
+  shuma: 0,
+  data_leshimit: "",
+  data_skadimit: "",
+  statusi: "papaguar",
+  pershkrimi: "",
 };
 
-function AdminPergjigjet() {
+function AdminFaktura() {
   const {
-    data: pergjigjet,
+    data: faturat,
     error,
     loading,
     getAll,
     create,
     update,
     remove,
-  } = useAdminCrud("pergjigjet");
+  } = useAdminCrud("faturat");
 
   const [showErrorModal, setShowErrorModal] = useState(false);
   useEscapeKey(showErrorModal, () => setShowErrorModal(false));
@@ -40,100 +42,95 @@ function AdminPergjigjet() {
     getAll();
   }, []);
 
-  // View modal
-  const [pergjigja, setPergjigja] = useState(null);
+  const [faktura, setFaktura] = useState(null);
   const [showViewModal, setShowViewModal] = useState(false);
   useEscapeKey(showViewModal, () => setShowViewModal(false));
 
-  // Create modal
-  const [pergjigjetForm, setPergjigjetForm] = useState(FORM);
+  const [fakturaForm, setFakturaForm] = useState(FORM);
   const [showCreateModal, setShowCreateModal] = useState(false);
-  const createPergjigje = async (e) => {
+  const createFaktura = async (e) => {
     e.preventDefault();
-    create(pergjigjetForm);
+    create(fakturaForm);
     setShowCreateModal(false);
-    setPergjigjetForm(FORM);
+    setFakturaForm(FORM);
   };
   useEscapeKey(showCreateModal, () => {
     setShowCreateModal(false);
-    setPergjigjetForm(FORM);
+    setFakturaForm(FORM);
   });
 
-  // Update modal
-  const [pergjigjetUpdateForm, setPergjigjetUpdateForm] = useState(null);
+  const [fakturaUpdateForm, setFakturaUpdateForm] = useState(null);
   const [showUpdateModal, setShowUpdateModal] = useState(false);
-  const updatePergjigje = async (e) => {
+  const updateFaktura = async (e) => {
     e.preventDefault();
-    update(pergjigja.id, pergjigjetUpdateForm);
+    update(faktura.id, fakturaUpdateForm);
     setShowUpdateModal(false);
-    setPergjigja(null);
-    setPergjigjetUpdateForm(null);
+    setFaktura(null);
+    setFakturaUpdateForm(null);
   };
   useEscapeKey(showUpdateModal, () => {
     setShowUpdateModal(false);
-    setPergjigja(null);
-    setPergjigjetUpdateForm(null);
+    setFaktura(null);
+    setFakturaUpdateForm(null);
   });
 
-  // Delete modal
   const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const deletePergjigje = async () => {
-    remove(pergjigja.id);
+  const deleteFaktura = async () => {
+    remove(faktura.id);
     setShowDeleteModal(false);
-    setPergjigja(null);
+    setFaktura(null);
   };
   useEscapeKey(showDeleteModal, () => {
     setShowDeleteModal(false);
-    setPergjigja(null);
+    setFaktura(null);
   });
 
   if (loading) return <Loader />;
 
   return (
     <div>
-      <h1>Pergjigjet e Tiketave</h1>
-      <button
-        className="btn btn-primary"
-        onClick={() => setShowCreateModal(true)}
-      >
-        Shto Pergjigje
+      <h1>Faturat</h1>
+      <button className="btn btn-primary" onClick={() => setShowCreateModal(true)}>
+        Shto Fature
       </button>
 
-      {pergjigjet && (
+      {faturat && (
         <div className="table-responsive-md">
           <table className="table text-center fs-5">
             <thead>
               <tr>
                 <th>#</th>
-                <th>Tiketi ID</th>
-                <th>Autori</th>
-                <th>Lloji</th>
-                <th>Mesazhi</th>
-                <th>Data Hapjes</th>
+                <th>Klienti ID</th>
+                <th>Abonimi ID</th>
+                <th>Shuma</th>
+                <th>Statusi</th>
+                <th>Data Leshimit</th>
+                <th>Data Skadimit</th>
                 <th>Aksionet</th>
               </tr>
             </thead>
             <tbody>
-              {pergjigjet.map((p) => (
+              {faturat.map((f) => (
                 <tr
-                  key={p.id}
+                  key={f.id}
                   onClick={() => {
-                    setPergjigja(p);
+                    setFaktura(f);
                     setShowViewModal(true);
                   }}
                 >
-                  <td>{p.id}</td>
-                  <td>{p.tiketi_id}</td>
-                  <td>{p.autori}</td>
-                  <td>{p.lloji}</td>
-                  <td>{p.mesazhi?.slice(0, 30)}...</td>
-                  <td>{p.data_hapjes?.slice(0, 10)}</td>
+                  <td>#INV-{String(f.id).padStart(4, "0")}</td>
+                  <td>{f.klienti_id}</td>
+                  <td>#AB-{String(f.abonimi_id).padStart(5, "0")}</td>
+                  <td>€{Number(f.shuma).toFixed(2)}</td>
+                  <td>{f.statusi}</td>
+                  <td>{f.data_leshimit?.slice(0, 10)}</td>
+                  <td>{f.data_skadimit?.slice(0, 10) || "—"}</td>
                   <td onClick={(e) => e.stopPropagation()}>
                     <button
                       className="table-btn btn btn-warning m-2"
                       onClick={() => {
-                        setPergjigja(p);
-                        setPergjigjetUpdateForm(p);
+                        setFaktura(f);
+                        setFakturaUpdateForm(f);
                         setShowUpdateModal(true);
                       }}
                     >
@@ -142,7 +139,7 @@ function AdminPergjigjet() {
                     <button
                       className="table-btn btn btn-danger"
                       onClick={() => {
-                        setPergjigja(p);
+                        setFaktura(f);
                         setShowDeleteModal(true);
                       }}
                     >
@@ -156,14 +153,14 @@ function AdminPergjigjet() {
         </div>
       )}
 
-      {showViewModal && pergjigja && (
+      {showViewModal && faktura && (
         <Modal
           show={showViewModal}
           onClose={() => setShowViewModal(false)}
-          title={`Pergjigja: #${pergjigja.id}`}
+          title={`Faktura: #INV-${String(faktura.id).padStart(4, "0")}`}
         >
           <div className="modal-body">
-            <PergjigjetDisplay pergjigja={pergjigja} />
+            <FakturaDisplay faktura={faktura} />
           </div>
           <div className="modal-footer">
             <button className="btn btn-secondary" onClick={() => setShowViewModal(false)}>
@@ -177,13 +174,13 @@ function AdminPergjigjet() {
         <Modal
           show={showCreateModal}
           onClose={() => setShowCreateModal(false)}
-          title="Shto Pergjigje"
+          title="Shto Fature"
         >
           <div className="modal-body">
-            <PergjigjetForm
-              form={pergjigjetForm}
-              setForm={setPergjigjetForm}
-              onSubmit={createPergjigje}
+            <FakturaForm
+              form={fakturaForm}
+              setForm={setFakturaForm}
+              onSubmit={createFaktura}
             />
           </div>
           <div className="modal-footer">
@@ -194,17 +191,17 @@ function AdminPergjigjet() {
         </Modal>
       )}
 
-      {showUpdateModal && pergjigja && (
+      {showUpdateModal && faktura && (
         <Modal
           show={showUpdateModal}
           onClose={() => setShowUpdateModal(false)}
-          title={`Perditso Pergjigjen: #${pergjigja.id}`}
+          title={`Perditso Faturën: #INV-${String(faktura.id).padStart(4, "0")}`}
         >
           <div className="modal-body">
-            <PergjigjetForm
-              form={pergjigjetUpdateForm}
-              setForm={setPergjigjetUpdateForm}
-              onSubmit={updatePergjigje}
+            <FakturaForm
+              form={fakturaUpdateForm}
+              setForm={setFakturaUpdateForm}
+              onSubmit={updateFaktura}
               isEdit={true}
             />
           </div>
@@ -216,14 +213,14 @@ function AdminPergjigjet() {
         </Modal>
       )}
 
-      {showDeleteModal && pergjigja && (
+      {showDeleteModal && faktura && (
         <Modal
           show={showDeleteModal}
           onClose={() => setShowDeleteModal(false)}
-          title={`Deshironi ta fshini pergjigjen: #${pergjigja.id}`}
+          title={`Deshironi ta fshini faturën: #INV-${String(faktura.id).padStart(4, "0")}`}
         >
           <div className="modal-footer">
-            <button className="btn btn-danger" onClick={() => deletePergjigje()}>
+            <button className="btn btn-danger" onClick={() => deleteFaktura()}>
               Po, Fshij
             </button>
             <button className="btn btn-secondary" onClick={() => setShowDeleteModal(false)}>
@@ -246,4 +243,4 @@ function AdminPergjigjet() {
   );
 }
 
-export default AdminPergjigjet;
+export default AdminFaktura;

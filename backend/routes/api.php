@@ -45,18 +45,15 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/domains/user', [DomainController::class, 'userDomains']);
     Route::post('/domains/user', [DomainController::class, 'userStore']);
 
-    // ✅ Tiketa
     Route::get('/tiketa', [TiketiController::class, 'index']);
     Route::get('/tiketa/{id}', [TiketiController::class, 'show']);
     Route::post('/tiketa', [TiketiController::class, 'store']);
     Route::put('/tiketa/{id}', [TiketiController::class, 'update']);
     Route::delete('/tiketa/{id}', [TiketiController::class, 'destroy']);
 
-    // ✅ Pergjigjet e tiketave
     Route::post('/pergjigja_tiketi', [PergjigjaTiketiController::class, 'store']);
     Route::delete('/pergjigja_tiketi/{id}', [PergjigjaTiketiController::class, 'destroy']);
 
-    // ✅ Faturat
     Route::get('/faturat', [FakturaController::class, 'index']);
     Route::get('/faturat/{id}', [FakturaController::class, 'show']);
     Route::post('/faturat', [FakturaController::class, 'store']);
@@ -64,7 +61,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete('/faturat/{id}', [FakturaController::class, 'destroy']);
 });
 
-// Admin Auth
 Route::post('/admin/login', [AdminAuthController::class, 'login']);
 
 Route::middleware(['auth:sanctum', 'admin'])->prefix('admin')->group(function () {
@@ -87,19 +83,17 @@ Route::middleware(['auth:sanctum', 'admin'])->prefix('admin')->group(function ()
     Route::get('/abonimi/{id}', [AdminController::class, 'getAbonimi']);
     Route::delete('/abonimi/{id}', [AdminController::class, 'deleteAbonimi']);
 
-    // ✅ Admin Tiketa routes (we will add these)
     Route::get('/tiketa', [AdminController::class, 'getAllTiketa']);
     Route::get('/tiketa/{id}', [AdminController::class, 'getTiketi']);
     Route::post('/tiketa', [AdminController::class, 'createTiketi']);
     Route::put('/tiketa/{id}', [AdminController::class, 'updateTiketi']);
     Route::delete('/tiketa/{id}', [AdminController::class, 'deleteTiketi']);
 
-    // ✅ Admin Pergjigjet routes
     Route::get('/pergjigjet', [AdminController::class, 'getAllPergjigjet']);
     Route::post('/pergjigjet', [AdminController::class, 'createPergjigje']);
+    Route::put('/pergjigjet/{id}', [AdminController::class, 'updatePergjigje']);
     Route::delete('/pergjigjet/{id}', [AdminController::class, 'deletePergjigje']);
 
-    // ✅ Admin Faturat routes
     Route::get('/faturat', [AdminController::class, 'getAllFaturat']);
     Route::get('/faturat/{id}', [AdminController::class, 'getFaktura']);
     Route::post('/faturat', [AdminController::class, 'createFaktura']);
