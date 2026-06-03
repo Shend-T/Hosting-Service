@@ -92,10 +92,7 @@ function AdminPergjigjet() {
   return (
     <div>
       <h1>Pergjigjet e Tiketave</h1>
-      <button
-        className="btn btn-primary"
-        onClick={() => setShowCreateModal(true)}
-      >
+      <button className="btn btn-primary" onClick={() => setShowCreateModal(true)}>
         Shto Pergjigje
       </button>
 

@@ -68,7 +68,7 @@ function Servers() {
     }
   };
 
-  // Calculate storage usage percentage
+  // Kalkulo perqindjen e hapesires se perdorur
   const getStoragePercent = (used, total) => {
     if (!total) return 0;
     return Math.min(Math.round((used / total) * 100), 100);

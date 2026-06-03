@@ -9,6 +9,8 @@ backend/storage/framework/*
 backend/bootstrap/cache/*
 backend/public/storage
 
+backend/app/Console/Commands/CheckActiveAbonimi.php
+
 # Frontend modules
 frontend/node_modules
 # frontend/public

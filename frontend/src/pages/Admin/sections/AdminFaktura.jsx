@@ -42,10 +42,12 @@ function AdminFaktura() {
     getAll();
   }, []);
 
+  // View modal
   const [faktura, setFaktura] = useState(null);
   const [showViewModal, setShowViewModal] = useState(false);
   useEscapeKey(showViewModal, () => setShowViewModal(false));
 
+  // Create modal
   const [fakturaForm, setFakturaForm] = useState(FORM);
   const [showCreateModal, setShowCreateModal] = useState(false);
   const createFaktura = async (e) => {
@@ -59,6 +61,7 @@ function AdminFaktura() {
     setFakturaForm(FORM);
   });
 
+  // Update modal
   const [fakturaUpdateForm, setFakturaUpdateForm] = useState(null);
   const [showUpdateModal, setShowUpdateModal] = useState(false);
   const updateFaktura = async (e) => {
@@ -74,6 +77,7 @@ function AdminFaktura() {
     setFakturaUpdateForm(null);
   });
 
+  // Delete modal
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const deleteFaktura = async () => {
     remove(faktura.id);

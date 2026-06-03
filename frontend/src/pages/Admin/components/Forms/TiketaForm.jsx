@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import Select from "./Common/Select";
 import useAdminCrud from "../../../../hooks/useAdminCrud";
 
@@ -29,7 +29,7 @@ function TiketaForm({ form, setForm, onSubmit, isEdit = false }) {
           <option value="">-- Zgjedh Klientin --</option>
           {klientet && klientet.map((k) => (
             <option key={k.id} value={k.id}>
-              #{k.id} - {k.emri} {k.mbiemri} 
+              #{k.id} - {k.emri} {k.mbiemri}
             </option>
           ))}
         </select>

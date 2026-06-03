@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Models\Server;
+use App\Models\Servers;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -25,7 +25,7 @@ class MonitorimServer extends Model
 
     public function server()
     {
-        return $this->belongsTo(Server::class, 'serveri_id');
+        return $this->belongsTo(Servers::class, 'serveri_id');
     }
 }
 

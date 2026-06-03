@@ -4,21 +4,21 @@ import axios from "axios";
 import Modal from "../../../components/Common/Modal";
 import ErrorModal from "../../../components/Error/ErrorModal";
 import Loader from "../../../components/Common/Loader";
+import ProgressBar from "../components/ProgressBar";
 
-import { KLIENTI_FORM } from "../constants/forms";
+import { MONITORIM_SERVERS_FORM } from "../constants/forms";
 
-import { validateKlienti } from "../../../utils/validators";
-import { getStatusBadgeKlienti } from "../../../utils/statusUtils";
+import { getStatusBadgeMonitori } from "../../../utils/statusUtils";
 
 import { useEscapeKey } from "../../../hooks/useEscapeKey";
 import useAdminCrud from "../../../hooks/useAdminCrud";
 
-import KlientiForm from "../components/Forms/KlientiForm";
-import KlientiDisplay from "../components/Display/KlientiDisplay";
+import MonitorimServersForm from "../components/Forms/MonitorimServersForm";
+import MonitorimServersDisplay from "../components/Display/MonitorimServersDisplay";
 
-function AdminKlienti() {
+function AdminMonitorimServers() {
   const {
-    data: klientet,
+    data: monitoret,
     error,
     loading,
     getAll,
@@ -26,7 +26,8 @@ function AdminKlienti() {
     create,
     update,
     remove,
-  } = useAdminCrud("klienti");
+  } = useAdminCrud("monitorim-servers");
+  const { data: serveret, getAll: getAllServeret } = useAdminCrud("servers");
 
   const [modals, setModals] = useState({
     show: false,
@@ -39,9 +40,9 @@ function AdminKlienti() {
   const openModal = (name) => setModals({ ...modals, [name]: true });
   const closeModal = (name) => {
     setModals({ ...modals, [name]: false });
-    setKlienti(null);
-    setKlientiForm(KLIENTI_FORM);
-    setKlientiUpdateForm(null);
+    setMonitori(null);
+    setMonitoriForm(MONITORIM_SERVERS_FORM);
+    // setKlientiUpdateForm(null);
   };
 
   useEffect(() => {
@@ -52,29 +53,28 @@ function AdminKlienti() {
 
   useEffect(() => {
     getAll();
+    getAllServeret();
   }, []);
 
-  const [klienti, setKlienti] = useState(null);
-  const [klientiForm, setKlientiForm] = useState(KLIENTI_FORM);
-  const createKlienti = async (e) => {
-    e.preventDefault();
-    if (!validateKlienti(klientiForm, false)) return;
+  const [monitori, setMonitori] = useState(null);
+  const [monitoriForm, setMonitoriForm] = useState(MONITORIM_SERVERS_FORM);
 
-    create(klientiForm);
+  const createMonitori = async (e) => {
+    e.preventDefault();
+
+    create(monitoriForm);
     closeModal("create");
   };
 
-  const [klientiUpdateForm, setKlientiUpdateForm] = useState(null);
-  const updateKlienti = async (e) => {
+  const updateMonitori = async (e) => {
     e.preventDefault();
-    if (!validateKlienti(klientiUpdateForm, true)) return;
 
-    update(klienti.id, klientiUpdateForm);
+    update(monitori.id, monitoriForm);
     closeModal("update");
   };
 
-  const deleteKlienti = async () => {
-    remove(klienti.id);
+  const deleteMonitori = async () => {
+    remove(monitori.id);
     closeModal("delete");
   };
 
@@ -86,9 +86,8 @@ function AdminKlienti() {
       delete: false,
       error: false,
     });
-    setKlienti(null);
-    setKlientiForm(KLIENTI_FORM);
-    setKlientiUpdateForm(null);
+    setMonitori(null);
+    setMonitoriForm(MONITORIM_SERVERS_FORM);
   });
 
   if (loading) {
@@ -98,67 +97,89 @@ function AdminKlienti() {
   return (
     <div>
       <>
-        <h1>Klientet</h1>
-        <button className="btn btn-primary" onClick={() => openModal("create")}>
-          Shto Klient
+        <h1>Monitoro Serveret</h1>
+        <button
+          className="btn btn-primary"
+          onClick={() => {
+            openModal("create");
+          }}
+        >
+          Shto Monitorim Serveri
         </button>
       </>
 
-      {klientet && (
+      {monitoret && (
         <div className="table-responsive-md">
           <table className="table text-center align-middle fs-5">
             <thead>
               <tr>
                 <th scope="col">#</th>
-                <th scope="col">Emri</th>
-                <th scope="col">Mbiemri</th>
-                <th scope="col">Kompania</th>
-                <th scope="col">Email</th>
-                <th scope="col">Telefoni</th>
-                <th scope="col">Adresa</th>
-                <th scope="col">Bilanci</th>
+                <th scope="col"># Serveri</th>
+                <th scope="col">CPU Perdorim %</th>
+                <th scope="col">RAM Perdorim %</th>
+                <th scope="col">Disk Perdorim %</th>
+                <th scope="col">Bandwidth GB</th>
                 <th scope="col">Statusi</th>
-                <th scope="col">Data Regjistrimit</th>
+                <th scope="col">Alarmi</th>
                 <th scope="col">Aksionet</th>
-                {/* Spo di term ma tmir se aksionet */}
               </tr>
             </thead>
             <tbody>
-              {klientet.map((klienti) => (
+              {monitoret.map((monitori) => (
                 <tr
-                  key={klienti.id}
+                  key={monitori.id}
                   onClick={() => {
-                    setKlienti(klienti);
+                    setMonitori(monitori);
                     openModal("show");
                   }}
                 >
-                  <td>{klienti.id}</td>
-                  <td>{klienti.emri}</td>
-                  <td>{klienti.mbiemri}</td>
-                  <td>{klienti.kompania}</td>
-                  <td>{klienti.email}</td>
-                  <td>{klienti.telefoni}</td>
-                  <td>{klienti.adresa}</td>
-                  <td>{klienti.bilanci}</td>
+                  <td>{monitori.id}</td>
+                  <td>{monitori.serveri_id}</td>
+                  <td>
+                    <ProgressBar
+                      usedPercent={monitori.cpu_perdorim}
+                      totalPercent={100}
+                      text={monitori.cpu_perdorim}
+                    />
+                  </td>
+                  <td>
+                    <ProgressBar
+                      usedPercent={monitori.ram_perdorim}
+                      totalPercent={100}
+                      text={monitori.ram_perdorim}
+                    />
+                  </td>
+                  <td>
+                    <ProgressBar
+                      usedPercent={monitori.disk_perdorim}
+                      totalPercent={70}
+                      text={((monitori.disk_perdorim / 70) * 100).toFixed(2)}
+                    />
+                  </td>
+                  <td>{monitori.bandwidth} GB</td>
                   <td>
                     <span
-                      className={`${getStatusBadgeKlienti(klienti.statusi)}`}
+                      className={`${getStatusBadgeMonitori(monitori.statusi)}`}
                       style={{
                         padding: "5px",
                         marginTop: "5px",
                       }}
                     >
-                      {klienti.statusi}
+                      {monitori.statusi}
                     </span>
                   </td>
-                  <td>{klienti.data_regjistrimit}</td>
+                  <td>
+                    {monitori.alarmi === 0
+                      ? "🟢 Cdo gje ne rregull"
+                      : "🔴 Nje Problem Ka Dal!"}
+                  </td>
                   <td onClick={(e) => e.stopPropagation()}>
                     <button
                       className="table-btn btn btn-warning m-2"
                       onClick={() => {
                         openModal("update");
-                        setKlienti(klienti);
-                        setKlientiUpdateForm(klienti);
+                        setMonitori(monitori);
+                        setMonitoriForm(monitori);
                       }}
                     >
                       Perditso
@@ -167,7 +188,7 @@ function AdminKlienti() {
                       className="table-btn btn btn-danger"
                       onClick={() => {
                         openModal("delete");
-                        setKlienti(klienti);
+                        setMonitori(monitori);
                       }}
                     >
                       Fshij
@@ -184,10 +205,10 @@ function AdminKlienti() {
         <Modal
           show={modals.show}
           onClose={() => closeModal("show")}
-          title={`Klienti: #${klienti.id} - ${klienti.emri} ${klienti.mbiemri}`}
+          title={`Monitori: #${monitori.id}`}
         >
           <div className="modal-body">
-            <KlientiDisplay klienti={klienti} />
+            <MonitorimServersDisplay monitori={monitori} />
           </div>
           <div className="modal-footer">
             <button
@@ -204,13 +225,14 @@ function AdminKlienti() {
         <Modal
           show={modals.create}
           onClose={() => closeModal("create")}
-          title="Shto Klient"
+          title="Shto Monitorim Serveri"
         >
           <div className="modal-body">
-            <KlientiForm
-              form={klientiForm}
-              setForm={setKlientiForm}
-              onSubmit={createKlienti}
+            <MonitorimServersForm
+              form={monitoriForm}
+              setForm={setMonitoriForm}
+              onSubmit={createMonitori}
+              serveret={serveret}
             />
           </div>
           <div className="modal-footer">
@@ -228,13 +250,14 @@ function AdminKlienti() {
         <Modal
           show={modals.update}
           onClose={() => closeModal("update")}
-          title={`Perditso Klientin: #${klienti.id} - ${klienti.emri} ${klienti.mbiemri}`}
+          title={`Perditso Monitorin: #${monitori.id}`}
         >
           <div className="modal-body">
-            <KlientiForm
-              form={klientiUpdateForm}
-              setForm={setKlientiUpdateForm}
-              onSubmit={updateKlienti}
+            <MonitorimServersForm
+              form={monitoriForm}
+              setForm={setMonitoriForm}
+              onSubmit={updateMonitori}
+              serveret={serveret}
               isEdit={true}
             />
           </div>
@@ -253,10 +276,10 @@ function AdminKlienti() {
         <Modal
           show={modals.delete}
           onClose={() => closeModal("delete")}
-          title={`Deshironi ta fshini klientin: #${klienti.id} - ${klienti.emri} ${klienti.mbiemri}`}
+          title={`Deshironi ta fshini Monitorin: #${monitori.id}`}
         >
           <div className="modal-footer">
-            <button className="btn btn-danger" onClick={() => deleteKlienti()}>
+            <button className="btn btn-danger" onClick={() => deleteMonitori()}>
               Po, Fshij
             </button>
             <button
@@ -282,4 +305,4 @@ function AdminKlienti() {
   );
 }
 
-export default AdminKlienti;
+export default AdminMonitorimServers;

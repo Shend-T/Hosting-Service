@@ -38,3 +38,14 @@ export const getStatusBadgeAbonimi = (statusi) => {
       return "badge bg-secondary text-white";
   }
 };
+
+export const getStatusBadgeMonitori = (statusi) => {
+  switch (statusi) {
+    case "monitoron":
+      return "badge bg-success text-white";
+    case "nuk monitoron":
+      return "badge bg-secondary text-white";
+    default:
+      return "badge bg-secondary text-white";
+  }
+};
