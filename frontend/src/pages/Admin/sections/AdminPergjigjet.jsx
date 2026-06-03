@@ -25,6 +25,7 @@ function AdminPergjigjet() {
     loading,
     getAll,
     create,
+    update,
     remove,
   } = useAdminCrud("pergjigjet");
 
@@ -56,6 +57,22 @@ function AdminPergjigjet() {
   useEscapeKey(showCreateModal, () => {
     setShowCreateModal(false);
     setPergjigjetForm(FORM);
+  });
+
+  // Update modal
+  const [pergjigjetUpdateForm, setPergjigjetUpdateForm] = useState(null);
+  const [showUpdateModal, setShowUpdateModal] = useState(false);
+  const updatePergjigje = async (e) => {
+    e.preventDefault();
+    update(pergjigja.id, pergjigjetUpdateForm);
+    setShowUpdateModal(false);
+    setPergjigja(null);
+    setPergjigjetUpdateForm(null);
+  };
+  useEscapeKey(showUpdateModal, () => {
+    setShowUpdateModal(false);
+    setPergjigja(null);
+    setPergjigjetUpdateForm(null);
   });
 
   // Delete modal
@@ -113,6 +130,16 @@ function AdminPergjigjet() {
                   <td>{p.data_hapjes?.slice(0, 10)}</td>
                   <td onClick={(e) => e.stopPropagation()}>
                     <button
+                      className="table-btn btn btn-warning m-2"
+                      onClick={() => {
+                        setPergjigja(p);
+                        setPergjigjetUpdateForm(p);
+                        setShowUpdateModal(true);
+                      }}
+                    >
+                      Perditso
+                    </button>
+                    <button
                       className="table-btn btn btn-danger"
                       onClick={() => {
                         setPergjigja(p);
@@ -139,7 +166,10 @@ function AdminPergjigjet() {
             <PergjigjetDisplay pergjigja={pergjigja} />
           </div>
           <div className="modal-footer">
-            <button className="btn btn-secondary" onClick={() => setShowViewModal(false)}>
+            <button
+              className="btn btn-secondary"
+              onClick={() => setShowViewModal(false)}
+            >
               Mbyll
             </button>
           </div>
@@ -160,7 +190,35 @@ function AdminPergjigjet() {
             />
           </div>
           <div className="modal-footer">
-            <button className="btn btn-secondary" onClick={() => setShowCreateModal(false)}>
+            <button
+              className="btn btn-secondary"
+              onClick={() => setShowCreateModal(false)}
+            >
+              Mbyll
+            </button>
+          </div>
+        </Modal>
+      )}
+
+      {showUpdateModal && pergjigja && (
+        <Modal
+          show={showUpdateModal}
+          onClose={() => setShowUpdateModal(false)}
+          title={`Perditso Pergjigjen: #${pergjigja.id}`}
+        >
+          <div className="modal-body">
+            <PergjigjetForm
+              form={pergjigjetUpdateForm}
+              setForm={setPergjigjetUpdateForm}
+              onSubmit={updatePergjigje}
+              isEdit={true}
+            />
+          </div>
+          <div className="modal-footer">
+            <button
+              className="btn btn-secondary"
+              onClick={() => setShowUpdateModal(false)}
+            >
               Mbyll
             </button>
           </div>
@@ -174,10 +232,16 @@ function AdminPergjigjet() {
           title={`Deshironi ta fshini pergjigjen: #${pergjigja.id}`}
         >
           <div className="modal-footer">
-            <button className="btn btn-danger" onClick={() => deletePergjigje()}>
+            <button
+              className="btn btn-danger"
+              onClick={() => deletePergjigje()}
+            >
               Po, Fshij
             </button>
-            <button className="btn btn-secondary" onClick={() => setShowDeleteModal(false)}>
+            <button
+              className="btn btn-secondary"
+              onClick={() => setShowDeleteModal(false)}
+            >
               Jo, Mbyll
             </button>
           </div>

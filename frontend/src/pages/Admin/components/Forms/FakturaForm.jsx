@@ -29,11 +29,12 @@ function FakturaForm({ form, setForm, onSubmit, isEdit = false }) {
           required
         >
           <option value="">-- Zgjedh Klientin --</option>
-          {klientet && klientet.map((k) => (
-            <option key={k.id} value={k.id}>
-              #{k.id} - {k.emri} {k.mbiemri} ({k.email})
-            </option>
-          ))}
+          {klientet &&
+            klientet.map((k) => (
+              <option key={k.id} value={k.id}>
+                #{k.id} - {k.emri} {k.mbiemri} ({k.email})
+              </option>
+            ))}
         </select>
       </div>
 
@@ -46,11 +47,12 @@ function FakturaForm({ form, setForm, onSubmit, isEdit = false }) {
           required
         >
           <option value="">-- Zgjedh Abonimin --</option>
-          {abonimet && abonimet.map((a) => (
-            <option key={a.id} value={a.id}>
-              #{a.id} - Klienti {a.klienti_id} ({a.statusi})
-            </option>
-          ))}
+          {abonimet &&
+            abonimet.map((a) => (
+              <option key={a.id} value={a.id}>
+                #{a.id} - Klienti {a.klienti_id} ({a.statusi})
+              </option>
+            ))}
         </select>
       </div>
 
