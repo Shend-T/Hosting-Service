@@ -13,11 +13,12 @@ class IsAdmin
      *
      * @param  Closure(Request): (Response)  $next
      */
-    public function handle(Request $request, Closure $next) : Response
+    public function handle(Request $request, Closure $next): Response
     {
-        if (!Auth::guard('admin')->check()) {
+        if (!$request->user() || !$request->user()->tokenCan("admin")) {
             return response()->json(['message' => 'I pa autorizuar'], 403);
         }
+
         return $next($request);
     }
 }

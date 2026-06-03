@@ -9,6 +9,7 @@ import Footer from "./components/Footer";
 import Home from "./pages/Home/Home";
 import About from "./pages/About/About";
 import Terms from "./pages/Terms/Terms";
+import FAQ from "./pages/FAQ/FAQ";
 
 // ===== Authentikimi =====
 import Register from "./pages/Register/Register";
@@ -26,6 +27,7 @@ import AdminLogin from "./pages/Admin/AdminLogin";
 import Klienti from "./pages/Klienti/Klienti";
 import Paketa from "./pages/Paketa/Paketa";
 import Abonimi from "./pages/Abonimi/Abonimi";
+import NotFound from "./components/Error/NotFound";
 
 function App() {
   return (
@@ -36,6 +38,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<About />} />
         <Route path="/terms" element={<Terms />} />
+        <Route path="/faq" element={<FAQ />} />
         {/* Authentikimi */}
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
@@ -49,6 +52,8 @@ function App() {
         <Route path="/klienti" element={<Klienti />} /> {/* Klienti CRUD */}
         <Route path="/paketa" element={<Paketa />} /> {/* Paketa CRUD */}
         <Route path="/abonimi" element={<Abonimi />} /> {/* Abonimi CRUD */}
+        {/* 404 Page */}
+        <Route path="*" element={<NotFound />} />
       </Routes>
       <Footer />
     </BrowserRouter>
