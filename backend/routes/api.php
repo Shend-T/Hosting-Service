@@ -14,10 +14,6 @@ use App\Http\Controllers\DomainController;
 use App\Http\Controllers\LlogariHostingController;
 use App\Http\Controllers\MonitorimServerController;
 use App\Http\Controllers\FakturaController;
-<<<<<<< HEAD
-=======
-
->>>>>>> fc6f9325ca6e15052f71c22980df18ee2f923c2f
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AdminAuthController;
 
@@ -83,51 +79,51 @@ Route::middleware(['auth:sanctum', 'admin'])->prefix('admin')->group(function ()
     Route::put('/paketa/{id}', [AdminController::class, 'updatePaketa']);
     Route::delete('/paketa/{id}', [AdminController::class, 'deletePaketa']);
 
-<<<<<<< HEAD
     Route::get('/abonimi', [AdminController::class, 'getAllAbonimi']);
     Route::get('/abonimi/{id}', [AdminController::class, 'getAbonimi']);
+    Route::post('/abonimi', [AdminController::class, 'createAbonimi']);
+    Route::put('/abonimi/{id}', [AdminController::class, 'updateAbonimi']);
     Route::delete('/abonimi/{id}', [AdminController::class, 'deleteAbonimi']);
 
-=======
-    Route::get('/abonimi', [AdminController::class, "getAllAbonimi"]);
-    Route::get('/abonimi/{id}', [AdminController::class, "getAbonimi"]);
-    Route::post('/abonimi', [AdminController::class, "createAbonimi"]);
-    Route::put('/abonimi/{id}', [AdminController::class, "updateAbonimi"]);
-    Route::delete('/abonimi/{id}', [AdminController::class, "deleteAbonimi"]);
-
-    Route::get('/monitorim-servers', [AdminController::class, "getAllMonitorimServer"]);
-    Route::post('/monitorim-servers', [AdminController::class, "createMonitorimServer"]);
-    Route::put('/monitorim-servers/{id}', [AdminController::class, "updateMonitorimServer"]);
+    Route::get('/monitorim-servers', [AdminController::class, 'getAllMonitorimServer']);
+    Route::post('/monitorim-servers', [AdminController::class, 'createMonitorimServer']);
+    Route::put('/monitorim-servers/{id}', [AdminController::class, 'updateMonitorimServer']);
     Route::delete('/monitorim-servers/{id}', [AdminController::class, 'deleteMonitorimServer']);
 
-    // ✅ Admin Tiketa routes (we will add these)
->>>>>>> fc6f9325ca6e15052f71c22980df18ee2f923c2f
     Route::get('/tiketa', [AdminController::class, 'getAllTiketa']);
     Route::get('/tiketa/{id}', [AdminController::class, 'getTiketi']);
     Route::post('/tiketa', [AdminController::class, 'createTiketi']);
     Route::put('/tiketa/{id}', [AdminController::class, 'updateTiketi']);
     Route::delete('/tiketa/{id}', [AdminController::class, 'deleteTiketi']);
 
-<<<<<<< HEAD
     Route::get('/pergjigjet', [AdminController::class, 'getAllPergjigjet']);
     Route::post('/pergjigjet', [AdminController::class, 'createPergjigje']);
     Route::put('/pergjigjet/{id}', [AdminController::class, 'updatePergjigje']);
     Route::delete('/pergjigjet/{id}', [AdminController::class, 'deletePergjigje']);
 
-=======
-    // ✅ Admin Pergjigjet routes
-    Route::get('/pergjigjet', [AdminController::class, 'getAllPergjigjet']);
-    Route::post('/pergjigjet', [AdminController::class, 'createPergjigje']);
-    Route::delete('/pergjigjet/{id}', [AdminController::class, 'deletePergjigje']);
-
-    // ✅ Admin Faturat routes
->>>>>>> fc6f9325ca6e15052f71c22980df18ee2f923c2f
     Route::get('/faturat', [AdminController::class, 'getAllFaturat']);
     Route::get('/faturat/{id}', [AdminController::class, 'getFaktura']);
     Route::post('/faturat', [AdminController::class, 'createFaktura']);
     Route::put('/faturat/{id}', [AdminController::class, 'updateFaktura']);
     Route::delete('/faturat/{id}', [AdminController::class, 'deleteFaktura']);
-<<<<<<< HEAD
+
+    Route::get('/servers', [AdminController::class, 'getAllServers']);
+    Route::get('/servers/{id}', [AdminController::class, 'getServer']);
+    Route::post('/servers', [AdminController::class, 'createServer']);
+    Route::put('/servers/{id}', [AdminController::class, 'updateServer']);
+    Route::delete('/servers/{id}', [AdminController::class, 'deleteServer']);
+
+    Route::get('/llogari-hostings', [AdminController::class, 'getAllLlogariHostings']);
+    Route::get('/llogari-hostings/{id}', [AdminController::class, 'getLlogariHosting']);
+    Route::post('/llogari-hostings', [AdminController::class, 'createLlogariHosting']);
+    Route::put('/llogari-hostings/{id}', [AdminController::class, 'updateLlogariHosting']);
+    Route::delete('/llogari-hostings/{id}', [AdminController::class, 'deleteLlogariHosting']);
+
+    Route::get('/domainet', [AdminController::class, 'getAllDomainet']);
+    Route::get('/domainet/{id}', [AdminController::class, 'getDomain']);
+    Route::post('/domainet', [AdminController::class, 'createDomain']);
+    Route::put('/domainet/{id}', [AdminController::class, 'updateDomain']);
+    Route::delete('/domainet/{id}', [AdminController::class, 'deleteDomain']);
 });
 
 Route::get('/servers', [ServerController::class, 'index']);
@@ -155,53 +151,6 @@ Route::get('/monitorim-servers/{monitorimServer}', [MonitorimServerController::c
 Route::put('/monitorim-servers/{monitorimServer}', [MonitorimServerController::class, 'update']);
 Route::patch('/monitorim-servers/{monitorimServer}', [MonitorimServerController::class, 'update']);
 Route::delete('/monitorim-servers/{monitorimServer}', [MonitorimServerController::class, 'destroy']);
-=======
-
-    Route::get('/servers', [AdminController::class, 'getAllServers']);
-    Route::get('/servers/{id}', [AdminController::class, 'getServer']);
-    Route::post('/servers', [AdminController::class, 'createServer']);
-    Route::put('/servers/{id}', [AdminController::class, 'updateServer']);
-    Route::delete('/servers/{id}', [AdminController::class, 'deleteServer']);
-
-    Route::get('/llogari-hostings', [AdminController::class, 'getAllLlogariHostings']);
-    Route::get('/llogari-hostings/{id}', [AdminController::class, 'getLlogariHosting']);
-    Route::post('/llogari-hostings', [AdminController::class, 'createLlogariHosting']);
-    Route::put('/llogari-hostings/{id}', [AdminController::class, 'updateLlogariHosting']);
-    Route::delete('/llogari-hostings/{id}', [AdminController::class, 'deleteLlogariHosting']);
-
-    Route::get('/domainet', [AdminController::class, 'getAllDomainet']);
-    Route::get('/domainet/{id}', [AdminController::class, 'getDomain']);
-    Route::post('/domainet', [AdminController::class, 'createDomain']);
-    Route::put('/domainet/{id}', [AdminController::class, 'updateDomain']);
-    Route::delete('/domainet/{id}', [AdminController::class, 'deleteDomain']);
-});
-
-Route::get('/servers', [ServerController::class, 'index']);  // Lexo krejt serverat
-Route::post('/servers', [ServerController::class, 'store']); // Krijo server
-Route::get('/servers/{server}', [ServerController::class, 'show']); // Lexo nje server
-// Route::put('/servers/{server}', [ServerController::class, 'update']); // Perditeso server
-Route::delete('/servers/{server}', [ServerController::class, 'destroy']); // Fshi server
-
-Route::get('/domain', [DomainController::class, 'index']);               // Lexo te gjitha domainet
-Route::get('/domain/{domain}', [DomainController::class, 'show']);       // Lexo nje domain
-Route::post('/domain', [DomainController::class, 'store']);              // Krijo domain
-Route::put('/domain/{domain}', [DomainController::class, 'update']);     // Perditeso domain
-Route::delete('/domain/{domain}', [DomainController::class, 'destroy']); // Fshi domain
-
-Route::get('/llogari-hostings', [LlogariHostingController::class, 'index']);  // Lexo te gjitha llogari hosting
-Route::post('/llogari-hostings', [LlogariHostingController::class, 'store']); // Krijo llogari hosting
-Route::get('/llogari-hostings/{llogariHosting}', [LlogariHostingController::class, 'show']); // Lexo nje llogari hosting
-Route::put('/llogari-hostings/{llogariHosting}', [LlogariHostingController::class, 'update']); // Perditeso llogari hosting
-Route::patch('/llogari-hostings/{llogariHosting}', [LlogariHostingController::class, 'update']); // Perditeso llogari hosting
-Route::delete('/llogari-hostings/{llogariHosting}', [LlogariHostingController::class, 'destroy']); // Fshi llogari hosting
-
-Route::get('/monitorim-servers', [MonitorimServerController::class, 'index']);  // Lexo te gjitha monitorimet
-Route::post('/monitorim-servers', [MonitorimServerController::class, 'store']); // Krijo monitorim
-Route::get('/monitorim-servers/{monitorimServer}', [MonitorimServerController::class, 'show']); // Lexo nje monitorim
-Route::put('/monitorim-servers/{monitorimServer}', [MonitorimServerController::class, 'update']); // Perditeso monitorim
-Route::patch('/monitorim-servers/{monitorimServer}', [MonitorimServerController::class, 'update']); // Perditeso monitorim
-Route::delete('/monitorim-servers/{monitorimServer}', [MonitorimServerController::class, 'destroy']); // Fshi monitorim
->>>>>>> fc6f9325ca6e15052f71c22980df18ee2f923c2f
 
 Route::get('/abonimi', [AbonimiController::class, 'index']);
 Route::get('/abonimi/{id}', [AbonimiController::class, 'show']);
@@ -209,30 +158,9 @@ Route::post('/abonimi', [AbonimiController::class, 'store']);
 Route::put('/abonimi/{id}', [AbonimiController::class, 'update']);
 Route::delete('/abonimi/{id}', [AbonimiController::class, 'destroy']);
 
-<<<<<<< HEAD
 Route::get('/paketa', [PaketaController::class, 'index']);
 Route::get('/paketa/{id}', [PaketaController::class, 'show']);
 Route::get('/paketa-3', [PaketaController::class, 'showFirstThree']);
 Route::post('/paketa', [PaketaController::class, 'store']);
 Route::put('/paketa/{id}', [PaketaController::class, 'update']);
 Route::delete('/paketa/{id}', [PaketaController::class, 'destroy']);
-=======
-Route::get('/paketa', [PaketaController::class, 'index']);            // Kthe krejt paketat
-Route::get('/paketa/{id}', [PaketaController::class, 'show']);        // Kthe nje pakete ne baze te id-s
-Route::get('/paketa-3', [PaketaController::class, 'showFirstThree']); // Kthe vetem 3 paketat e para( na duhet per home page)
-Route::post('/paketa', [PaketaController::class, 'store']);           // Krijo pakete
-Route::put('/paketa/{id}', [PaketaController::class, 'update']);      // Perditso nje pakete
-Route::delete('/paketa/{id}', [PaketaController::class, 'destroy']);  // Fshij nje pakete
-
-Route::post('/pergjigja_tiketi', [PergjigjaTiketiController::class, 'store']);
-Route::get('/pergjigja_tiketi/{pergjigjaTiketi}', [PergjigjaTiketiController::class, 'show']);
-Route::get('/pergjigja_tiketi/{pergjigjaTiketi}/edit', [PergjigjaTiketiController::class, 'edit']);
-Route::put('/pergjigja_tiketi/{pergjigjaTiketi}', [PergjigjaTiketiController::class, 'update']);
-Route::delete('/pergjigja_tiketi/{pergjigjaTiketi}', [PergjigjaTiketiController::class, 'destroy']);
-
-Route::get('/faturat', [FakturaController::class, 'index']);
-Route::get('/faturat/{id}', [FakturaController::class, 'show']);
-Route::post('/faturat', [FakturaController::class, 'store']);
-Route::put('/faturat/{id}', [FakturaController::class, 'update']);
-Route::delete('/faturat/{id}', [FakturaController::class, 'destroy']);
->>>>>>> fc6f9325ca6e15052f71c22980df18ee2f923c2f
